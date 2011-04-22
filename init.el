@@ -167,7 +167,7 @@
 
 (defun rido ()
   "Find a recent file using Ido.
-   From <http://www.emacswiki.org/emacs-es/RecentFiles#toc5>."
+   From URL `http://www.emacswiki.org/emacs-es/RecentFiles#toc5'."
   (interactive)
   (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
     (when file
@@ -245,6 +245,16 @@ is ISO 8601, which is ``%Y-%m-%dT%T%z''."
   (interactive "Mformat: ")
   (insert (format-time-string
      (if (string= "" format) "%Y-%m-%dT%T%z" format))))
+
+(defun my/bells ()
+  "Don't ring the bell on navigation and cancellation commands.
+
+From URL `http://stackoverflow.com/q/324457#731660'."
+  (unless (memq this-command
+    '(down up previous-line next-line mwheel-scroll
+      backward-char forward-char keyboard-quit))
+    (ding)))
+(setq ring-bell-function 'my/bells)
 
 ;;
 ;;; load local config to override any of the above settings
