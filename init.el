@@ -14,8 +14,6 @@
 ;; Environment: Mac OS X
 ;; Emacsen:     GNU Emacs 23.2.1
 ;;
-;; Tip: C-u 0 M-x byte-recompile-directory to compile the .el files.
-;;
 ;;; Code:
 
 ;;

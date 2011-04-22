@@ -1,0 +1,21 @@
+#+TITLE:       README
+#+DESCRIPTION: This is my personal =.emacs.d= directory.
+#+STARTUP:     align hidestars indent
+
+* Installation
+
+If you're using [[http://xstow.sf.net][XStow]], you can do something like this:
+
+#+BEGIN_SRC sh
+$ store=/tmp/emacs.d
+$ git clone git://github.com/jmdeldin/.emacs.d.git $store
+$ xstow -t $HOME $store
+#+END_SRC
+
+* Uninstallation
+
+#+BEGIN_SRC sh
+$ xstow -t $HOME/.emacs.d $store -D
+#+END_SRC sh
+
+
