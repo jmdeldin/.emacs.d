@@ -199,6 +199,11 @@
 (if window-system
   (themes))
 
+;; highlight FIXME & TODO
+(font-lock-add-keywords nil
+                        '(("\\<\\(FIXME\\|TODO\\):"
+                           1 font-lock-warning-face t)))
+
 ;;
 ;;; Keybindings
 ;;
