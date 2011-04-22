@@ -235,6 +235,18 @@
    [?\C-u ?\M-x ?a ?l ?i ?g ?n ?- ?r ?e ?g ?e ?x ?p ?\C-m ?\C-a ?\C-k ?\\ ?\( ?: ?\\ ?\) ?\\ ?\( ?\\ ?s ?- ?* ?\\ ?\) ?\C-m ?\C-? ?2 ?\C-m ?\C-m ?n])
 
 ;;
+;;; Functions
+;;
+(defun timestamp (format)
+  "Inserts the timestamp given by FORMAT, or selects a default if nil.
+
+The format is any format accepted by `format-time-string'. The default
+is ISO 8601, which is ``%Y-%m-%dT%T%z''."
+  (interactive "Mformat: ")
+  (insert (format-time-string
+     (if (string= "" format) "%Y-%m-%dT%T%z" format))))
+
+;;
 ;;; load local config to override any of the above settings
 ;;
 (load-library (concat my/local "/local"))
