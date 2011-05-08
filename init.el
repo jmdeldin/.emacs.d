@@ -213,6 +213,9 @@
 ;; C-c w -- toggle whitespace mode
 (global-set-key (kbd "C-c w") 'global-whitespace-mode)
 
+;; C-c C-d -- Remove trailing whitespace
+(global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
+
 ;; C-w -- delete the previous word (like most shells)
 (global-set-key (kbd "C-w") 'backward-delete-word)
 
