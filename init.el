@@ -116,6 +116,7 @@
 ;; load package/filetype-specific confs (prefix is used to avoid name clashes)
 (load-library (concat my/site-lisp "/_ruby"))
 (load-library (concat my/site-lisp "/_org"))
+(load-library (concat my/site-lisp "/_yaml"))
 
 ;;
 ;;; Misc. settings
