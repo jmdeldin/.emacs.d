@@ -207,7 +207,7 @@
 ;;
 
 ;; Swap C-j and RET
-(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 (global-set-key (kbd "C-j") 'newline)
 
 ;; C-c w -- toggle whitespace mode
