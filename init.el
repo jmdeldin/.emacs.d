@@ -125,6 +125,9 @@
 ;; Connect with `emacsclient'
 (server-start)
 
+;; Unicode
+(prefer-coding-system 'utf-8)
+
 ;; put backup & autosave files in /tmp
 (setq backup-by-copying t)
 (setq backup-directory-alist
