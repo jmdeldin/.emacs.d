@@ -4,18 +4,15 @@
 
 * Installation
 
-If you're using [[http://xstow.sf.net][XStow]], you can do something like this:
+You can clone directly as =$HOME/.emacs.d=:
 
 #+BEGIN_SRC sh
-$ store=/tmp/emacs.d
-$ git clone git://github.com/jmdeldin/.emacs.d.git $store
-$ xstow -t $HOME $store
+$ git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
 #+END_SRC
 
 * Uninstallation
 
 #+BEGIN_SRC sh
-$ xstow -t $HOME/.emacs.d $store -D
-#+END_SRC sh
-
+$ rm ~/.emacs.d
+#+END_SRC
 
