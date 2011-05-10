@@ -275,6 +275,19 @@ From URL `http://stackoverflow.com/q/324457#731660'."
     (ding)))
 (setq ring-bell-function 'my/bells)
 
+(defun toggle-window-dedicated ()
+  "Toggle whether the current active window is dedicated or not.
+
+From URL `http://stackoverflow.com/q/43765'."
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window
+                                 (not (window-dedicated-p window))))
+       "Window '%s' is dedicated"
+     "Window '%s' is normal")
+   (current-buffer)))
+
 (defadvice comment-or-uncomment-region (before slick-comment activate compile)
   "When called interactively with no active region, (un)comment the whole line.
 
