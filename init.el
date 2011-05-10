@@ -179,6 +179,11 @@
 (require 'saveplace)
 (setq-default save-place t)
 
+;; save minibuffer history
+(savehist-mode 1)
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(setq savehist-file (concat my/local "/.savehist"))
+
 ;; M-x gdb
 (setq gdb-many-windows t)
 
