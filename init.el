@@ -231,10 +231,14 @@
 ;; C-x C-k -- kill region (since we just unbound it with C-w)
 (global-set-key (kbd "C-x C-k") 'kill-region)
 
+;; window movement
 (global-set-key (kbd "M-<left>")  'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
 (global-set-key (kbd "M-<up>")    'windmove-up)
 (global-set-key (kbd "M-<down>")  'windmove-down)
+
+;; better commenting (replaces the original comment-dwim)
+(global-set-key (kbd "M-;") 'comment-or-uncomment-region)
 
 ;;
 ;;; Macros
@@ -270,6 +274,16 @@ From URL `http://stackoverflow.com/q/324457#731660'."
       backward-char forward-char keyboard-quit))
     (ding)))
 (setq ring-bell-function 'my/bells)
+
+(defadvice comment-or-uncomment-region (before slick-comment activate compile)
+  "When called interactively with no active region, (un)comment the whole line.
+
+From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/'."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
 
 ;;
 ;;; load local config to override any of the above settings
