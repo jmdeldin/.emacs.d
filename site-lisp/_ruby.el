@@ -13,5 +13,7 @@
             (require 'inf-ruby)
             (autoload 'run-ruby "inf-ruby")
             (autoload 'inf-ruby-keys "inf-ruby")
-            (inf-ruby-keys)))
+            (inf-ruby-keys)
+            (autoload 'ri "ri")
+            (global-set-key (kbd "C-h r") 'ri)))
 
