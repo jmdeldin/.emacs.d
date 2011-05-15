@@ -244,6 +244,9 @@
 ;; better commenting (replaces the original comment-dwim)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
 
+;; C-x m -- recompile
+(global-set-key (kbd "C-x m") 'recompile)
+
 ;;
 ;;; Macros
 ;;
