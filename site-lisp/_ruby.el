@@ -18,6 +18,7 @@
             (require 'ruby-electric)
             (require 'inf-ruby)
             (require 'flymake-ruby)
+            (flymake-ruby-load)
             (autoload 'run-ruby "inf-ruby")
             (autoload 'inf-ruby-keys "inf-ruby")
             (inf-ruby-keys)
