@@ -227,7 +227,7 @@
 (global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
 
 ;; C-w -- delete the previous word (like most shells)
-(global-set-key (kbd "C-w") 'backward-delete-word)
+(global-set-key (kbd "C-w") 'backward-kill-word)
 
 ;; C-x C-k -- kill region (since we just unbound it with C-w)
 (global-set-key (kbd "C-x C-k") 'kill-region)
