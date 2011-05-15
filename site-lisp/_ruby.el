@@ -16,12 +16,17 @@
           (lambda ()
             (require 'ruby-compilation)
             (require 'ruby-electric)
+
             (require 'inf-ruby)
-            (require 'flymake-ruby)
-            (flymake-ruby-load)
             (autoload 'run-ruby "inf-ruby")
             (autoload 'inf-ruby-keys "inf-ruby")
             (inf-ruby-keys)
+
+            (require 'flymake-ruby)
+            (flymake-ruby-load)
+
+            (autoload 'rvm-use-default "ruby-rvm")
+            (rvm-use-default)
             (autoload 'ri "ri")
             (global-set-key (kbd "C-h r") 'ri)
             (global-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
