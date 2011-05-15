@@ -23,6 +23,7 @@
 ;; hide the {menu,tool,scroll}bars
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; don't accelerate scrolling (default is terrible with inertial mouse wheels)
 (setq mouse-wheel-progressive-speed nil)
