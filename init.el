@@ -189,20 +189,17 @@
 ;;; Color themes
 ;;
 
-(defun themes ()
-  "Wrapper for loading themes"
-  (require 'color-theme)
-  (color-theme-initialize)
-
-  ;; load external themes
-  (let ((themes (concat my/vendor "/themes")))
-    (dolist (f (directory-files themes))
-      (let ((name (concat themes "/" f)))
-        (when (and (file-regular-p name))
-          (load-library name))))))
-
 (if window-system
-  (themes))
+    (progn
+      (require 'color-theme)
+      (color-theme-initialize)
+
+      ;; load external themes
+      (let ((themes (concat my/vendor "/themes")))
+        (dolist (f (directory-files themes))
+          (let ((name (concat themes "/" f)))
+            (when (and (file-regular-p name))
+              (load-library name)))))))
 
 ;; highlight FIXME & TODO
 (font-lock-add-keywords nil
