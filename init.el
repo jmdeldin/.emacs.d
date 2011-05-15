@@ -40,6 +40,9 @@
 ;; get rid of the audible bell
 (setq visible-bell t)
 
+;; turn down visual bells
+(setq ring-bell-function 'my/bells)
+
 ;; show line & column number in the mode line
 (column-number-mode t)
 (line-number-mode t)
@@ -113,6 +116,8 @@
   (normal-top-level-add-subdirs-to-load-path)
   (nconc load-path orig-load-path))
 
+(load-library (concat my/site-lisp "/defuns"))
+(load-library (concat my/site-lisp "/bindings"))
 ;; load package/filetype-specific confs (prefix is used to avoid name clashes)
 (load-library (concat my/site-lisp "/_ruby"))
 (load-library (concat my/site-lisp "/_org"))
@@ -168,14 +173,6 @@
 (require 'recentf)
 (recentf-mode 1)
 
-(defun rido ()
-  "Find a recent file using Ido.
-   From URL `http://www.emacswiki.org/emacs-es/RecentFiles#toc5'."
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
-
 ;; remember last edit position
 (require 'saveplace)
 (setq-default save-place t)
@@ -211,65 +208,6 @@
 (font-lock-add-keywords nil
                         '(("\\<\\(FIXME\\|TODO\\):"
                            1 font-lock-warning-face t)))
-
-;;
-;;; Macros
-;;
-
-;; Align key-value strings, like
-;;   foo: bar
-;;   baz:1
-;; to
-;;   foo: bar
-;;   baz: 1
-(fset 'align-key-value
-   [?\C-u ?\M-x ?a ?l ?i ?g ?n ?- ?r ?e ?g ?e ?x ?p ?\C-m ?\C-a ?\C-k ?\\ ?\( ?: ?\\ ?\) ?\\ ?\( ?\\ ?s ?- ?* ?\\ ?\) ?\C-m ?\C-? ?2 ?\C-m ?\C-m ?n])
-
-;;
-;;; Functions
-;;
-(defun timestamp (format)
-  "Inserts the timestamp given by FORMAT, or selects a default if nil.
-
-The format is any format accepted by `format-time-string'. The default
-is ISO 8601, which is ``%Y-%m-%dT%T%z''."
-  (interactive "Mformat: ")
-  (insert (format-time-string
-     (if (string= "" format) "%Y-%m-%dT%T%z" format))))
-
-(defun my/bells ()
-  "Don't ring the bell on navigation and cancellation commands.
-
-From URL `http://stackoverflow.com/q/324457#731660'."
-  (unless (memq this-command
-    '(down up previous-line next-line mwheel-scroll
-      backward-char forward-char keyboard-quit))
-    (ding)))
-(setq ring-bell-function 'my/bells)
-
-(defun toggle-window-dedicated ()
-  "Toggle whether the current active window is dedicated or not.
-
-From URL `http://stackoverflow.com/q/43765'."
-  (interactive)
-  (message
-   (if (let (window (get-buffer-window (current-buffer)))
-         (set-window-dedicated-p window
-                                 (not (window-dedicated-p window))))
-       "Window '%s' is dedicated"
-     "Window '%s' is normal")
-   (current-buffer)))
-
-(defadvice comment-or-uncomment-region (before slick-comment activate compile)
-  "When called interactively with no active region, (un)comment the whole line.
-
-From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/'."
-  (interactive
-   (if mark-active (list (region-beginning) (region-end))
-     (list (line-beginning-position)
-           (line-beginning-position 2)))))
-
-(load-library (concat my/site-lisp "/bindings"))
 
 ;;
 ;;; load local config to override any of the above settings
