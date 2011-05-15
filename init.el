@@ -232,6 +232,9 @@
 ;; C-x C-k -- kill region (since we just unbound it with C-w)
 (global-set-key (kbd "C-x C-k") 'kill-region)
 
+;; C-x C-j -- join line
+(global-set-key (kbd "C-x C-j") 'join-line)
+
 ;; window movement
 (global-set-key (kbd "M-<left>")  'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
