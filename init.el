@@ -123,7 +123,8 @@
 ;;
 
 ;; Connect with `emacsclient'
-(server-start)
+(if (not (boundp 'server-process))
+    (server-start))
 
 ;; Unicode
 (prefer-coding-system 'utf-8)
