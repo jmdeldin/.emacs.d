@@ -8,8 +8,8 @@
 
 ;; capture templates (C-c c)
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
-         "* TODO %?\n %i\n  %a")))
+      '(("t" "TODO" entry (file org-default-notes-file "Tasks")
+         "* TODO %?\n%U\n")))
 
 ;; agenda
 ;; (setq org-agenda-to-appt t)
