@@ -11,15 +11,12 @@
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
+(setq org-modules (quote (org-habit)))
 
 ;; capture templates (C-c c)
 (setq org-capture-templates
       '(("t" "TODO" entry (file org-default-notes-file "Tasks")
          "* TODO %?\n%U\n")))
-
-;; agenda
-;; (setq org-agenda-to-appt t)
-;; FIXME: Might remove
 
 ;; timer/clock-in
 (setq org-timer-default-timer 25)
