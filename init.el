@@ -12,7 +12,7 @@
 ;;
 ;; Uses:        LaTeX, Org-Mode, Ruby, C
 ;; Environment: Mac OS X
-;; Emacsen:     GNU Emacs 23.2.1
+;; Emacsen:     GNU Emacs 23.2.1+ and Aquamacs 2.2+
 ;;
 ;;; Code:
 
