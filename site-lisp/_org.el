@@ -1,10 +1,16 @@
+;;; Org-Mode customizations
+;;
+;; Define these variables in `../local/local.el':
+;;
+;;   (setq org-default-notes-file PATH_TO_CAPTURE.ORG)
+;;   (setq org-archive-location PATH_TO_ARCHIVE.ORG)
+;;   (setq org-agenda-files LIST)
+;;
+
 (require 'org-install)
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-;; file paths
-(setq org-default-notes-file "~/Dropbox/notes/capture.org")
-(setq org-archive-location "~/Dropbox/notes/archive.org::")
 
 ;; capture templates (C-c c)
 (setq org-capture-templates
