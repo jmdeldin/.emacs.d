@@ -137,6 +137,10 @@
 ;; Unicode
 (prefer-coding-system 'utf-8)
 
+;; use ~/.emacs.d/local/emacs-custom.el for customizations
+(setq custom-file (concat my/local "/emacs-custom.el"))
+(load custom-file 'noerror)
+
 ;; put backup & autosave files in /tmp
 (setq backup-by-copying t)
 (setq backup-directory-alist
