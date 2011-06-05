@@ -25,9 +25,6 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; don't accelerate scrolling (default is terrible with inertial mouse wheels)
-(setq mouse-wheel-progressive-speed nil)
-
 ;; hide the startup messages
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
