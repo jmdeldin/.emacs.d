@@ -119,6 +119,8 @@
 
 (load-library (concat my/site-lisp "/defuns"))
 (load-library (concat my/site-lisp "/bindings"))
+(load-library (concat my/site-lisp "/aquamacs"))
+
 ;; load package/filetype-specific confs (prefix is used to avoid name clashes)
 (load-library (concat my/site-lisp "/_ruby"))
 (load-library (concat my/site-lisp "/_org"))
