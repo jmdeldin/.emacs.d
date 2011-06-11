@@ -182,6 +182,7 @@
 ;; remember last edit position
 (require 'saveplace)
 (setq-default save-place t)
+(setq save-place-file (concat my/local "/.emacs-places"))
 
 ;; save minibuffer history
 (savehist-mode 1)
