@@ -165,8 +165,9 @@
 ;; ido is much more useful than C-f or C-b
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
-(ido-mode 1)
 (setq ido-show-dot-for-dired t)
+(setq ido-save-directory-list-file (concat my/local "/.ido.last"))
+(ido-mode 1)
 
 ;; don't use file<n> to distinguish between identically-named files -- use
 ;; part of the directory
