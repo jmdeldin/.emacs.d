@@ -206,7 +206,8 @@
         (dolist (f (directory-files themes))
           (let ((name (concat themes "/" f)))
             (when (and (file-regular-p name))
-              (load-library name)))))))
+              (if (string= "el" (file-name-extension name))
+                  (load-library name))))))))
 
 ;; highlight FIXME & TODO
 (font-lock-add-keywords nil
@@ -219,4 +220,3 @@
 (load-library (concat my/local "/local"))
 
 ;;; end of init.el.
-
