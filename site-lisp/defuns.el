@@ -61,3 +61,8 @@ From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/
    (if mark-active (list (region-beginning) (region-end))
      (list (line-beginning-position)
            (line-beginning-position 2)))))
+(defun eshell/d (&optional dir)
+  "Launches a dired instance in the current working directory or DIR."
+  (if dir
+      (dired dir)
+    (dired ".")))
