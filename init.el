@@ -203,6 +203,10 @@
 ;; eshell
 (setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
+;; autopair -- textmate-like quotation
+(require 'autopair)
+(autopair-global-mode t)
+(setq autopair-autowrap t)
 
 ;; magit -- load on magit-status
 (load-library (concat my/vendor "/magit/50magit"))
