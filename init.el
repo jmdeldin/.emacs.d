@@ -89,6 +89,9 @@
 ;; insert a newline at the EOF
 (setq-default require-final-newline t)
 
+;; delete trailing whitespace on save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 ;;; Variables
 (defvar my/site-lisp
   (concat user-emacs-directory "site-lisp")
