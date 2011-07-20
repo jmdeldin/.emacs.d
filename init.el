@@ -117,16 +117,10 @@
   (normal-top-level-add-subdirs-to-load-path)
   (nconc load-path orig-load-path))
 
-(load-library (concat my/site-lisp "/defuns"))
-(load-library (concat my/site-lisp "/bindings"))
-(load-library (concat my/site-lisp "/aquamacs"))
-(load-library (concat my/site-lisp "/_ess"))
-
-;; load package/filetype-specific confs (prefix is used to avoid name clashes)
-(load-library (concat my/site-lisp "/_gv"))
-(load-library (concat my/site-lisp "/_org"))
-(load-library (concat my/site-lisp "/_ruby"))
-(load-library (concat my/site-lisp "/_yaml"))
+;; load package/filetype-specific configurations
+(dolist (f (directory-files my/site-lisp))
+  (if (string= (file-name-extension f) "el")
+      (load-library (concat my/site-lisp "/" (file-name-sans-extension f)))))
 
 ;;
 ;;; Misc. settings
