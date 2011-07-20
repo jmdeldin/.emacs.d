@@ -203,6 +203,9 @@
 ;; eshell
 (setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
+;; subword mode -- camelCase navigation
+(global-subword-mode t)
+
 ;; autopair -- textmate-like quotation
 (require 'autopair)
 (autopair-global-mode t)
