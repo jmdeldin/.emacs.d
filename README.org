@@ -16,3 +16,50 @@ $ git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
 $ rm ~/.emacs.d
 #+END_SRC
 
+* Notes
+** Launching
+| Command        | Purpose                      |
+|----------------+------------------------------|
+| emacs --daemon | Start server                 |
+| emacsclient -c | Open frame in running server |
+
+** Keys
+| Key         | Description                        |
+|-------------+------------------------------------|
+| C-q TAB     | Insert literal tab                 |
+| M-y         | Traverse kill-ring (after C-y)     |
+| C-u C-SPC   | Jump to last mark                  |
+| M-n         | (In =cua-mode=) Increment digit    |
+| C-M \       | Indent according to major mode     |
+| C-c C-s     | Start IRB                          |
+| C-c C-r     | Send region to IRB (C-c C-s first) |
+| C-x v =     | Diff against HEAD                  |
+| C-u C-x v = | Diff against other branch          |
+| C-x v u     | Discard changes                    |
+| C-x v ~     | Checkout another rev               |
+| C-x v l     | View commit log                    |
+| C-Shift BS  | Kill whole line                    |
+| C-c '       | Edit code block (org-babel)        |
+
+
+** Functions and modes
+| Function    | Description                           |
+|-------------+---------------------------------------|
+| follow-mode | Browse splits like they're one window |
+| ielm-mode   | Elisp REPL                            |
+| hexl-mode   | Hex viewer                            |
+| bury-buffer | Send buffer to end of list            |
+
+
+** org-mode
+| Command     | Function                                   |
+|-------------+--------------------------------------------|
+| C-c C-n     | next heading                               |
+| C-c C-p     | previous heading                           |
+| C-c C-f     | next heading (same level)                  |
+| C-c C-b     | previous heading (same level)              |
+| C-c C-u     | back to a higher heading                   |
+| C-c /       | Sparse tree                                |
+| M-S-RET     | Insert new item with checkbox              |
+| M-S-UP/DOWN | Move items including subitems up/down      |
+| C-c -       | Cycle list level through different bullets |
