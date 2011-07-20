@@ -184,6 +184,7 @@
 ;; recent files
 (require 'recentf)
 (setq recentf-save-file (concat my/local "/.recentf"))
+(setq recentf-max-saved-items 100)
 (recentf-mode 1)
 
 ;; remember last edit position
