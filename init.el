@@ -197,6 +197,9 @@
 (setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
 
+;; magit -- load on magit-status
+(load-library (concat my/vendor "/magit/50magit"))
+
 ;;
 ;;; Color themes
 ;;
