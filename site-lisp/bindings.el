@@ -2,6 +2,9 @@
 ;;; Keybindings
 ;;
 
+;; C-c C-r -- Revert buffer
+(global-set-key (kbd "C-c C-r") 'revert-buffer)
+
 ;; Swap C-j and RET
 (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 (global-set-key (kbd "C-j") 'newline)
