@@ -3,6 +3,8 @@
 ;; Define these variables in `../local/local.el':
 ;;
 ;;   (setq org-default-notes-file PATH_TO_CAPTURE.ORG)
+;;   (setq org-journal-file PATH_TO_JOURNAL.ORG)
+;;   (setq org-log-file PATH_TO_LOG.ORG)
 ;;   (setq org-archive-location PATH_TO_ARCHIVE.ORG)
 ;;   (setq org-agenda-files LIST)
 ;;
@@ -15,8 +17,13 @@
 
 ;; capture templates (C-c c)
 (setq org-capture-templates
-      '(("t" "TODO" entry (file org-default-notes-file "Tasks")
-         "* TODO %?\n%U\n")))
+      '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
+         "* TODO %^{Task} %^g \n%U \n%?")
+        ("j" "Journal" entry (file+datetree org-journal-file)
+         "* %^{Title}\n%U \n%?\n")
+        ("l" "Log" entry (file+datetree+prompt org-log-file)
+         "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
+        ))
 
 ;; timer/clock-in
 (setq org-timer-default-timer 25)
