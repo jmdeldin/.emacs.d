@@ -40,6 +40,9 @@ $ rm ~/.emacs.d
 | C-x v l     | View commit log                    |
 | C-Shift BS  | Kill whole line                    |
 | C-c '       | Edit code block (org-babel)        |
+| C-x r m     | Bookmark the current loc in a file |
+| C-x r b     | Jump to bookmark                   |
+| C-x r l     | List bookmarks                     |
 
 
 ** Functions and modes

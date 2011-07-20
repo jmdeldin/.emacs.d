@@ -139,6 +139,9 @@
 (setq custom-file (concat my/local "/emacs-custom.el"))
 (load custom-file 'noerror)
 
+;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
+(setq bookmark-file (concat my/local "/.emacs.bmk"))
+
 ;; put backup & autosave files in /tmp
 (setq backup-by-copying t)
 (setq backup-directory-alist
