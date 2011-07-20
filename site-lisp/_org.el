@@ -42,3 +42,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
+
+;; babel
+(setq org-babel-load-languages (mapcar (lambda (l) (cons l t))
+        '(C calc emacs-lisp gnuplot latex perl R ruby screen sh)))
