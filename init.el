@@ -193,6 +193,10 @@
 ;; M-x gdb
 (setq gdb-many-windows t)
 
+;; eshell
+(setq eshell-directory-name (concat user-emacs-directory "eshell"))
+
+
 ;;
 ;;; Color themes
 ;;
