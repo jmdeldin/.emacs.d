@@ -162,6 +162,9 @@
 (setq ispell-list-command "list")
 (setq ispell-extra-args '("--sug-mode=ultra"))
 
+;; fill-paragraph (M-q): use single spaces between sentences
+(setq sentence-end-double-space nil)
+
 ;;
 ;;; Packages
 ;;
