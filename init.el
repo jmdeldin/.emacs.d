@@ -227,7 +227,7 @@
           (let ((name (concat themes "/" f)))
             (when (and (file-regular-p name))
               (if (string= "el" (file-name-extension name))
-                  (load-library name))))))))
+                  (load-library (file-name-sans-extension name)))))))))
 
 ;; highlight FIXME & TODO
 (font-lock-add-keywords nil
