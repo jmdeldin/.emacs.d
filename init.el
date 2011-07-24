@@ -237,6 +237,6 @@
 ;;
 ;;; load local config to override any of the above settings
 ;;
-(load-library (concat my/local "/local"))
+(load (concat my/local "/local") 'noerror)
 
 ;;; end of init.el.
