@@ -9,6 +9,9 @@
 ;;   (setq org-agenda-files LIST)
 ;;
 
+(setq load-path (cons (concat my/vendor "/org-mode/lisp") load-path))
+(setq load-path (cons (concat my/vendor "/org-mode/contrib/lisp") load-path))
+
 (require 'org-install)
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
