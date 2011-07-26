@@ -58,6 +58,9 @@
 ;; syntax highlighting
 (global-font-lock-mode t)
 
+;; display time
+(display-time)
+
 ;; enable the backtrace
 ; (setq debug-on-error t)
 
