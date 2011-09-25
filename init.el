@@ -201,6 +201,9 @@
 ;; M-x gdb
 (setq gdb-many-windows t)
 
+;; restore window configuration with C-c LEFT
+(winner-mode)
+
 ;; eshell
 (setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
