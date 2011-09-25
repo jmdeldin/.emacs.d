@@ -95,3 +95,11 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
   (if dir
       (dired dir)
     (dired ".")))
+
+(defun eshell/clear ()
+  "Clear the eshell buffer.
+
+From URL `http://www.khngai.com/emacs/eshell.php'"
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)))
