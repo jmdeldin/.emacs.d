@@ -218,6 +218,9 @@
 ;; magit -- load on magit-status
 (load-library (concat my/vendor "/magit/50magit"))
 
+;; prevent auto-joining #erc
+(setq erc-autojoin-channels-alist '())
+
 ;;
 ;;; Color themes
 ;;
