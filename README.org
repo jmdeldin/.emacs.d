@@ -16,6 +16,18 @@ $ git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
 $ rm ~/.emacs.d
 #+END_SRC
 
+* Customizations for =local/local.el=
+** User
+#+begin_src elisp
+  (setq user-full-name "...")
+  (setq user-mail-address "...")
+#+end_src
+
+** Org-Mode
+#+begin_src elisp
+(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
+#+end_src
+
 * Notes
 ** Launching
 | Command        | Description                  |
@@ -61,7 +73,7 @@ $ rm ~/.emacs.d
 
 
 ** org-mode
-| Command     | Decription                         |
+| Command     | Decription                                 |
 |-------------+--------------------------------------------|
 | C-c C-n     | next heading                               |
 | C-c C-p     | previous heading                           |
