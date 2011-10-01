@@ -49,3 +49,9 @@
 ;; babel
 (setq org-babel-load-languages (mapcar (lambda (l) (cons l t))
         '(C calc emacs-lisp gnuplot latex perl R ruby screen sh)))
+
+;; show the agenda from the current day
+(setq org-agenda-start-on-weekday nil)
+
+;; remove "Valid XHTML" link
+(setq org-export-html-validation-link nil)
