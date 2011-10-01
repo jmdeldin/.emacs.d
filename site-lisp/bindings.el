@@ -24,11 +24,19 @@
 ;; C-x C-j -- join line
 (global-set-key (kbd "C-x C-j") 'join-line)
 
-;; window movement
-(global-set-key (kbd "M-<left>")  'windmove-left)
-(global-set-key (kbd "M-<right>") 'windmove-right)
-(global-set-key (kbd "M-<up>")    'windmove-up)
-(global-set-key (kbd "M-<down>")  'windmove-down)
+;; window movement from <http://nex-3.com/posts/45-efficient-window-switching-in-emacs>
+(defun select-next-window ()
+  "Switch to the next window"
+  (interactive)
+  (select-window (next-window)))
+
+(defun select-previous-window ()
+  "Switch to the previous window"
+  (interactive)
+  (select-window (previous-window)))
+
+(global-set-key (kbd "M-<right>") 'select-next-window)
+(global-set-key (kbd "M-<left>")  'select-previous-window)
 
 ;; better commenting (replaces the original comment-dwim)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
