@@ -161,7 +161,7 @@
 ;; use aspell
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
-(setq ispell-extra-args '("--sug-mode=ultra"))
+(setq ispell-extra-args '("--dont-suggest"))
 
 ;; fill-paragraph (M-q): use single spaces between sentences
 (setq sentence-end-double-space nil)
