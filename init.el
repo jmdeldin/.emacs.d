@@ -221,6 +221,9 @@
 ;; prevent auto-joining #erc
 (setq erc-autojoin-channels-alist '())
 
+(require 'textmate)
+(textmate-mode)
+
 ;;
 ;;; Color themes
 ;;
@@ -249,3 +252,4 @@
 (load (concat my/local "/local") 'noerror)
 
 ;;; end of init.el.
+
