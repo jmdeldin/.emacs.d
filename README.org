@@ -18,7 +18,7 @@ $ rm ~/.emacs.d
 
 * Notes
 ** Launching
-| Command        | Purpose                      |
+| Command        | Description                  |
 |----------------+------------------------------|
 | emacs --daemon | Start server                 |
 | emacsclient -c | Open frame in running server |
@@ -43,19 +43,25 @@ $ rm ~/.emacs.d
 | C-x r m     | Bookmark the current loc in a file |
 | C-x r b     | Jump to bookmark                   |
 | C-x r l     | List bookmarks                     |
+| C-x C-n     | Narrow region                      |
+| C-x C-w     | Widen region                       |
+| C-x r w     | Save window configuration          |
+| C-x r j     | Restore configuration              |
+
 
 
 ** Functions and modes
-| Function    | Description                           |
-|-------------+---------------------------------------|
-| follow-mode | Browse splits like they're one window |
-| ielm-mode   | Elisp REPL                            |
-| hexl-mode   | Hex viewer                            |
-| bury-buffer | Send buffer to end of list            |
+| Function               | Description                           |
+|------------------------+---------------------------------------|
+| follow-mode            | Browse splits like they're one window |
+| ielm-mode              | Elisp REPL                            |
+| hexl-mode              | Hex viewer                            |
+| bury-buffer            | Send buffer to end of list            |
+| highlight-changes-mode | Show newly changed text in red        |
 
 
 ** org-mode
-| Command     | Function                                   |
+| Command     | Decription                         |
 |-------------+--------------------------------------------|
 | C-c C-n     | next heading                               |
 | C-c C-p     | previous heading                           |
@@ -66,3 +72,11 @@ $ rm ~/.emacs.d
 | M-S-RET     | Insert new item with checkbox              |
 | M-S-UP/DOWN | Move items including subitems up/down      |
 | C-c -       | Cycle list level through different bullets |
+
+** Dired
+| Command | Description        |
+|---------+--------------------|
+| % u     | uppercase filename |
+| % l     | lowercase filename |
+| % R     | regex rename       |
+
