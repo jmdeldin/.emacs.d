@@ -33,3 +33,5 @@
 
 (autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
 (add-to-list 'auto-mode-alist '("\\.rdoc$" . rdoc-mode))
+
+(require 'rinari)
