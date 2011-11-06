@@ -41,6 +41,9 @@
 ;; C-x m -- recompile
 (global-set-key (kbd "C-x m") 'recompile)
 
+;; Cmd-F -- full-screen mode
+(global-set-key (kbd "s-F") 'ns-toggle-fullscreen)
+
 (windmove-default-keybindings)
 ;; Make windmove work in org-mode:
 (add-hook 'org-shiftup-final-hook 'windmove-up)
