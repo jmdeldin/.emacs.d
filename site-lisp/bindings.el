@@ -35,12 +35,15 @@
   (interactive)
   (select-window (previous-window)))
 
-(global-set-key (kbd "M-<right>") 'select-next-window)
-(global-set-key (kbd "M-<left>")  'select-previous-window)
-
 ;; better commenting (replaces the original comment-dwim)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
 
 ;; C-x m -- recompile
 (global-set-key (kbd "C-x m") 'recompile)
 
+(windmove-default-keybindings)
+;; Make windmove work in org-mode:
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
