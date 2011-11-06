@@ -25,11 +25,12 @@
             (require 'flymake-ruby)
             (flymake-ruby-load)
 
-            (autoload 'rvm-use-default "ruby-rvm")
-            (rvm-use-default)
+            (require 'rhtml-mode)
+            ;; (autoload 'rvm-use-default "ruby-rvm")
+            ;; (rvm-use-default)
             (autoload 'ri "ri")
-            (global-set-key (kbd "C-h r") 'ri)
-            (global-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
+            (local-set-key (kbd "C-h r") 'ri)
+            (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
 
 (autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
 (add-to-list 'auto-mode-alist '("\\.rdoc$" . rdoc-mode))
