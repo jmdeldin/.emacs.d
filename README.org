@@ -40,30 +40,31 @@ $ rm ~/.emacs.d
 | emacsclient -c | Open frame in running server |
 
 ** Keys
-| Key         | Description                        |
-|-------------+------------------------------------|
-| C-q TAB     | Insert literal tab                 |
-| M-y         | Traverse kill-ring (after C-y)     |
-| C-u C-SPC   | Jump to last mark                  |
-| M-n         | (In =cua-mode=) Increment digit    |
-| C-M \       | Indent according to major mode     |
-| C-c C-s     | Start IRB                          |
-| C-c C-r     | Send region to IRB (C-c C-s first) |
-| C-x v =     | Diff against HEAD                  |
-| C-u C-x v = | Diff against other branch          |
-| C-x v u     | Discard changes                    |
-| C-x v ~     | Checkout another rev               |
-| C-x v l     | View commit log                    |
-| C-Shift BS  | Kill whole line                    |
-| C-c '       | Edit code block (org-babel)        |
-| C-x r m     | Bookmark the current loc in a file |
-| C-x r b     | Jump to bookmark                   |
-| C-x r l     | List bookmarks                     |
-| C-x C-n     | Narrow region                      |
-| C-x C-w     | Widen region                       |
-| C-x r w     | Save window configuration          |
-| C-x r j     | Restore configuration              |
-
+| Key         | Description                                     |
+|-------------+-------------------------------------------------|
+| C-q TAB     | Insert literal tab                              |
+| M-y         | Traverse kill-ring (after C-y)                  |
+| C-u C-SPC   | Jump to last mark                               |
+| M-n         | (In =cua-mode=) Increment digit                 |
+| C-M \       | Indent according to major mode                  |
+| C-c C-s     | Start IRB                                       |
+| C-c C-r     | Send region to IRB (C-c C-s first)              |
+| C-x v =     | Diff against HEAD                               |
+| C-u C-x v = | Diff against other branch                       |
+| C-x v u     | Discard changes                                 |
+| C-x v ~     | Checkout another rev                            |
+| C-x v l     | View commit log                                 |
+| C-Shift BS  | Kill whole line                                 |
+| C-c '       | Edit code block (org-babel)                     |
+| C-x r m     | Bookmark the current loc in a file              |
+| C-x r b     | Jump to bookmark                                |
+| C-x r l     | List bookmarks                                  |
+| C-x C-n     | Narrow region                                   |
+| C-x C-w     | Widen region                                    |
+| C-x r w     | Save window configuration                       |
+| C-x r j     | Restore configuration                           |
+| M-&         | Execute shell command asynchronously            |
+| C-x r t     | Removes the content in a rectangle (mark first) |
 
 
 ** Functions and modes
