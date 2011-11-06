@@ -4,3 +4,9 @@
 [submodule "site-lisp/vendor/ruby-rinari"]
 	path = site-lisp/vendor/ruby-rinari
 	url = git://github.com/eschulte/rinari.git
+[submodule "site-lisp/vendor/scss-mode"]
+	path = site-lisp/vendor/scss-mode
+	url = git://github.com/antonj/scss-mode.git
+[submodule "site-lisp/vendor/rhtml-mode"]
+	path = site-lisp/vendor/rhtml-mode
+	url = https://github.com/eschulte/rhtml.git

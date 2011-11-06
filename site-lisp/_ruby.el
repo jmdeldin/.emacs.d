@@ -36,3 +36,5 @@
 (add-to-list 'auto-mode-alist '("\\.rdoc$" . rdoc-mode))
 
 (require 'rinari)
+(require 'rhtml-mode)
+
