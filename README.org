@@ -65,7 +65,34 @@ $ rm ~/.emacs.d
 | C-x r j     | Restore configuration                           |
 | M-&         | Execute shell command asynchronously            |
 | C-x r t     | Removes the content in a rectangle (mark first) |
+| M-0 .. M-9  | Prefix argument                                 |
+| M-- M-c     | Capitalize last word (M-dash for back)          |
+| M-e         | Forward sentence                                |
+| M-a         | Backward sentence                               |
+| C-M-f       | Move forward by a balanced expr (e.g., ",', []) |
+| C-M-b       | Move backward by a balanced expr                |
+| M-m         | back-to-indentation (^ in Vim)                  |
+| M-r         | move the point w/o scrolling                    |
+| M-g M-g     | goto-line                                       |
 
+** Searching
+| Key     | Description                               |
+|---------+-------------------------------------------|
+| M-p     | previous search term                      |
+| M-n     | next search term                          |
+| M-c     | toggle case-sensitivity                   |
+| C-s C-w | search with the word at point (* inv Vim) |
+
+** Ido-mode
+These keys work inside the Ido minibuffer (C-x C-f).
+
+| Key       | Description                                           |
+|-----------+-------------------------------------------------------|
+| C-d       | Open a dired buffer in the current directory          |
+| C-a       | Toggles showing ignored files                         |
+| C-c       | Toggles case-sensitivity                              |
+| C-s & C-r | Move to the next/prev match                           |
+| C-SPC     | Restrict to an expr (C-x C-b .org C-SPC for just org) |
 
 ** Functions and modes
 | Function               | Description                           |
@@ -75,7 +102,7 @@ $ rm ~/.emacs.d
 | hexl-mode              | Hex viewer                            |
 | bury-buffer            | Send buffer to end of list            |
 | highlight-changes-mode | Show newly changed text in red        |
-
+| info-apropos           | full-text search of info              |
 
 ** org-mode
 | Command     | Decription                                 |
