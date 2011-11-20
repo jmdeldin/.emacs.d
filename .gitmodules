@@ -10,3 +10,6 @@
 [submodule "site-lisp/vendor/rhtml-mode"]
 	path = site-lisp/vendor/rhtml-mode
 	url = https://github.com/eschulte/rhtml.git
+[submodule "site-lisp/vendor/cucumber"]
+	path = site-lisp/vendor/cucumber
+	url = https://github.com/michaelklishin/cucumber.el.git
