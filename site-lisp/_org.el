@@ -55,3 +55,8 @@
 
 ;; remove "Valid XHTML" link
 (setq org-export-html-validation-link nil)
+
+; minted latex export
+(setq org-export-latex-listings 'minted)
+(setq org-export-latex-minted-options
+      '(("fontsize" "\\scriptsize")))
