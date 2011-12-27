@@ -78,17 +78,3 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
 
 (setq swapping-buffer nil)
 (setq swapping-window nil)
-
-(defun eshell/d (&optional dir)
-  "Launches a dired instance in the current working directory or DIR."
-  (if dir
-      (dired dir)
-    (dired ".")))
-
-(defun eshell/clear ()
-  "Clear the eshell buffer.
-
-From URL `http://www.khngai.com/emacs/eshell.php'"
-  (interactive)
-  (let ((inhibit-read-only t))
-    (erase-buffer)))

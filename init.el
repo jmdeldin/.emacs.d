@@ -1,14 +1,16 @@
 ;;; init.el --- Jon-Michael Deldin's .emacs
-;;
-;; Author:      Jon-Michael Deldin <dev@jmdeldin.com>
-;; Copyright:   2010-11 Jon-Michael Deldin
-;; Created:     2010-10-01
-;; Keywords:    local
-;;
+
+;; Copyright (C) 2010-2011  Jon-Michael Deldin
+
+;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
+;; Keywords: local
+;; Created:  2010-10-01
+;; Compatibility: 24
+
 ;;; Commentary:
 ;;
-;; I started using Emacs in fall of 2010 after a few years of
-;; Vim. Details of my setup are listed below:
+;; I started using Emacs in fall of 2010 after a few years of Vim. Details of
+;; my setup are listed below:
 ;;
 ;; Uses:        LaTeX, Org-Mode, Ruby, C
 ;; Environment: Mac OS X
@@ -16,89 +18,23 @@
 ;;
 ;;; Code:
 
-;;
-;;; UI settings
-;;
+(defvar my/site-lisp (concat user-emacs-directory "site-lisp")
+  "Local elisp directory (e.g., ~/.emacs.d/site-lisp).")
 
-;; hide the {menu,tool,scroll}bars
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-;; hide the startup messages
-(setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message t)
-
-;; "y or n" instead of "yes or no"
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; confirm quit
-(setq confirm-kill-emacs 'y-or-n-p)
-
-;; show line & column number in the mode line
-(column-number-mode t)
-
-;; show file size
-(size-indication-mode t)
-
-;; highlight parens
-(show-paren-mode t)
-(setq show-paren-delay 0.0)
-
-;; highlight current line
-(global-hl-line-mode 1)
-
-;; display time
-(display-time)
-
-;;
-;;; Whitespace
-;;
-
-;; wrap lines at column 78
-(setq-default fill-column 78)
-
-;; highlight right-margin when whitespace-mode is on
-(setq whitespace-line-column fill-column)
-
-;; highlight empty lines
-(setq indicate-empty-lines t)
-
-;; hard-wrap lines all the time
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-;; use spaces, not tabs (C-q C-i to insert a hard-tab)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq indent-line-function 'insert-tab)
-
-;; 4-spaces for C-modes (e.g., C & Perl)
-(setq c-default-style "k&r")
-(setq-default c-basic-offset 4)
-
-;; insert a newline at the EOF
-(setq-default require-final-newline t)
-
-;; delete trailing whitespace on save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;;; Variables
-(defvar my/site-lisp
-  (concat user-emacs-directory "site-lisp")
-    "Local elisp directory. Typically ~/.emacs.d/site-lisp.")
-
-(defvar my/vendor
-  (concat my/site-lisp "/vendor")
-    "External elisp. Typically ~/.emacs.d/site-lisp/vendor")
+(defvar my/vendor (concat my/site-lisp "/vendor")
+  "External elisp (e.g., ~/.emacs.d/site-lisp/vendor).")
 
 (defvar my/local (concat user-emacs-directory "local")
-  "Directory containing site-local modifications.
-   Typically ~/.emacs.d/local. This should not be placed
-   under version control.")
+  "Directory with site-local customizations. This shouldn't be checked-in.")
 
-;;
-;;; Paths
-;;
+(defun localize (dir)
+  "Concatenates a DIR with my/local."
+  (expand-file-name dir my/local))
+
+(defun load-directory (directory)
+  "Load an entire DIRECTORY of elisp files."
+  (dolist (f (directory-files directory t ".el$"))
+    (load-file f)))
 
 ;; add subdirectories of site-lisp to the *front* of load-path
 (let* ((default-directory my/site-lisp)
@@ -107,112 +43,21 @@
   (normal-top-level-add-subdirs-to-load-path)
   (nconc load-path orig-load-path))
 
-;; load package/filetype-specific configurations
-(dolist (f (directory-files my/site-lisp))
-  (if (string= (file-name-extension f) "el")
-      (load-library (concat my/site-lisp "/" (file-name-sans-extension f)))))
-
-;;
-;;; Misc. settings
-;;
-
-;; Connect with `emacsclient'
-(if (not (boundp 'server-process))
-    (server-start))
-
-;; Unicode
-(prefer-coding-system 'utf-8)
+(load-directory (concat user-emacs-directory "init.d"))
+(load-directory my/site-lisp)
 
 ;; use ~/.emacs.d/local/emacs-custom.el for customizations
-(setq custom-file (concat my/local "/emacs-custom.el"))
+(setq custom-file (localize "emacs-custom.el"))
 (load custom-file 'noerror)
 
-;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
-(setq bookmark-file (concat my/local "/.emacs.bmk"))
-
-;; put backup & autosave files in /tmp
-(setq backup-by-copying t)
-(setq backup-directory-alist
-      `((".*" . ,(concat my/local "/backups/"))))
-(setq delete-old-versions t)
-(setq kept-new-version 6)
-(setq kept-old-versions 2)
-(setq version-control t)
-
-;; dump auto-save files in ~/.emacs.d/local/saves
-(setq auto-save-list-file-prefix
-      (concat my/local "/saves/"))
-(setq auto-save-file-name-transforms
-      `((".*" ,(concat my/local "/saves") t)))
-
-;; use aspell
-(setq ispell-program-name "aspell")
-(setq ispell-list-command "list")
-(setq ispell-extra-args '("--dont-suggest"))
-
-;; fill-paragraph (M-q): use single spaces between sentences
-(setq sentence-end-double-space nil)
-
-;;
-;;; Packages
-;;
-
-;; ido is much more useful than C-f or C-b
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(setq ido-show-dot-for-dired t)
-(setq ido-save-directory-list-file (concat my/local "/.ido.last"))
-(ido-mode 1)
-
-;; don't use file<n> to distinguish between identically-named files -- use
-;; part of the directory
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
-;; recent files
-(require 'recentf)
-(setq recentf-save-file (concat my/local "/.recentf"))
-(setq recentf-max-saved-items 100)
-(recentf-mode 1)
-
-;; remember last edit position
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (concat my/local "/.emacs-places"))
-
-;; save minibuffer history
-(savehist-mode 1)
-(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(setq savehist-file (concat my/local "/.savehist"))
-
-;; M-x gdb
-(setq gdb-many-windows t)
-
-;; restore window configuration with C-c LEFT
-(winner-mode)
-
-;; eshell
-(setq eshell-directory-name (concat user-emacs-directory "eshell"))
-
-;; subword mode -- camelCase navigation
-(global-subword-mode t)
-
-;; autopair -- textmate-like quotation
-(require 'autopair)
-(autopair-global-mode t)
-(setq autopair-autowrap t)
-
-;; magit -- load on magit-status
-(load-library (concat my/vendor "/magit/50magit"))
-
-;; prevent auto-joining #erc
-(setq erc-autojoin-channels-alist '())
+;; ;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
+(setq bookmark-file (localize ".emacs.bmk"))
 
 (require 'textmate)
 (textmate-mode)
 
 (autoload 'markdown-mode "markdown-mode.el"
-  "Major mode for editing Markdown files" t)
+   "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
@@ -220,14 +65,12 @@
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (setq scss-compile-at-save nil)
 
-;; highlight FIXME & TODO
-(font-lock-add-keywords nil
-                        '(("\\<\\(FIXME\\|TODO\\):"
-                           1 font-lock-warning-face t)))
+;; ;; highlight FIXME & TODO
+;; (font-lock-add-keywords nil
+;;                         '(("\\<\\(FIXME\\|TODO\\):"
+;;                            1 font-lock-warning-face t)))
 
-;;
-;;; load local config to override any of the above settings
-;;
+;; load local config to override any of the above settings
 (load (concat my/local "/local") 'noerror)
 
 ;;; init.el ends here
