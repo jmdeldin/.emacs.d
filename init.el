@@ -220,23 +220,6 @@
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (setq scss-compile-at-save nil)
 
-;;
-;;; Color themes
-;;
-
-(if window-system
-    (progn
-      (require 'color-theme)
-      (color-theme-initialize)
-
-      ;; load external themes
-      (let ((themes (concat my/vendor "/themes")))
-        (dolist (f (directory-files themes))
-          (let ((name (concat themes "/" f)))
-            (when (and (file-regular-p name))
-              (if (string= "el" (file-name-extension name))
-                  (load-library (file-name-sans-extension name)))))))))
-
 ;; highlight FIXME & TODO
 (font-lock-add-keywords nil
                         '(("\\<\\(FIXME\\|TODO\\):"
