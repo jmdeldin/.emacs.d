@@ -12,7 +12,7 @@
 ;;
 ;; Uses:        LaTeX, Org-Mode, Ruby, C
 ;; Environment: Mac OS X
-;; Emacsen:     GNU Emacs 23.2.1+ and Aquamacs 2.2+
+;; Emacsen:     GNU Emacs 24
 ;;
 ;;; Code:
 
@@ -21,9 +21,9 @@
 ;;
 
 ;; hide the {menu,tool,scroll}bars
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; hide the startup messages
 (setq inhibit-startup-message t)
@@ -35,15 +35,8 @@
 ;; confirm quit
 (setq confirm-kill-emacs 'y-or-n-p)
 
-;; get rid of the audible bell
-(setq visible-bell t)
-
-;; turn down visual bells
-(setq ring-bell-function 'my/bells)
-
 ;; show line & column number in the mode line
 (column-number-mode t)
-(line-number-mode t)
 
 ;; show file size
 (size-indication-mode t)
@@ -55,21 +48,15 @@
 ;; highlight current line
 (global-hl-line-mode 1)
 
-;; syntax highlighting
-(global-font-lock-mode t)
-
 ;; display time
 (display-time)
-
-;; enable the backtrace
-; (setq debug-on-error t)
 
 ;;
 ;;; Whitespace
 ;;
 
 ;; wrap lines at column 78
-(setq fill-column 78)
+(setq-default fill-column 78)
 
 ;; highlight right-margin when whitespace-mode is on
 (setq whitespace-line-column fill-column)
@@ -260,5 +247,4 @@
 ;;
 (load (concat my/local "/local") 'noerror)
 
-;;; end of init.el.
-
+;;; init.el ends here

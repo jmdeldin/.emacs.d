@@ -30,16 +30,6 @@ is ISO 8601, which is ``%Y-%m-%dT%T%z''."
   (insert (format-time-string
      (if (string= "" format) "%Y-%m-%dT%T%z" format))))
 
-(defun my/bells ()
-  "Don't ring the bell on navigation and cancellation commands.
-
-From URL `http://stackoverflow.com/q/324457#731660'."
-  (unless (memq this-command
-    '(down up previous-line next-line mwheel-scroll
-      backward-char forward-char keyboard-quit))
-    (ding)))
-
-
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
 
@@ -61,7 +51,6 @@ From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/
    (if mark-active (list (region-beginning) (region-end))
      (list (line-beginning-position)
            (line-beginning-position 2)))))
-
 
 (defun swap-buffers-in-windows ()
   "Swap buffers between two windows.
