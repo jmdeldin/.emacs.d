@@ -33,15 +33,8 @@
 
 (defun load-directory (directory)
   "Load an entire DIRECTORY of elisp files."
-  (dolist (f (directory-files directory t ".el$"))
-    (load-file f)))
-
-;; add subdirectories of site-lisp to the *front* of load-path
-(let* ((default-directory my/site-lisp)
-       (orig-load-path load-path))
-  (setq load-path (cons default-directory nil))
-  (normal-top-level-add-subdirs-to-load-path)
-  (nconc load-path orig-load-path))
+  (dolist (f (directory-files directory t ".el"))
+    (load-library (file-name-sans-extension f))))
 
 (load-directory (concat user-emacs-directory "init.d"))
 (load-directory my/site-lisp)
@@ -50,25 +43,10 @@
 (setq custom-file (localize "emacs-custom.el"))
 (load custom-file 'noerror)
 
-;; ;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
+;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
 (setq bookmark-file (localize ".emacs.bmk"))
 
-(require 'textmate)
 (textmate-mode)
-
-(autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-      (cons '("\\.md" . markdown-mode) auto-mode-alist))
-
-(autoload 'scss-mode "scss-mode")
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-(setq scss-compile-at-save nil)
-
-;; ;; highlight FIXME & TODO
-;; (font-lock-add-keywords nil
-;;                         '(("\\<\\(FIXME\\|TODO\\):"
-;;                            1 font-lock-warning-face t)))
 
 ;; load local config to override any of the above settings
 (load (concat my/local "/local") 'noerror)

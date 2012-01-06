@@ -14,7 +14,7 @@
 (setq whitespace-line-column fill-column)
 
 ;; highlight empty lines
-(setq indicate-empty-lines t)
+(setq-default indicate-empty-lines t)
 
 ;; hard-wrap lines all the time
 (add-hook 'text-mode-hook 'turn-on-auto-fill)

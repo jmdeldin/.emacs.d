@@ -8,19 +8,35 @@
 ;;; Code:
 
 (setq required-packages
-      (list 'magit 'textmate-mode 'scss-mode))
+      '(
+        auctex
+        graphviz-dot-mode
+        magit
+        markdown-mode
+        org
+        ruby-compilation
+        ruby-electric
+        ruby-mode
+        scss-mode
+        textmate-mode
+        yaml-mode
+        ))
 
+(setq url-http-attempt-keepalives nil)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("ess" . "http://kieranhealy.org/packages")))
+        ("tromey" . "http://tromey.com/elpa/")))
 
 (package-initialize)
 
-;; (dolist (package required-packages)
-;;   (when (not (package-installed-p package))
-;;     (package-refresh-contents)
-;;     (package-install package)))
+(defun setup-packages ()
+  "Install required packages."
+  (interactive)
+  (package-refresh-contents)
+  (dolist (p required-packages)
+      (message "Installing %s" p)
+      (package-install p)))
 
 (provide '00-packages)
 ;;; 00-packages.el ends here
