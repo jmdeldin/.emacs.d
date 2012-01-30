@@ -25,6 +25,10 @@
 ;; Unicode
 (prefer-coding-system 'utf-8)
 
+;; changing a region's case is useful
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 ;; remember last edit position
 (require 'saveplace)
 (setq-default save-place t)
