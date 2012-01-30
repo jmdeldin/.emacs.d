@@ -38,5 +38,8 @@
 ;; display time
 (display-time)
 
+;; use ibuffer instead of list-buffers
+(defalias 'list-buffers 'ibuffer)
+
 (provide '01-ui)
 ;;; 01-ui.el ends here
