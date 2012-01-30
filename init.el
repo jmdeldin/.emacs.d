@@ -1,6 +1,6 @@
 ;;; init.el --- Jon-Michael Deldin's .emacs
 
-;; Copyright (C) 2010-2011  Jon-Michael Deldin
+;; Copyright (C) 2010-2012 Jon-Michael Deldin
 
 ;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
 ;; Keywords: local
@@ -36,8 +36,8 @@
   (dolist (f (directory-files directory t ".el"))
     (load-library (file-name-sans-extension f))))
 
-(load-directory (concat user-emacs-directory "init.d"))
 (load-directory my/site-lisp)
+(load-directory (concat user-emacs-directory "init.d"))
 
 ;; use ~/.emacs.d/local/emacs-custom.el for customizations
 (setq custom-file (localize "emacs-custom.el"))

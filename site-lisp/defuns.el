@@ -78,3 +78,8 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
 
 (setq swapping-buffer nil)
 (setq swapping-window nil)
+
+(defun filter (cond-p lst)
+  "Delete elements from a LST not matching condition COND-P."
+  (delq nil
+        (mapcar (lambda (x) (and (funcall cond-p x) x)) lst)))
