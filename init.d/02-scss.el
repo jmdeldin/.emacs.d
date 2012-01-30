@@ -8,6 +8,6 @@
 ;;; Code:
 
 (setq scss-compile-at-save nil)
-
+(add-hook 'css-mode-hook 'rainbow-mode)
 (provide '02-scss)
 ;;; 02-scss.el ends here
