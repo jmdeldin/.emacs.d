@@ -49,3 +49,9 @@
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+;; M-s -- switch to next window
+(global-set-key (kbd "M-s") 'select-next-window)
+
+;; M-S -- switch to previous window
+(global-set-key (kbd "M-S") 'select-previous-window)
