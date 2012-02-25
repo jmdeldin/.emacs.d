@@ -44,7 +44,6 @@
 ;; Cmd-F -- full-screen mode
 (global-set-key (kbd "s-F") 'ns-toggle-fullscreen)
 
-(windmove-default-keybindings)
 ;; Make windmove work in org-mode:
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
