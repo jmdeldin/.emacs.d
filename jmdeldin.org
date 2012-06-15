@@ -1,8 +1,8 @@
 #+TITLE:       Jon-Michael Deldin's Emacs Configuration
 #+STARTUP:     align hidestars indent
 
-I started using Emacs in the fall of 2010 after a few years of Vim. I work on
-Mac OS X and GNU Emacs 24.1 using LaTeX, Org-Mode, and Ruby.
+I started using Emacs in the fall of 2010 after a few years of Vim. I use GNU
+Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
 
 * Variables
 #+begin_src emacs-lisp
@@ -30,9 +30,12 @@ Mac OS X and GNU Emacs 24.1 using LaTeX, Org-Mode, and Ruby.
     (dolist (f (directory-files directory t ".el"))
       (load-library (file-name-sans-extension f))))
 
+  ;; load personal elisp
+  (load-directory my/site-lisp)
+
   (defun get-installed-packages ()
     "Caches packages installed with package.el to ~/.emacs.d/pkgs.el.
-  This could definitely be improved, but for now, it's basically a macro."
+    This could definitely be improved, but for now, it's basically a macro."
     (interactive)
     (package-list-packages-no-fetch)
     (toggle-read-only)
@@ -56,82 +59,33 @@ Mac OS X and GNU Emacs 24.1 using LaTeX, Org-Mode, and Ruby.
       (unless (package-installed-p p)
         (message "Installing %s" p)
         (package-install p))))
-#+end_src
 
-* Misc
-#+begin_src emacs-lisp
-(load-directory my/site-lisp)
-
-;; use ~/.emacs.d/local/emacs-custom.el for customizations
-(setq custom-file (localize "emacs-custom.el"))
-(load custom-file 'noerror)
-
-;; use ~/.emacs.d/local/.emacs.bmk for bookmarks
-(setq bookmark-file (localize ".emacs.bmk"))
-
-(textmate-mode)
-
-;; load local config to override any of the above settings
-(load (concat my/local "/local") 'noerror)
+  (defun associate-file-type (file-list mode)
+    "Associates a FILE-LIST with a MODE."
+    (let* ((regexp (concat (regexp-opt file-list t) "\\'")))
+      (add-to-list 'auto-mode-alist (cons regexp mode))))
 #+end_src
 
 * Packages
+Load and activate elisp packages:
 #+begin_src emacs-lisp
-(setq url-http-attempt-keepalives nil)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("melpa" . "http://melpa.milkbox.net/packages/")))
-
 (package-initialize)
 #+end_src
 
-* Backups
-#+begin_src emacs-lisp
-;; place backups in ~/.emacs.d/local/backups
-(setq backup-by-copying t)
-(setq backup-directory-alist
-      (list (cons "." (expand-file-name "backups" my/local))))
-(setq delete-old-versions t)
-(setq kept-new-versions 6)
-(setq kept-old-versions 2)
-(setq version-control t)
-
-;; dump auto-save files in ~/.emacs.d/local/saves
-(setq auto-save-list-file-prefix
-      (concat my/local "/saves/"))
-;(setq auto-save-file-name-transforms
- ;     (list (cons "." (expand-file-name "saves" my/local))))
-#+end_src
-* Packages
-Keep =package.el= from timing out on large installs.
-
+Prevent =package.el= from timing out on large installs:
 #+begin_src emacs-lisp
   (setq url-http-attempt-keepalives nil)
 #+end_src
 
-Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
-
+Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
 #+begin_src emacs-lisp
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
 #+end_src
 
+* Backups
+Place backups in ~/.emacs.d/local/backups
 #+begin_src emacs-lisp
-(package-initialize)
-#+end_src
-
-* 01-backups.el
-#+begin_src emacs-lisp
-;;; 01-backups.el --- backup and auto-save settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: local
-
-;;; Code:
-
-;; place backups in ~/.emacs.d/local/backups
 (setq backup-by-copying t)
 (setq backup-directory-alist
       (list (cons "." (expand-file-name "backups" my/local))))
@@ -139,387 +93,274 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
 (setq kept-new-versions 6)
 (setq kept-old-versions 2)
 (setq version-control t)
-
-;; dump auto-save files in ~/.emacs.d/local/saves
+#+end_src
+* Auto-saves
+Dump auto-save files in ~/.emacs.d/local/saves
+#+begin_src emacs-lisp
 (setq auto-save-list-file-prefix
       (concat my/local "/saves/"))
-;(setq auto-save-file-name-transforms
- ;     (list (cons "." (expand-file-name "saves" my/local))))
-
-;;; 01-backups.el ends here
 #+end_src
 
-* 01-erc.el
+* ERC
+Prevent auto-joining =#erc=
 #+begin_src emacs-lisp
-;;; 01-erc.el --- erc/irc settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: comm
-
-;;; Code:
-
-;; prevent auto-joining #erc
 (setq erc-autojoin-channels-alist '())
-
-;;; 01-erc.el ends here
 #+end_src
 
-* 01-eshell.el
+* Minibuffer
+Interactively-do-things is the greatest Emacs extension.
+
 #+begin_src emacs-lisp
-;;; 01-eshell.el --- eshell settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: terminals
-
-;;; Code:
-
-;; eshell
-(setq eshell-directory-name (concat user-emacs-directory "eshell"))
-
-(defun eshell/d (&optional dir)
-  "Launches a dired instance in the current working directory or DIR."
-  (if dir
-      (dired dir)
-    (dired ".")))
-
-(defun eshell/clear ()
-  "Clear the eshell buffer from URL `http://www.khngai.com/emacs/eshell.php'."
-  (interactive)
-  (let ((inhibit-read-only t))
-    (erase-buffer)))
-
-;;; 01-eshell.el ends here
-#+end_src
-
-* 01-keywords.el
-#+begin_src emacs-lisp
-;;; 01-keywords.el --- keywords to highlight
-
-;; Copyright (C) 2012  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-;; highlight FIXME & TODO
-(defun my/highlight ()
-  "Highlight FIXME and TODO keywords."
-  (font-lock-add-keywords nil
-                          '(("\\<\\(FIXME\\|TODO\\):"
-                             1 font-lock-warning-face t))))
-
-(add-hook 'text-mode-hook 'my/highlight)
-
-;;; 01-keywords.el ends here
-#+end_src
-
-* 01-minibuffer.el
-#+begin_src emacs-lisp
-;;; 01-minibuffer.el --- minibuffer settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-;; ido-mode
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (setq ido-show-dot-for-dired t)
 (setq ido-save-directory-list-file (localize ".ido.last"))
 (ido-mode 1)
+#+end_src
 
-;; use part of the directory to distinguish between identically-named files
+Use part of the directory to distinguish between identically-named files:
+#+begin_src emacs-lisp
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
+#+end_src
 
-;; save minibuffer history
+Save minibuffer history:
+#+begin_src emacs-lisp
 (savehist-mode 1)
 (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (setq savehist-file (localize ".savehist"))
+#+end_src
 
-;; recent files
+Enable recent files:
+#+begin_src emacs-lisp
 (require 'recentf)
 (setq recentf-save-file (localize ".recentf"))
 (setq recentf-max-saved-items 100)
 (recentf-mode 1)
-
-
-;;; 01-minibuffer.el ends here
 #+end_src
 
-* 01-server.el
+* Server
+Only load the server if it isn't running.
 #+begin_src emacs-lisp
-;;; 01-server.el --- server settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
 (load "server")
 (unless (server-running-p)
   (server-start))
-
-;;; 01-server.el ends here
 #+end_src
 
-* 01-spell.el
+* Spelling
+Use =aspell= instead of =ispell=, use =list= for faster region checking, and
+use a faster suggestion mode.
+
 #+begin_src emacs-lisp
-;;; 01-spell.el --- flyspell settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
-(setq ispell-extra-args '("--dont-suggest"))
-
-;;; 01-spell.el ends here
+(setq ispell-extra-args '("--sug-mode=ultra"))
 #+end_src
 
-* 01-text.el
+* Text Editing
+Enable camelCase navigation
 #+begin_src emacs-lisp
-;;; 01-text.el --- text-editing settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-;; camelCase navigation
 (global-subword-mode t)
+#+end_src
 
-;; match parens and quotes
+Match parens and quotes
+#+begin_src emacs-lisp
 (electric-pair-mode t)
+#+end_src
 
-;; on-the-fly reindentation
+Enable on-the-fly reindentation
+#+begin_src emacs-lisp
 (electric-indent-mode t)
+#+end_src
 
-;; insert a newline around special characters
+Insert a newline around special characters
+#+begin_src emacs-lisp
 (electric-layout-mode t)
+#+end_src
 
-;; fill-paragraph (M-q): use single spaces between sentences
+Use single spaces between sentences for =fill-paragraph= (=M-q=)
+#+begin_src emacs-lisp
 (setq sentence-end-double-space nil)
+#+end_src
 
-;; Unicode
+Use Unicode everywhere
+#+begin_src emacs-lisp
 (prefer-coding-system 'utf-8)
+#+end_src
 
-;; changing a region's case is useful
+Changing a region's case is useful
+#+begin_src emacs-lisp
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+#+end_src
 
-;; remember last edit position
+Remember last edit position
+#+begin_src emacs-lisp
 (require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file (localize "/.emacs-places"))
-
-;;; 01-text.el ends here
 #+end_src
 
-* 01-ui.el
+Load =textmate-mode=
 #+begin_src emacs-lisp
-;;; 01-ui.el --- UI settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: frames
-
-;;; Code:
-
-;; hide the {menu,tool,scroll}bars
+(textmate-mode)
+#+end_src
+* UI
+Hide the {menu,tool,scroll}bars
+#+begin_src emacs-lisp
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+#+end_src
 
-;; hide the startup messages
+Hide the startup messages
+#+begin_src emacs-lisp
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
+#+end_src
 
-;; "y or n" instead of "yes or no"
+"y or n" instead of "yes or no"
+#+begin_src emacs-lisp
 (fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
 
-;; confirm quit
+Confirm quit
+#+begin_src emacs-lisp
 (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
 
-;; show line & column number in the mode line
+Show line & column number in the mode line
+#+begin_src emacs-lisp
 (column-number-mode t)
+#+end_src
 
-;; show file size
+Show file size
+#+begin_src emacs-lisp
 (size-indication-mode t)
+#+end_src
 
-;; highlight parens
+Highlight parens
+#+begin_src emacs-lisp
 (show-paren-mode t)
 (setq show-paren-delay 0.0)
+#+end_src
 
-;; highlight current line
+Highlight current line
+#+begin_src emacs-lisp
 (global-hl-line-mode 1)
+#+end_src
 
-;; display time
+Display the time
+#+begin_src emacs-lisp
 (display-time)
+#+end_src
 
-;; use ibuffer instead of list-buffers
+Use =ibuffer= instead of =list-buffers=
+#+begin_src emacs-lisp
 (defalias 'list-buffers 'ibuffer)
-
-;;; 01-ui.el ends here
 #+end_src
 
-* 01-whitespace.el
+* Whitespace
+Wrap lines at column 78
 #+begin_src emacs-lisp
-;;; 01-whitespace.el --- whitespace settings
-
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-;; wrap lines at column 78
 (setq-default fill-column 78)
-
-;; highlight right-margin when whitespace-mode is on
-(setq whitespace-line-column fill-column)
-
-;; highlight empty lines
-(setq-default indicate-empty-lines t)
-
-;; hard-wrap lines all the time
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-;; use spaces, not tabs (C-q C-i to insert a hard-tab)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq indent-line-function 'insert-tab)
-
-;; insert a newline at the EOF
-(setq-default require-final-newline t)
-
-;; delete trailing whitespace on save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;;; 01-whitespace.el ends here
 #+end_src
 
-* 01-window.el
+Highlight right-margin when whitespace-mode is on
 #+begin_src emacs-lisp
-;;; 01-window.el --- window settings
+(setq whitespace-line-column fill-column)
+#+end_src
 
-;; Copyright (C) 2011  Jon-Michael Deldin
+Highlight empty lines
+#+begin_src emacs-lisp
+(setq-default indicate-empty-lines t)
+#+end_src
 
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: frames
+Hard-wrap lines all the time
+#+begin_src emacs-lisp
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+end_src
 
-;;; Code:
+Use spaces, not tabs (C-q C-i to insert a hard-tab)
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+end_src
 
-;; restore window configuration with C-c LEFT
+2-space tabs
+#+begin_src emacs-lisp
+(setq-default tab-width 2)
+#+end_src
+
+Insert tabs when appropriate
+#+begin_src emacs-lisp
+(setq indent-line-function 'insert-tab)
+#+end_src
+
+Insert a newline at the EOF
+#+begin_src emacs-lisp
+(setq-default require-final-newline t)
+#+end_src#+end_src
+
+Delete trailing whitespace on save
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+* Window Management
+Restore window configuration with =C-c LEFT=
+#+begin_src emacs-lisp
 (winner-mode)
+#+end_src
 
-;; windmove -- default binding is shift
+Enable windmove -- default binding is shift
+#+begin_src emacs-lisp
 (windmove-default-keybindings)
 (setq windmove-wrap-around t)
-
-
-;;; 01-window.el ends here
 #+end_src
 
-* 02-c.el
+Make windmove work in org-mode:
 #+begin_src emacs-lisp
-;;; 02-c.el --- settings for C-mode and its derivatives
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+#+end_src
 
-;; Copyright (C) 2011  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
+* C
+The only way to program.
+#+begin_src emacs-lisp
 (setq c-default-style "k&r")
+#+end_src
+
+Use four spaces for tabs.
+#+begin_src emacs-lisp
 (setq-default c-basic-offset 4)
-
-;; M-x gdb
-(setq gdb-many-windows t)
-
-;;; 02-c.el ends here
 #+end_src
 
-* 02-ess.el
+* Graphviz
 #+begin_src emacs-lisp
-;; autoloads borrowed from http://braeburn.aquamacs.org/code/master/aquamacs/src/site-lisp/aquamacs-mode-defaults.el
-(autoload 'ess-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'Rnw-mode "ess-site" "Emacs Speaks Statistics" t)
-(autoload 'R-transcript-mode "ess-site" "Emacs Speaks Statistics" t)
-
-(setq auto-mode-alist
-      (append '(
-                ("\\.[rR]$" . R-mode)
-                ("\\.[rR]profile$" . R-mode)
-                ("\\.[Rr]t$" . R-transcript-mode)
-                ("\\.[Rr]out$" . R-transcript-mode))
-              auto-mode-alist))
+(associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
 #+end_src
 
-* 02-gv.el
-#+begin_src emacs-lisp
-;; graphviz settings
-
-(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode for graphviz files" t)
-(add-to-list 'auto-mode-alist '("\\.gv$" . graphviz-dot-mode))
-(add-to-list 'auto-mode-alist '("\\.dot$" . graphviz-dot-mode))
-
-#+end_src
-
-* 02-lisp.el
+* Lisp
 #+begin_src emacs-lisp
 (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
-
+#+end_src
+* Org-Mode
+Include org:
+#+begin_src emacs-lisp
+(require 'org-install)
 #+end_src
 
-* 02-org.el
+Include the org-habit module for the agenda:
 #+begin_src emacs-lisp
-;;; 02-org.el --- Org-Mode customizations
-
-;; Copyright (C) 2012  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: tools
-
-;;; Commentary:
-
-;; This configuration assumes org files live in the ~/org directory. You can
-;; customize it by setting these variables in `../local/local.el':
-;;
-;;   (setq org-default-notes-file PATH_TO_CAPTURE.ORG)
-;;   (setq org-journal-file PATH_TO_JOURNAL.ORG)
-;;   (setq org-log-file PATH_TO_LOG.ORG)
-;;   (setq org-archive-location PATH_TO_ARCHIVE.ORG)
-;;   (setq org-agenda-files LIST)
-;;
-;;; Code:
-
-(require 'org-install)
-
 (setq org-modules (quote (org-habit)))
+#+end_src
 
-;; paths
+** Paths
+This configuration assumes org files live in the =~/org= directory. You can
+customize it by setting these variables in =../local/local.el=:
+#+begin_src emacs-lisp
 (setq org-directory "~/org")
 (setq org-default-notes-file "~/org/capture.org")
 (setq org-journal-file "~/org/journal.org")
@@ -528,7 +369,12 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
 (setq org-agenda-files (filter (lambda (fn)
                                  (not (string-match (rx "#") fn)))
                                (file-expand-wildcards org-directory)))
-;; capture templates (C-c c)
+#+end_src
+
+** Capture Templates
+Hit =C-c c= to trigger these:
+
+#+begin_src emacs-lisp
 (setq org-capture-templates
       '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
          "* TODO %^{Task} %^g \n%U \n%?")
@@ -537,11 +383,10 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
         ("l" "Log" entry (file+datetree+prompt org-log-file)
          "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
         ))
+#+end_src
 
-;; timer/clock-in
-(setq org-timer-default-timer 25)
-
-;; templates
+** Skeleton
+#+begin_src emacs-lisp
 (define-skeleton orgmode-skeleton
   "Inserts orgmode defaults into the current buffer."
   "Title: "
@@ -549,74 +394,107 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
   "#+DESCRIPTION: " (skeleton-read "Description: ") \n
   "#+STARTUP:     align hidestars indent lognotedone" \n
   \n _)
+#+end_src
 
-;; bindings
+** Keybindings
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
+#+end_src
 
-;; babel
+** Babel
+Include these languages for babel
+#+begin_src emacs-lisp
 (setq org-babel-load-languages (mapcar (lambda (l) (cons l t))
         '(C calc emacs-lisp gnuplot latex perl python R ruby screen sh)))
+#+end_src
 
-;; show the agenda from the current day
+Highlight src blocks
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t)
+#+end_src
+** Agenda
+Show the agenda from the current day:
+#+begin_src emacs-lisp
 (setq org-agenda-start-on-weekday nil)
+#+end_src
 
-;; remove "Valid XHTML" link
+Show all habits
+#+begin_src emacs-lisp
+(setq org-habit-show-habits-only-for-today nil)
+#+end_src
+
+** Exporting
+Remove "Valid XHTML" link
+#+begin_src emacs-lisp
 (setq org-export-html-validation-link nil)
+#+end_src
 
-;; minted latex export
+Minted latex export
+#+begin_src emacs-lisp
 (setq org-export-latex-minted-options
       '(("fontsize" "\\scriptsize")))
-
-;; show all habits
-(setq org-habit-show-habits-only-for-today nil)
-
-;;; 02-org.el ends here
 #+end_src
 
-* 02-perl.el
+* Perl
+Use the more modern =cperl-mode=
 #+begin_src emacs-lisp
-;;; _perl.el -- Perl settings
-
-;; use cperl-mode
 (defalias 'perl-mode 'cperl-mode)
+#+end_src
 
-;; turn on for tests
+Use =cperl-mode= for =.t= tests
+#+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
+#+end_src
 
-;; 4 SPC
+Use four-space indents
+#+begin_src emacs-lisp
 (setq cperl-indent-level 4)
+#+end_src
 
-;; indent only 4-spaces in broken-up calls like
-;;   someCall(
-;;       $var,
-;;       $var2
-;;   )
+Indent only four-spaces in broken-up calls like
+#+begin_src perl
+  someCall(
+      $var,
+      $var2
+  )
+#+end_src
+#+begin_src emacs-lisp
 (setq cperl-indent-parens-as-block t)
 (setq cperl-close-paren-offset -4)
-
-;; Indentation for lines not starting statements (e.g., hash members)
-(setq cperl-continued-statement-offset 0)
 #+end_src
 
-* 02-ruby.el
+Fix indentation for lines not starting statements (e.g., hash members)
+#+begin_src emacs-lisp
+(setq cperl-continued-statement-offset 0)
+#+end_src#+end_src
+
+* Ruby
+** Running
+Shortcut for running a script and returning focus to it:
 #+begin_src emacs-lisp
 (defun ruby-run-buffer ()
   "Run the current Ruby script and switch focus back to the script."
   (interactive)
   (ruby-compilation-this-buffer)
   (other-window -1))
+#+end_src
 
-(autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+** Filetypes
+#+begin_src emacs-lisp
+(associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile") 'ruby-mode)
+#+end_src
 
+Turn on =rdoc-mode=:
+#+begin_src emacs-lisp
+(autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
+(associate-file-type '(".rdoc" ".rd") 'rdoc-mode)
+#+end_src
+
+** Hooks
+#+begin_src emacs-lisp
 (add-hook 'ruby-mode-hook
           (lambda ()
             (flymake-ruby-load)
@@ -624,78 +502,81 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
             (local-set-key (kbd "C-h r") 'yari)
             (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
 
-(autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
-(add-to-list 'auto-mode-alist '("\\.rdoc$" . rdoc-mode))
 #+end_src
 
-* 02-scss.el
+* CSS
+Turn on =rainbow-mode= for colored hex values
 #+begin_src emacs-lisp
-;;; 02-scss.el --- SCSS settings
-
-;; Copyright (C) 2012  Jon-Michael Deldin
-
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-(setq scss-compile-at-save nil)
 (add-hook 'css-mode-hook 'rainbow-mode)
-;;; 02-scss.el ends here
 #+end_src
 
-* 02-tex.el
+Prevent SCSS from compiling at save time:
 #+begin_src emacs-lisp
-;;; 02-tex.el --- LaTeX settings
+(setq scss-compile-at-save nil)
+#+end_src
 
-;; Copyright (C) 2012  Jon-Michael Deldin
+* Markdown
+#+begin_src emacs-lisp
+(associate-file-type '(".md" ".markdown") 'markdown-mode)
+#+end_src
 
-;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
-;; Keywords: convenience
-
-;;; Code:
-
-;; produce PDFs instead of DVIs
+* LaTeX
+Produce PDFs instead of DVIs
+#+begin_src emacs-lisp
 (setq TeX-PDF-mode t)
-
-;;; 02-tex.el ends here
 #+end_src
 
-* 02-yaml.el
+* Keybindings
+** Editing
+=C-c C-r= -- Revert buffer
 #+begin_src emacs-lisp
-(autoload 'yaml-mode "yaml-mode" "" t)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-#+end_src
-
-* 03-bindings.el
-#+begin_src emacs-lisp
-;;
-;;; Keybindings
-;;
-
-;; C-c C-r -- Revert buffer
 (global-set-key (kbd "C-c C-r") 'revert-buffer)
+#+end_src
 
-;; Swap C-j and RET
+Swap =C-j= and =RET=
+#+begin_src emacs-lisp
 (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 (global-set-key (kbd "C-j") 'newline)
+#+end_src
 
-;; C-c w -- toggle whitespace mode
-(global-set-key (kbd "C-c w") 'global-whitespace-mode)
-
-;; C-c C-d -- Remove trailing whitespace
+=C-c C-d= -- Remove trailing whitespace
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
+#+end_src
 
-;; C-w -- delete the previous word (like most shells)
+=C-w= -- delete the previous word (like most shells)
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-w") 'backward-kill-word)
+#+end_src
 
-;; C-x C-k -- kill region (since we just unbound it with C-w)
+C-x C-k -- kill region (since we just unbound it with C-w)
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-k") 'kill-region)
+#+end_src
 
-;; C-x C-j -- join line
+=C-x C-j= -- join line
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-j") 'join-line)
+#+end_src
 
-;; window movement from <http://nex-3.com/posts/45-efficient-window-switching-in-emacs>
+=C-c w= -- toggle whitespace mode
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c w") 'global-whitespace-mode)
+#+end_src
+
+better commenting (replaces the original comment-dwim)
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-;") 'comment-or-uncomment-region)
+#+end_src
+
+=C-x m= -- recompile
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x m") 'recompile)
+#+end_src
+
+** UI
+Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
+#+begin_src emacs-lisp
 (defun select-next-window ()
   "Switch to the next window"
   (interactive)
@@ -705,34 +586,43 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository.
   "Switch to the previous window"
   (interactive)
   (select-window (previous-window)))
+#+end_src
 
-;; better commenting (replaces the original comment-dwim)
-(global-set-key (kbd "M-;") 'comment-or-uncomment-region)
-
-;; C-x m -- recompile
-(global-set-key (kbd "C-x m") 'recompile)
-
-;; Cmd-F -- full-screen mode
-(global-set-key (kbd "s-F") 'ns-toggle-fullscreen)
-
-;; Make windmove work in org-mode:
-(add-hook 'org-shiftup-final-hook 'windmove-up)
-(add-hook 'org-shiftleft-final-hook 'windmove-left)
-(add-hook 'org-shiftdown-final-hook 'windmove-down)
-(add-hook 'org-shiftright-final-hook 'windmove-right)
-
-;; M-s -- switch to next window
+=M-s/M-S= -- switch to next/previous windows
+#+begin_src emacs-lisp
 (global-set-key (kbd "M-s") 'select-next-window)
-
-;; M-S -- switch to previous window
 (global-set-key (kbd "M-S") 'select-previous-window)
+#+end_src
 
-;; M-x -- ido-like completion for functions
+=M-x= -- ido-like completion for functions
+#+begin_src emacs-lisp
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+#+end_src
 
-;; Mac-bindings
+** Mac
+Make the Cmd and Opt keys work for =M-x=
+#+begin_src emacs-lisp
 (when system-type "darwin"
   (setq-default mac-command-modifier 'meta)
   (setq-default mac-option-modifier 'meta))
+#+end_src
+
+* Misc
+Use =~/.emacs.d/local/emacs-custom.el= for customizations (and don't barf if
+the file doesn't exist):
+#+begin_src emacs-lisp
+(setq custom-file (localize "emacs-custom.el"))
+(load custom-file 'noerror)
+#+end_src
+
+Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
+#+begin_src emacs-lisp
+(setq bookmark-file (localize ".emacs.bmk"))
+#+end_src
+
+
+Load local config to override any of the above settings
+#+begin_src emacs-lisp
+(load (concat my/local "/local") 'noerror)
 #+end_src
