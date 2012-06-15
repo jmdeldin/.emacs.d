@@ -7,20 +7,25 @@
 
 ;;; Code:
 
-(setq required-packages
-      '(
-        auctex
-        graphviz-dot-mode
-        magit
-        markdown-mode
-        org
-        ruby-compilation
-        ruby-electric
-        ruby-mode
-        scss-mode
-        textmate-mode
-        yaml-mode
-        ))
+(defvar my/required-pkgs (concat user-emacs-directory "pkgs.el")
+  "File containing cached packages.")
+
+(defun get-installed-packages ()
+  "Caches packages installed with package.el to ~/.emacs.d/pkgs.el.
+This could definitely be improved, but for now, it's basically a macro."
+  (interactive)
+  (package-list-packages-no-fetch)
+  (toggle-read-only)
+  (flush-lines "  available  ")
+  (flush-lines "  built-in  ")
+  (lisp-mode)
+  (mark-whole-buffer)
+  (replace-regexp "[0-9.]+ +installed .*" "")
+  (beginning-of-buffer)
+  (insert "(setq required-packages '(\n")
+  (end-of-buffer)
+  (insert "))")
+  (write-file my/required-pkgs))
 
 (setq url-http-attempt-keepalives nil)
 (setq package-archives
