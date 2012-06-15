@@ -14,20 +14,9 @@
 
 (add-hook 'ruby-mode-hook
           (lambda ()
-            (require 'ruby-compilation)
-            (require 'ruby-electric)
-
-            (require 'inf-ruby)
-            (autoload 'run-ruby "inf-ruby")
-            (autoload 'inf-ruby-keys "inf-ruby")
-            (inf-ruby-keys)
-
-            (require 'flymake-ruby)
             (flymake-ruby-load)
-
-;;            (require 'rhtml-mode)
             (autoload 'ri "ri")
-            (local-set-key (kbd "C-h r") 'ri)
+            (local-set-key (kbd "C-h r") 'yari)
             (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
 
 (autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
