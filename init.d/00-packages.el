@@ -38,9 +38,11 @@ This could definitely be improved, but for now, it's basically a macro."
   "Install required packages."
   (interactive)
   (package-refresh-contents)
+  (load my/required-pkgs)
   (dolist (p required-packages)
+    (unless (package-installed-p p)
       (message "Installing %s" p)
-      (package-install p)))
+      (package-install p))))
 
 (provide '00-packages)
 ;;; 00-packages.el ends here
