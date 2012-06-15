@@ -59,7 +59,6 @@
 ;; M-x -- ido-like completion for functions
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-x") 'smex-major-mode-commands)
 
 ;; Mac-bindings
 (when system-type "darwin"
