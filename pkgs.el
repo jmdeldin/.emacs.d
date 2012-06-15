@@ -4,7 +4,6 @@
   flymake-ruby
   inf-ruby
   inflections
-  ir-black-theme
   jump
   magit
   markdown-mode
