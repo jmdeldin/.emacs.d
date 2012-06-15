@@ -60,3 +60,8 @@
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-x") 'smex-major-mode-commands)
+
+;; Mac-bindings
+(when system-type "darwin"
+  (setq-default mac-command-modifier 'meta)
+  (setq-default mac-option-modifier 'meta))
