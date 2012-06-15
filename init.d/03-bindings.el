@@ -55,3 +55,8 @@
 
 ;; M-S -- switch to previous window
 (global-set-key (kbd "M-S") 'select-previous-window)
+
+;; M-x -- ido-like completion for functions
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-x") 'smex-major-mode-commands)
