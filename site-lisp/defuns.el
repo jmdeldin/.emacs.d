@@ -83,3 +83,8 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
   "Delete elements from a LST not matching condition COND-P."
   (delq nil
         (mapcar (lambda (x) (and (funcall cond-p x) x)) lst)))
+
+(defun jm/shell (name)
+  "Creates a unique shell buffer labeled NAME."
+  (interactive (list (read-string "Shell: ")))
+  (shell (concat "> " name)))
