@@ -503,7 +503,27 @@ Turn on =rdoc-mode=:
             (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
 
 #+end_src
+* Scheme
+** Variables
+#+begin-src emacs-lisp
+(setq scheme-program-name "scheme")
+#+end_src
 
+** Helper functions
+#+begin_src emacs-lisp
+(defun scheme-run-buffer ()
+  "Runs the current buffer through scheme and switches focus back to the script."
+  (interactive)
+  (scheme-send-region (point-min) (point-max)))
+#+end_src
+
+** Hooks
+#+begin_src emacs-lisp
+    (add-hook 'scheme-mode-hook
+              (lambda ()
+                (local-set-key (kbd "C-c C-c") 'scheme-run-buffer)
+                (local-set-key (kbd "C-j") 'eval-last-sexp)))
+#+end_src
 * CSS
 Turn on =rainbow-mode= for colored hex values
 #+begin_src emacs-lisp
