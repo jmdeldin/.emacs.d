@@ -1,5 +1,6 @@
 #+TITLE:       Jon-Michael Deldin's Emacs Configuration
 #+STARTUP:     align hidestars indent
+#+STYLE: <style>html { font: 14px Helvetica, sans-serif } body { width: 85%; margin: 2% auto;} pre, code { font-family: Monaco, Consolas, 'Bitstream Vera Sans', monospace; }</style>
 
 I started using Emacs in the fall of 2010 after a few years of Vim. I use GNU
 Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
