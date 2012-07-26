@@ -505,7 +505,7 @@ Turn on =rdoc-mode=:
 #+end_src
 * Scheme
 ** Variables
-#+begin-src emacs-lisp
+#+begin_src emacs-lisp
 (setq scheme-program-name "scheme")
 #+end_src
 
