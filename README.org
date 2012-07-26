@@ -8,10 +8,6 @@ You can clone directly as =$HOME/.emacs.d=:
 
 #+BEGIN_SRC sh
 $ git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
-$ git submodule init
-$ git submodule update
-$ git submodule foreach git submodule init
-$ git submodule foreach git submodule update
 #+END_SRC
 
 * Uninstallation
@@ -123,4 +119,3 @@ These keys work inside the Ido minibuffer (C-x C-f).
 | % u     | uppercase filename |
 | % l     | lowercase filename |
 | % R     | regex rename       |
-

@@ -1,0 +1,649 @@
+#+TITLE:       Jon-Michael Deldin's Emacs Configuration
+#+STARTUP:     align hidestars indent
+#+STYLE: <style>html { font: 14px Helvetica, sans-serif } body { width: 85%; margin: 2% auto;} pre, code { font-family: Monaco, Consolas, 'Bitstream Vera Sans', monospace; }</style>
+
+I started using Emacs in the fall of 2010 after a few years of Vim. I use GNU
+Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
+
+* Variables
+#+begin_src emacs-lisp
+  (defvar my/site-lisp (concat user-emacs-directory "site-lisp")
+    "Local elisp directory (e.g., ~/.emacs.d/site-lisp).")
+
+  (defvar my/vendor (concat my/site-lisp "/vendor")
+    "External elisp (e.g., ~/.emacs.d/site-lisp/vendor).")
+
+  (defvar my/local (concat user-emacs-directory "local")
+    "Directory with site-local customizations. This shouldn't be checked-in.")
+
+  (defvar my/required-pkgs (concat user-emacs-directory "pkgs.el")
+    "File containing cached packages.")
+#+end_src
+
+* Helper Functions
+#+begin_src emacs-lisp
+  (defun localize (dir)
+    "Concatenates a DIR with my/local."
+    (expand-file-name dir my/local))
+
+  (defun load-directory (directory)
+    "Load an entire DIRECTORY of elisp files."
+    (dolist (f (directory-files directory t ".el"))
+      (load-library (file-name-sans-extension f))))
+
+  ;; load personal elisp
+  (load-directory my/site-lisp)
+
+  (defun get-installed-packages ()
+    "Caches packages installed with package.el to ~/.emacs.d/pkgs.el.
+  This could definitely be improved, but for now, it's basically a macro."
+    (interactive)
+    (package-list-packages-no-fetch)
+    (toggle-read-only)
+    (flush-lines "  available  ")
+    (flush-lines "  built-in  ")
+    (lisp-mode)
+    (mark-whole-buffer)
+    (replace-regexp "[0-9.]+ +installed .*" "")
+    (beginning-of-buffer)
+    (insert "(setq required-packages '(\n")
+    (end-of-buffer)
+    (insert "))")
+    (write-file my/required-pkgs))
+
+  (defun setup-packages ()
+    "Install required packages."
+    (interactive)
+    (package-refresh-contents)
+    (load my/required-pkgs)
+    (dolist (p required-packages)
+      (unless (package-installed-p p)
+        (message "Installing %s" p)
+        (package-install p))))
+
+  (defun associate-file-type (file-list mode)
+    "Associates a FILE-LIST with a MODE."
+    (let* ((regexp (concat (regexp-opt file-list t) "\\'")))
+      (add-to-list 'auto-mode-alist (cons regexp mode))))
+#+end_src
+
+* Packages
+Load and activate elisp packages:
+#+begin_src emacs-lisp
+(package-initialize)
+#+end_src
+
+Prevent =package.el= from timing out on large installs:
+#+begin_src emacs-lisp
+  (setq url-http-attempt-keepalives nil)
+#+end_src
+
+Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
+#+begin_src emacs-lisp
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+#+end_src
+
+* Backups
+Place backups in ~/.emacs.d/local/backups
+#+begin_src emacs-lisp
+(setq backup-by-copying t)
+(setq backup-directory-alist
+      (list (cons "." (expand-file-name "backups" my/local))))
+(setq delete-old-versions t)
+(setq kept-new-versions 6)
+(setq kept-old-versions 2)
+(setq version-control t)
+#+end_src
+* Auto-saves
+Dump auto-save files in ~/.emacs.d/local/saves
+#+begin_src emacs-lisp
+(setq auto-save-list-file-prefix
+      (concat my/local "/saves/"))
+#+end_src
+
+* ERC
+Prevent auto-joining =#erc=
+#+begin_src emacs-lisp
+(setq erc-autojoin-channels-alist '())
+#+end_src
+
+* Minibuffer
+Interactively-do-things is the greatest Emacs extension.
+
+#+begin_src emacs-lisp
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq ido-show-dot-for-dired t)
+(setq ido-save-directory-list-file (localize ".ido.last"))
+(ido-mode 1)
+#+end_src
+
+Use part of the directory to distinguish between identically-named files:
+#+begin_src emacs-lisp
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+#+end_src
+
+Save minibuffer history:
+#+begin_src emacs-lisp
+(savehist-mode 1)
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(setq savehist-file (localize ".savehist"))
+#+end_src
+
+Enable recent files:
+#+begin_src emacs-lisp
+(require 'recentf)
+(setq recentf-save-file (localize ".recentf"))
+(setq recentf-max-saved-items 100)
+(recentf-mode 1)
+#+end_src
+
+* Server
+Only load the server if it isn't running.
+#+begin_src emacs-lisp
+(load "server")
+(unless (server-running-p)
+  (server-start))
+#+end_src
+
+* Spelling
+Use =aspell= instead of =ispell=, use =list= for faster region checking, and
+use a faster suggestion mode.
+
+#+begin_src emacs-lisp
+(setq ispell-program-name "aspell")
+(setq ispell-list-command "list")
+(setq ispell-extra-args '("--sug-mode=ultra"))
+#+end_src
+
+* Text Editing
+Enable camelCase navigation
+#+begin_src emacs-lisp
+(global-subword-mode t)
+#+end_src
+
+Match parens and quotes
+#+begin_src emacs-lisp
+(electric-pair-mode t)
+#+end_src
+
+Enable on-the-fly reindentation
+#+begin_src emacs-lisp
+(electric-indent-mode t)
+#+end_src
+
+Insert a newline around special characters
+#+begin_src emacs-lisp
+(electric-layout-mode t)
+#+end_src
+
+Use single spaces between sentences for =fill-paragraph= (=M-q=)
+#+begin_src emacs-lisp
+(setq sentence-end-double-space nil)
+#+end_src
+
+Use Unicode everywhere
+#+begin_src emacs-lisp
+(prefer-coding-system 'utf-8)
+#+end_src
+
+Changing a region's case is useful
+#+begin_src emacs-lisp
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+#+end_src
+
+Remember last edit position
+#+begin_src emacs-lisp
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (localize "/.emacs-places"))
+#+end_src
+
+Load =textmate-mode=
+#+begin_src emacs-lisp
+(textmate-mode)
+#+end_src
+* UI
+Hide the {menu,tool,scroll}bars
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+Hide the startup messages
+#+begin_src emacs-lisp
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message t)
+#+end_src
+
+"y or n" instead of "yes or no"
+#+begin_src emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+Confirm quit
+#+begin_src emacs-lisp
+(setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
+Show line & column number in the mode line
+#+begin_src emacs-lisp
+(column-number-mode t)
+#+end_src
+
+Show file size
+#+begin_src emacs-lisp
+(size-indication-mode t)
+#+end_src
+
+Highlight parens
+#+begin_src emacs-lisp
+(show-paren-mode t)
+(setq show-paren-delay 0.0)
+#+end_src
+
+Highlight current line
+#+begin_src emacs-lisp
+(global-hl-line-mode 1)
+#+end_src
+
+Display the time
+#+begin_src emacs-lisp
+(display-time)
+#+end_src
+
+Use =ibuffer= instead of =list-buffers=
+#+begin_src emacs-lisp
+(defalias 'list-buffers 'ibuffer)
+#+end_src
+
+* Whitespace
+Wrap lines at column 78
+#+begin_src emacs-lisp
+(setq-default fill-column 78)
+#+end_src
+
+Highlight right-margin when whitespace-mode is on
+#+begin_src emacs-lisp
+(setq whitespace-line-column fill-column)
+#+end_src
+
+Highlight empty lines
+#+begin_src emacs-lisp
+(setq-default indicate-empty-lines t)
+#+end_src
+
+Hard-wrap lines all the time
+#+begin_src emacs-lisp
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+end_src
+
+Use spaces, not tabs (C-q C-i to insert a hard-tab)
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+end_src
+
+2-space tabs
+#+begin_src emacs-lisp
+(setq-default tab-width 2)
+#+end_src
+
+Insert tabs when appropriate
+#+begin_src emacs-lisp
+(setq indent-line-function 'insert-tab)
+#+end_src
+
+Insert a newline at the EOF
+#+begin_src emacs-lisp
+(setq-default require-final-newline t)
+#+end_src#+end_src
+
+Delete trailing whitespace on save
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+* Window Management
+Restore window configuration with =C-c LEFT=
+#+begin_src emacs-lisp
+(winner-mode)
+#+end_src
+
+Enable windmove -- default binding is shift
+#+begin_src emacs-lisp
+(windmove-default-keybindings)
+(setq windmove-wrap-around t)
+#+end_src
+
+Make windmove work in org-mode:
+#+begin_src emacs-lisp
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+#+end_src
+
+* C
+The only way to program.
+#+begin_src emacs-lisp
+(setq c-default-style "k&r")
+#+end_src
+
+Use four spaces for tabs.
+#+begin_src emacs-lisp
+(setq-default c-basic-offset 4)
+#+end_src
+
+* Graphviz
+#+begin_src emacs-lisp
+(associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
+#+end_src
+
+* Lisp
+#+begin_src emacs-lisp
+(define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
+#+end_src
+* Org-Mode
+Include org:
+#+begin_src emacs-lisp
+(require 'org-install)
+#+end_src
+
+Include the org-habit module for the agenda:
+#+begin_src emacs-lisp
+(setq org-modules (quote (org-habit)))
+#+end_src
+
+** Paths
+This configuration assumes org files live in the =~/org= directory. You can
+customize it by setting these variables in =../local/local.el=:
+#+begin_src emacs-lisp
+(setq org-directory "~/org")
+(setq org-default-notes-file "~/org/capture.org")
+(setq org-journal-file "~/org/journal.org")
+(setq org-log-file "~/org/log.org")
+(setq org-archive-location "archive/%s_archive::")
+(setq org-agenda-files (filter (lambda (fn)
+                                 (not (string-match (rx "#") fn)))
+                               (file-expand-wildcards org-directory)))
+#+end_src
+
+** Capture Templates
+Hit =C-c c= to trigger these:
+
+#+begin_src emacs-lisp
+(setq org-capture-templates
+      '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
+         "* TODO %^{Task} %^g \n%U \n%?")
+        ("j" "Journal" entry (file+datetree org-journal-file)
+         "* %^{Title}\n%U \n%?\n")
+        ("l" "Log" entry (file+datetree+prompt org-log-file)
+         "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
+        ))
+#+end_src
+
+** Skeleton
+#+begin_src emacs-lisp
+(define-skeleton orgmode-skeleton
+  "Inserts orgmode defaults into the current buffer."
+  "Title: "
+  "#+TITLE:       " str | (file-name-nondirectory buffer-file-name) \n
+  "#+DESCRIPTION: " (skeleton-read "Description: ") \n
+  "#+STARTUP:     align hidestars indent lognotedone" \n
+  \n _)
+#+end_src
+
+** Keybindings
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+#+end_src
+
+** Babel
+Include these languages for babel
+#+begin_src emacs-lisp
+(setq org-babel-load-languages (mapcar (lambda (l) (cons l t))
+        '(C calc emacs-lisp gnuplot latex perl python R ruby screen sh)))
+#+end_src
+
+Highlight src blocks
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t)
+#+end_src
+** Agenda
+Show the agenda from the current day:
+#+begin_src emacs-lisp
+(setq org-agenda-start-on-weekday nil)
+#+end_src
+
+Show all habits
+#+begin_src emacs-lisp
+(setq org-habit-show-habits-only-for-today nil)
+#+end_src
+
+** Exporting
+Remove "Valid XHTML" link
+#+begin_src emacs-lisp
+(setq org-export-html-validation-link nil)
+#+end_src
+
+Minted latex export
+#+begin_src emacs-lisp
+(setq org-export-latex-minted-options
+      '(("fontsize" "\\scriptsize")))
+#+end_src
+
+* Perl
+Use the more modern =cperl-mode=
+#+begin_src emacs-lisp
+(defalias 'perl-mode 'cperl-mode)
+#+end_src
+
+Use =cperl-mode= for =.t= tests
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
+#+end_src
+
+Use four-space indents
+#+begin_src emacs-lisp
+(setq cperl-indent-level 4)
+#+end_src
+
+Indent only four-spaces in broken-up calls like
+#+begin_src perl
+  someCall(
+      $var,
+      $var2
+  )
+#+end_src
+#+begin_src emacs-lisp
+(setq cperl-indent-parens-as-block t)
+(setq cperl-close-paren-offset -4)
+#+end_src
+
+Fix indentation for lines not starting statements (e.g., hash members)
+#+begin_src emacs-lisp
+(setq cperl-continued-statement-offset 0)
+#+end_src#+end_src
+
+* Ruby
+** Running
+Shortcut for running a script and returning focus to it:
+#+begin_src emacs-lisp
+(defun ruby-run-buffer ()
+  "Run the current Ruby script and switch focus back to the script."
+  (interactive)
+  (ruby-compilation-this-buffer)
+  (other-window -1))
+#+end_src
+
+** Filetypes
+#+begin_src emacs-lisp
+(associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile") 'ruby-mode)
+#+end_src
+
+Turn on =rdoc-mode=:
+#+begin_src emacs-lisp
+(autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
+(associate-file-type '(".rdoc" ".rd") 'rdoc-mode)
+#+end_src
+
+** Hooks
+#+begin_src emacs-lisp
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (flymake-ruby-load)
+            (autoload 'ri "ri")
+            (local-set-key (kbd "C-h r") 'yari)
+            (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
+
+#+end_src
+* Scheme
+** Variables
+#+begin_src emacs-lisp
+(setq scheme-program-name "scheme")
+#+end_src
+
+** Helper functions
+#+begin_src emacs-lisp
+(defun scheme-run-buffer ()
+  "Runs the current buffer through scheme and switches focus back to the script."
+  (interactive)
+  (scheme-send-region (point-min) (point-max)))
+#+end_src
+
+** Hooks
+#+begin_src emacs-lisp
+    (add-hook 'scheme-mode-hook
+              (lambda ()
+                (local-set-key (kbd "C-c C-c") 'scheme-run-buffer)
+                (local-set-key (kbd "C-j") 'eval-last-sexp)))
+#+end_src
+* CSS
+Turn on =rainbow-mode= for colored hex values
+#+begin_src emacs-lisp
+(add-hook 'css-mode-hook 'rainbow-mode)
+#+end_src
+
+Prevent SCSS from compiling at save time:
+#+begin_src emacs-lisp
+(setq scss-compile-at-save nil)
+#+end_src
+
+* Markdown
+#+begin_src emacs-lisp
+(associate-file-type '(".md" ".markdown") 'markdown-mode)
+#+end_src
+
+* LaTeX
+Produce PDFs instead of DVIs
+#+begin_src emacs-lisp
+(setq TeX-PDF-mode t)
+#+end_src
+
+* Keybindings
+** Editing
+=C-c C-r= -- Revert buffer
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c C-r") 'revert-buffer)
+#+end_src
+
+Swap =C-j= and =RET=
+#+begin_src emacs-lisp
+(global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+(global-set-key (kbd "C-j") 'newline)
+#+end_src
+
+=C-c C-d= -- Remove trailing whitespace
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
+#+end_src
+
+=C-w= -- delete the previous word (like most shells)
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-w") 'backward-kill-word)
+#+end_src
+
+C-x C-k -- kill region (since we just unbound it with C-w)
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-k") 'kill-region)
+#+end_src
+
+=C-x C-j= -- join line
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-j") 'join-line)
+#+end_src
+
+=C-c w= -- toggle whitespace mode
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c w") 'global-whitespace-mode)
+#+end_src
+
+better commenting (replaces the original comment-dwim)
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-;") 'comment-or-uncomment-region)
+#+end_src
+
+=C-x m= -- recompile
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x m") 'recompile)
+#+end_src
+
+** UI
+Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
+#+begin_src emacs-lisp
+(defun select-next-window ()
+  "Switch to the next window"
+  (interactive)
+  (select-window (next-window)))
+
+(defun select-previous-window ()
+  "Switch to the previous window"
+  (interactive)
+  (select-window (previous-window)))
+#+end_src
+
+=M-s/M-S= -- switch to next/previous windows
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-s") 'select-next-window)
+(global-set-key (kbd "M-S") 'select-previous-window)
+#+end_src
+
+=M-x= -- ido-like completion for functions
+#+begin_src emacs-lisp
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+#+end_src
+
+** Mac
+Make the Cmd and Opt keys work for =M-x=
+#+begin_src emacs-lisp
+(when system-type "darwin"
+  (setq-default mac-command-modifier 'meta)
+  (setq-default mac-option-modifier 'meta))
+#+end_src
+
+* Misc
+Use =~/.emacs.d/local/emacs-custom.el= for customizations (and don't barf if
+the file doesn't exist):
+#+begin_src emacs-lisp
+(setq custom-file (localize "emacs-custom.el"))
+(load custom-file 'noerror)
+#+end_src
+
+Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
+#+begin_src emacs-lisp
+(setq bookmark-file (localize ".emacs.bmk"))
+#+end_src
+
+
+Load local config to override any of the above settings
+#+begin_src emacs-lisp
+(load (concat my/local "/local") 'noerror)
+#+end_src

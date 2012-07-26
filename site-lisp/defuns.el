@@ -30,16 +30,6 @@ is ISO 8601, which is ``%Y-%m-%dT%T%z''."
   (insert (format-time-string
      (if (string= "" format) "%Y-%m-%dT%T%z" format))))
 
-(defun my/bells ()
-  "Don't ring the bell on navigation and cancellation commands.
-
-From URL `http://stackoverflow.com/q/324457#731660'."
-  (unless (memq this-command
-    '(down up previous-line next-line mwheel-scroll
-      backward-char forward-char keyboard-quit))
-    (ding)))
-
-
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
 
@@ -61,7 +51,6 @@ From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/
    (if mark-active (list (region-beginning) (region-end))
      (list (line-beginning-position)
            (line-beginning-position 2)))))
-
 
 (defun swap-buffers-in-windows ()
   "Swap buffers between two windows.
@@ -90,16 +79,12 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
 (setq swapping-buffer nil)
 (setq swapping-window nil)
 
-(defun eshell/d (&optional dir)
-  "Launches a dired instance in the current working directory or DIR."
-  (if dir
-      (dired dir)
-    (dired ".")))
+(defun filter (cond-p lst)
+  "Delete elements from a LST not matching condition COND-P."
+  (delq nil
+        (mapcar (lambda (x) (and (funcall cond-p x) x)) lst)))
 
-(defun eshell/clear ()
-  "Clear the eshell buffer.
-
-From URL `http://www.khngai.com/emacs/eshell.php'"
-  (interactive)
-  (let ((inhibit-read-only t))
-    (erase-buffer)))
+(defun jm/shell (name)
+  "Creates a unique shell buffer labeled NAME."
+  (interactive (list (read-string "Shell: ")))
+  (shell (concat "> " name)))
