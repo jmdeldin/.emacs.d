@@ -261,6 +261,11 @@ Use =ibuffer= instead of =list-buffers=
 (defalias 'list-buffers 'ibuffer)
 #+end_src
 
+Use a visual alarm instead
+#+begin_src emacs-lisp
+(setq visible-bell t)
+#+end_src
+
 * Whitespace
 Wrap lines at column 78
 #+begin_src emacs-lisp
