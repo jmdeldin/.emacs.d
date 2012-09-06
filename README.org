@@ -70,6 +70,8 @@ $ rm ~/.emacs.d
 | M-m         | back-to-indentation (^ in Vim)                  |
 | M-r         | move the point w/o scrolling                    |
 | M-g M-g     | goto-line                                       |
+| M-o M-s     | Center text                                     |
+| C-x r N     | Number lines                                    |
 
 ** Searching
 | Key     | Description                               |
