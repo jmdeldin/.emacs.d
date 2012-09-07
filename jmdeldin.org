@@ -207,11 +207,6 @@ Remember last edit position
 (setq-default save-place t)
 (setq save-place-file (localize "/.emacs-places"))
 #+end_src
-
-Load =textmate-mode=
-#+begin_src emacs-lisp
-(textmate-mode)
-#+end_src
 * UI
 Hide the {menu,tool,scroll}bars
 #+begin_src emacs-lisp
