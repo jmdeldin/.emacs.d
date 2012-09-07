@@ -84,6 +84,12 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
 #+end_src
 
+* Lockfiles
+Disable lockfiles -- there's only one user on this machine. This prevents
+[[https://github.com/guard/guard][guard]] from re-running specs everytime the file is edited (but not saved).
+#+begin_src emacs-lisp
+(setq create-lockfiles nil)
+#+end_src
 * Backups
 Place backups in ~/.emacs.d/local/backups
 #+begin_src emacs-lisp
