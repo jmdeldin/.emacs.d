@@ -641,11 +641,15 @@ Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-e
 (global-set-key (kbd "M-x") 'smex)
 #+end_src
 
+=Cmd-t= -- find files in a project
+#+begin_src emacs-lisp
+(global-set-key (kbd "s-t") 'find-file-in-project)
+#+end_src
 ** Mac
 Make the Cmd and Opt keys work for =M-x=
 #+begin_src emacs-lisp
 (when system-type "darwin"
-  (setq-default mac-command-modifier 'meta)
+  (setq-default mac-command-modifier 'super)
   (setq-default mac-option-modifier 'meta))
 #+end_src
 
