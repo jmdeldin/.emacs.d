@@ -556,6 +556,18 @@ Produce PDFs instead of DVIs
 #+end_src
 
 * Keybindings
+** Evil
+Arguably the best Vim ever, but sometimes, I still want Emacs keys.
+#+begin_src emacs-lisp
+(evil-mode)
+(define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
+(define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
+(define-key evil-insert-state-map (kbd "C-k") 'evil-delete-line)
+(define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
+#+end_src
 ** Editing
 =C-c C-r= -- Revert buffer
 #+begin_src emacs-lisp
