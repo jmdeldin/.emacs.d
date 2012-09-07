@@ -210,9 +210,11 @@ Remember last edit position
 * UI
 Hide the {menu,tool,scroll}bars
 #+begin_src emacs-lisp
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+  (if window-system
+      (scroll-bar-mode -1))
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+
 #+end_src
 
 Hide the startup messages
