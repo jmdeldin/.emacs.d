@@ -346,6 +346,19 @@ Use four spaces for tabs.
 (setq-default c-basic-offset 4)
 #+end_src
 
+Prevent =M-x compile= from taking up the whole screen ([[http://stackoverflow.com/a/9728357/73492][source]])
+#+begin_src emacs-lisp
+(defun my-compilation-hook ()
+  (when (not (get-buffer-window "*compilation*"))
+    (save-selected-window
+      (save-excursion
+        (let* ((w (split-window-vertically))
+               (h (window-height w)))
+          (select-window w)
+          (switch-to-buffer "*compilation*")
+          (shrink-window (- h 10)))))))
+(add-hook 'compilation-mode-hook 'my-compilation-hook)
+#+end_src
 * Graphviz
 #+begin_src emacs-lisp
 (associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
