@@ -506,7 +506,7 @@ Shortcut for running a script and returning focus to it:
 
 ** Filetypes
 #+begin_src emacs-lisp
-(associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile") 'ruby-mode)
+(associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile" "Guardfile") 'ruby-mode)
 #+end_src
 
 Turn on =rdoc-mode=:
