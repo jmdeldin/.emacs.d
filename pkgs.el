@@ -4,6 +4,7 @@
   evil
   find-file-in-project
   findr
+  flymake-cursor
   flymake-ruby
   graphviz-dot-mode
   htmlize
