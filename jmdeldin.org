@@ -326,6 +326,17 @@ Make windmove work in org-mode:
 (add-hook 'org-shiftright-final-hook 'windmove-right)
 #+end_src
 
+* Man
+Open man pages in a different window
+#+begin_src emacs-lisp
+(setq Man-notify-method 'friendly)
+#+end_src
+
+I tend to keep man pages pretty narrow
+#+begin_src emacs-lisp
+(setenv "MANWIDTH" "72")
+#+end_src
+
 * C
 The only way to program.
 #+begin_src emacs-lisp
