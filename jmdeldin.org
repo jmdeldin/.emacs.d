@@ -224,11 +224,6 @@ Hide the startup messages
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
-Confirm quit
-#+begin_src emacs-lisp
-(setq confirm-kill-emacs 'y-or-n-p)
-#+end_src
-
 Show line & column number in the mode line
 #+begin_src emacs-lisp
 (column-number-mode t)
