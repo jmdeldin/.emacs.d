@@ -467,7 +467,7 @@ Use the more modern =cperl-mode=
 
 Use =cperl-mode= for =.t= tests
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
+  (associate-file-type '(".t") 'cperl-mode)
 #+end_src
 
 Use four-space indents
