@@ -19,9 +19,9 @@ Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
 
 * Helper Functions
 #+begin_src emacs-lisp
-  (defun localize (dir)
-    "Concatenates a DIR with my/local."
-    (expand-file-name dir my/local))
+  (defun localize (file)
+    "Concatenates a FILE with my/local."
+    (expand-file-name file my/local))
 
   (defun load-directory (directory)
     "Load an entire DIRECTORY of elisp files."
@@ -92,7 +92,7 @@ Place backups in ~/.emacs.d/local/backups
 #+begin_src emacs-lisp
 (setq backup-by-copying t)
 (setq backup-directory-alist
-      (list (cons "." (expand-file-name "backups" my/local))))
+      (list (cons "." (localize "backups"))))
 (setq delete-old-versions t)
 (setq kept-new-versions 6)
 (setq kept-old-versions 2)
@@ -101,8 +101,7 @@ Place backups in ~/.emacs.d/local/backups
 * Auto-saves
 Dump auto-save files in ~/.emacs.d/local/saves
 #+begin_src emacs-lisp
-(setq auto-save-list-file-prefix
-      (concat my/local "/saves/"))
+(setq auto-save-list-file-prefix (localize "saves"))
 #+end_src
 
 * ERC
@@ -708,5 +707,5 @@ Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 
 Load local config to override any of the above settings
 #+begin_src emacs-lisp
-(load (concat my/local "/local") 'noerror)
+(load (localize "local") 'noerror)
 #+end_src
