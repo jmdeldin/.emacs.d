@@ -163,6 +163,13 @@ use a faster suggestion mode.
 #+end_src
 
 * Text Editing
+Default to 72 column width for plain text
+#+begin_src emacs-lisp
+  (add-hook 'text-mode-hook
+            '(lambda ()
+               (set-fill-column 72)))
+#+end_src
+
 Enable camelCase navigation
 #+begin_src emacs-lisp
   (global-subword-mode t)
