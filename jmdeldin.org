@@ -358,6 +358,14 @@ Use four spaces for tabs.
   (setq-default c-basic-offset 4)
 #+end_src
 
+Many-windows mode makes Emacs into a more traditional IDE for GDB. See
+=C-h f gdb= for details. *NOTE:* This doesn't work on OS 10.8 (non-stop
+mode isn't supported).
+
+#+begin_src emacs-lisp
+  (setq gdb-many-windows t)
+#+end_src
+
 Prevent =M-x compile= from taking up the whole screen ([[http://stackoverflow.com/a/9728357/73492][source]])
 #+begin_src emacs-lisp
   (defun my-compilation-hook ()
