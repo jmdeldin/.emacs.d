@@ -1,12 +1,14 @@
 (setq required-packages '(
   auctex
   browse-kill-ring
+  clojure-mode
   evil
-  find-file-in-project
+  find-file-in-pr...
   findr
   flymake-cursor
   flymake-ruby
   graphviz-dot-mode
+  highlight-inden...
   htmlize
   inf-ruby
   inflections
@@ -15,6 +17,9 @@
   jump
   magit
   markdown-mode
+  minimap
+  mmm-mode
+  paredit
   php+-mode
   rainbow-mode
   ruby-compilation
@@ -22,8 +27,10 @@
   scss-mode
   slime
   smex
+  solarized-theme
   underwater-theme
   undo-tree
   yaml-mode
   yari
+  zenburn-theme
 ))
