@@ -595,6 +595,7 @@ with =npm install -g jslint=.)
   (add-hook 'scheme-mode-hook
             (lambda ()
               (local-set-key (kbd "C-c C-c") 'scheme-run-buffer)
+              (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
 #+end_src
 
 * CSS
