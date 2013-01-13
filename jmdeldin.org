@@ -10,9 +10,6 @@ Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
   (defvar my/site-lisp (concat user-emacs-directory "site-lisp")
     "Local elisp directory (e.g., ~/.emacs.d/site-lisp).")
 
-  (defvar my/vendor (concat my/site-lisp "/vendor")
-    "External elisp (e.g., ~/.emacs.d/site-lisp/vendor).")
-
   (defvar my/local (concat user-emacs-directory "local")
     "Directory with site-local customizations. This shouldn't be checked-in.")
 
