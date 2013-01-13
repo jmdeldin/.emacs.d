@@ -696,6 +696,11 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "C-x g") 'magit-status)
 #+end_src
 
+=C-x R= -- =rido=
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x R") 'rido)
+#+end_src
+
 ** UI
 Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
 #+begin_src emacs-lisp
