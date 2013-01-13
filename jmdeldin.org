@@ -368,7 +368,9 @@ Prevent =M-x compile= from taking up the whole screen ([[http://stackoverflow.co
 
 * Lisp
 #+begin_src emacs-lisp
-(define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
+  (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
+
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+end_src
 * Org-Mode
 Include the org-habit module for the agenda:
