@@ -270,6 +270,13 @@ Use a visual alarm instead
   (setq visible-bell t)
 #+end_src
 
+Save the point between sessions
+#+begin_src emacs-lisp
+  (require 'saveplace)
+  (setq-default save-place t)
+  (setq save-place-file (localize "places"))
+#+end_src
+
 * Whitespace
 Wrap lines at column 78
 #+begin_src emacs-lisp
