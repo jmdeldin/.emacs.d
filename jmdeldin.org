@@ -611,6 +611,25 @@ Produce PDFs instead of DVIs
   (setq TeX-PDF-mode t)
 #+end_src
 
+* Multiple Major Modes
+Support editing mixed mode files, like ERB templates.
+
+#+begin_src emacs-lisp
+  (require 'mmm-auto)
+  (setq mmm-global-mode 'auto)
+  (setq mmm-submode-decoration-level 2)
+  (setq mmm-parse-when-idle t)
+#+end_src
+
+** ERB
+#+begin_src emacs-lisp
+  (mmm-add-mode-ext-class 'html-erb-mode "\\.html\\.erb\\'" 'erb)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-js)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-css)
+
+  (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
+#+end_src
+
 * Keybindings
 ** Evil
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
