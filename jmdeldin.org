@@ -277,6 +277,23 @@ Save the point between sessions
   (setq save-place-file (localize "places"))
 #+end_src
 
+** Mouse
+Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
+
+#+begin_src emacs-lisp
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] '(lambda ()
+                                 (interactive)
+                                 (scroll-down 1)))
+    (global-set-key [mouse-5] '(lambda ()
+                                 (interactive)
+                                 (scroll-up 1)))
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t))
+#+end_src
+
 * Whitespace
 Wrap lines at column 78
 #+begin_src emacs-lisp
