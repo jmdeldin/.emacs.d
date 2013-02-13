@@ -64,12 +64,6 @@ Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
       (add-to-list 'auto-mode-alist (cons regexp mode))))
 #+end_src
 
-* Packages
-Load and activate elisp packages:
-#+begin_src emacs-lisp
-  (package-initialize)
-#+end_src
-
 Prevent =package.el= from timing out on large installs:
 #+begin_src emacs-lisp
   (setq url-http-attempt-keepalives nil)
