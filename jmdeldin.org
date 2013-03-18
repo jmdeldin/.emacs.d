@@ -785,6 +785,12 @@ Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
   (setq bookmark-file (localize ".emacs.bmk"))
 #+end_src
 
+Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully
+functional= messages.
+#+begin_src emacs-lisp
+  (setenv "PAGER" "cat")
+#+end_src
+
 Load local config to override any of the above settings
 #+begin_src emacs-lisp
   (load (localize "local") 'noerror)
