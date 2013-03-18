@@ -663,13 +663,16 @@ Support editing mixed mode files, like ERB templates.
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
 #+begin_src emacs-lisp
 (evil-mode)
-(define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
+(define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-(define-key evil-insert-state-map (kbd "C-k") 'evil-delete-line)
+(define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
+(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
 (define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
 (define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
 (define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
 (define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-z") 'suspend-emacs)
+(define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
 #+end_src
 
 ** Editing
