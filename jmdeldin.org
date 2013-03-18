@@ -32,21 +32,17 @@ Emacs 24.1 on Mac OS X for Org-Mode, Ruby, LaTeX, sh, and R.
   (load-directory my/site-lisp)
 
   (defun get-installed-packages ()
-    "Caches packages installed with package.el to ~/.emacs.d/pkgs.el.
-  This could definitely be improved, but for now, it's basically a macro."
+    "Caches packages installed with package.el to ~/.emacs.d/pkgs.el."
     (interactive)
-    (package-list-packages-no-fetch)
-    (toggle-read-only)
-    (flush-lines "available")
-    (flush-lines "built-in")
-    (lisp-mode)
-    (mark-whole-buffer)
-    (replace-regexp "[0-9.]+ +installed .*" "")
-    (beginning-of-buffer)
-    (insert "(setq required-packages '(\n")
-    (end-of-buffer)
-    (insert "))")
-    (write-file my/required-pkgs))
+    (let ((buffer (find-file-noselect my/required-pkgs)))
+      (set-buffer buffer)
+      (erase-buffer)
+      (insert "(setq required-packages (quote ")
+      (insert (prin1-to-string package-activated-list))
+      (end-of-buffer)
+      (insert "))")
+      (save-buffer)
+      (kill-buffer buffer)))
 
   (defun setup-packages ()
     "Install required packages."
