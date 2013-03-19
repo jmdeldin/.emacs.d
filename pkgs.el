@@ -1,1 +1,1 @@
-(setq required-packages (quote (htmlize graphviz-dot-mode flymake-ruby flymake-easy scss-mode yari rainbow-mode markdown-mode yaml-mode js3-mode underwater-theme ir-black-theme zenburn-theme auctex browse-kill-ring clojure-mode evil flymake-cursor magit mmm-mode molokai-theme smex undo-tree)))
+(setq required-packages (quote (auctex browse-kill-ring ess evil flymake-cursor flymake-ruby flymake-easy graphviz-dot-mode htmlize ir-black-theme js3-mode magit markdown-mode mmm-mode molokai-theme rainbow-mode scss-mode smex underwater-theme undo-tree yaml-mode yari zenburn-theme)))
