@@ -111,6 +111,7 @@ Interactively-do-things is the greatest Emacs extension.
   (setq ido-everywhere t)
   (setq ido-show-dot-for-dired t)
   (setq ido-save-directory-list-file (localize ".ido.last"))
+  (setq ido-use-virtual-buffers t)
   (ido-mode 1)
 #+end_src
 *** Uniquify
