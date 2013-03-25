@@ -103,6 +103,7 @@ Prevent auto-joining =#erc=
 #+end_src
 
 * Minibuffer
+*** IDO
 Interactively-do-things is the greatest Emacs extension.
 
 #+begin_src emacs-lisp
@@ -112,20 +113,20 @@ Interactively-do-things is the greatest Emacs extension.
   (setq ido-save-directory-list-file (localize ".ido.last"))
   (ido-mode 1)
 #+end_src
-
+*** Uniquify
 Use part of the directory to distinguish between identically-named files:
 #+begin_src emacs-lisp
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
-
+*** Minibuffer History
 Save minibuffer history:
 #+begin_src emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
   (setq savehist-file (localize ".savehist"))
 #+end_src
-
+*** Recent Files
 Enable recent files:
 #+begin_src emacs-lisp
   (require 'recentf)
