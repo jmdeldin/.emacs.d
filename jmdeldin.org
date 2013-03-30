@@ -404,6 +404,11 @@ Prevent =M-x compile= from taking up the whole screen ([[http://stackoverflow.co
   (associate-file-type '(".R" ".r") 'r-mode)
   (autoload 'r-mode "ess-site" nil t)
 #+end_src
+
+Don't be so slow at evaluating buffers:
+#+begin_src emacs-lisp
+  (setq ess-eval-visibly-p nil)
+#+end_src
 * Lisp
 #+begin_src emacs-lisp
   (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
