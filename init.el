@@ -10,6 +10,9 @@
 ;;; Code:
 
 (package-initialize)
+
+(require 'org)
+
 (org-babel-load-file (expand-file-name "jmdeldin.org" user-emacs-directory))
 
 ;;; init.el ends here
