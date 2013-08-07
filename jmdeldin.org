@@ -674,6 +674,12 @@ Support editing mixed mode files, like ERB templates.
   (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
 #+end_src
 
+* Silver Searcher
+#+begin_src emacs-lisp
+(require 'ag)
+(setq ag-highlight-search t)
+#+end_src
+
 * Keybindings
 ** Evil
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
@@ -753,6 +759,12 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "C-x x") 'jm/shell)
 #+end_src
 
+=C-t= -- =ag-regexp-project-at-point=
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-t") 'ag-regexp-project-at-point)
+  (global-set-key (kbd "s-T") 'ag-project-regexp)
+#+end_src
+
 ** UI
 Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
 #+begin_src emacs-lisp
@@ -777,11 +789,6 @@ Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-e
 #+begin_src emacs-lisp
   (smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
-#+end_src
-
-=Cmd-t= -- find files in a project
-#+begin_src emacs-lisp
-  (global-set-key (kbd "s-t") 'find-file-in-project)
 #+end_src
 
 ** Mac
