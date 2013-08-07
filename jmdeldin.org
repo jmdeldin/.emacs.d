@@ -570,6 +570,13 @@ Turn on =rdoc-mode=:
               (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
 
 #+end_src
+
+** RSpec
+#+begin_src emacs-lisp
+(setq rspec-use-rake-when-possible nil)
+(setq rspec-use-bundler-when-possible nil)
+#+end_src
+
 * JavaScript
 Use 4-spaces
 #+begin_src emacs-lisp
