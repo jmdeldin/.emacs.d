@@ -466,6 +466,8 @@ Hit =C-c c= to trigger these:
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c b") 'org-iswitchb)
+  ;; for terminals -- TAB does not work
+  (global-set-key (kbd "C-x t") 'org-cycle)
 #+end_src
 
 ** Babel
