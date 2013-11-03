@@ -144,6 +144,14 @@ Only load the server if it isn't running.
     (server-start))
 #+end_src
 
+* Auto-Complete Mode
+#+begin_src emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (setq ac-ignore-case nil)
+  (add-to-list 'ac-modes 'enh-ruby-mode)
+#+end_src
+
 * Spelling
 Use =aspell= instead of =ispell=, use =list= for faster region checking, and
 use a faster suggestion mode.
@@ -159,6 +167,7 @@ Turn it on for comments
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
           '(c-mode-common-hook emacs-lisp-mode-hook enh-ruby-mode-hook
                                coffee-mode-hook js3-mode-hook))
+  (ac-flyspell-workaround)
 #+end_src
 * Text Editing
 Default to 72 column width for plain text
