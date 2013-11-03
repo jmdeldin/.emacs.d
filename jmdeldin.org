@@ -182,11 +182,6 @@ Enable camelCase navigation
   (global-subword-mode t)
 #+end_src
 
-Match parens and quotes
-#+begin_src emacs-lisp
-  (electric-pair-mode t)
-#+end_src
-
 Enable on-the-fly reindentation
 #+begin_src emacs-lisp
   (electric-indent-mode t)
@@ -873,4 +868,11 @@ functional= messages.
 Load local config to override any of the above settings
 #+begin_src emacs-lisp
   (load (localize "local") 'noerror)
+#+end_src
+* Smartparens
+#+begin_src emacs-lisp
+  (require 'smartparens-config)
+  (require 'smartparens-ruby)
+  (smartparens-global-mode)
+  (show-smartparens-global-mode t)
 #+end_src
