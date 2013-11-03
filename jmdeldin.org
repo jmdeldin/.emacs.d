@@ -577,9 +577,8 @@ Turn on =rdoc-mode=:
 
 ** Hooks
 #+begin_src emacs-lisp
-  (add-hook 'ruby-mode-hook
+  (add-hook 'enh-ruby-mode-hook
             (lambda ()
-              (flymake-ruby-load)
               (autoload 'ri "ri")
               (local-set-key (kbd "C-h r") 'yari)
               (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
