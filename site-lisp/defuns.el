@@ -30,6 +30,11 @@ is ISO 8601, which is ``%Y-%m-%dT%T%z''."
   (insert (format-time-string
      (if (string= "" format) "%Y-%m-%dT%T%z" format))))
 
+(defun pry ()
+  "Inserts a pry debugging line."
+  (interactive)
+  (insert "require 'pry'; binding.pry"))
+
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
 
