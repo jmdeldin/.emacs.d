@@ -574,7 +574,7 @@ Turn on =rdoc-mode=:
 ** RSpec
 #+begin_src emacs-lisp
 (setq rspec-use-rake-when-possible nil)
-(setq rspec-use-bundler-when-possible nil)
+(setq rspec-use-zeus-when-possible t)
 #+end_src
 
 * JavaScript
