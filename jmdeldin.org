@@ -582,7 +582,9 @@ Turn on =rdoc-mode=:
               (autoload 'ri "ri")
               (local-set-key (kbd "C-h r") 'yari)
               (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
-
+  (add-hook 'slim-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c , r") 'rspec-rerun)))
 #+end_src
 
 ** RSpec
