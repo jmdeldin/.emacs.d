@@ -272,9 +272,9 @@ Use =ibuffer= instead of =list-buffers=
   (defalias 'list-buffers 'ibuffer)
 #+end_src
 
-Use a visual alarm instead
+No bells
 #+begin_src emacs-lisp
-  (setq visible-bell t)
+  (setq ring-bell-function 'ignore)
 #+end_src
 
 Save the point between sessions
