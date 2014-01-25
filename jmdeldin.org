@@ -666,6 +666,11 @@ Prevent SCSS from compiling at save time:
   (setq scss-compile-at-save nil)
 #+end_src
 
+Two spaces:
+#+begin_src emacs-lisp
+  (setq css-indent-offset 2)
+#+end_src
+
 * Markdown
 #+begin_src emacs-lisp
   (associate-file-type '(".md" ".markdown") 'markdown-mode)
