@@ -655,6 +655,13 @@ with =npm install -g jslint=.)
               (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
 #+end_src
 
+* Clojure
+#+begin_src emacs-lisp
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (setq nrepl-hide-special-buffers t)
+  (setq cider-repl-result-prefix ";; => ")
+  (add-hook 'cider-repl-mode-hook 'subword-mode)
+#+end_src
 * CSS
 Turn on =rainbow-mode= for colored hex values
 #+begin_src emacs-lisp
