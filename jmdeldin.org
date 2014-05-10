@@ -664,6 +664,11 @@ with =npm install -g jslint=.)
   (setq nrepl-hide-special-buffers t)
   (setq cider-repl-result-prefix ";; => ")
   (add-hook 'cider-repl-mode-hook 'subword-mode)
+
+  (add-hook 'cider-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c ,") 'clojure-test-run-tests)))
+
 #+end_src
 * CSS
 Turn on =rainbow-mode= for colored hex values
