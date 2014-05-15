@@ -584,6 +584,7 @@ Turn on =rdoc-mode=:
             (lambda ()
               (rspec-mode 1)
               (autoload 'ri "ri")
+              (local-set-key (kbd "C-c , x") 'rspec-verify-single)
               (local-set-key (kbd "C-h r") 'yari)
               (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
   (add-hook 'slim-mode-hook
