@@ -684,20 +684,6 @@ Produce PDFs instead of DVIs
   (setq TeX-PDF-mode t)
 #+end_src
 
-* Compilation
-#+begin_src emacs-lisp
-  (define-derived-mode ansi-compilation-mode compilation-mode "ansi compilation"
-    "Compilation mode that understands ansi colors.
-  From URL `http://stackoverflow.com/a/17689025/73492'"
-    (require 'ansi-color)
-    (toggle-read-only 0)
-    (ansi-color-apply-on-region (point-min) (point-max)))
-
-  (defun colorize-compilation-buffer (one two)
-    "ansi colorize the compilation buffer."
-    (ansi-compilation-mode))
-  (setq compilation-finish-function 'colorize-compilation-buffer)
-#+end_src
 * Multiple Major Modes
 Support editing mixed mode files, like ERB templates.
 
