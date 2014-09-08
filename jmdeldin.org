@@ -651,6 +651,7 @@ with =npm install -g jslint=.)
   (setq nrepl-hide-special-buffers t)
   (setq cider-repl-result-prefix ";; => ")
   (add-hook 'cider-repl-mode-hook 'subword-mode)
+  (setq cider-auto-select-error-buffer nil)
 
   (add-hook 'cider-mode-hook
             (lambda ()
