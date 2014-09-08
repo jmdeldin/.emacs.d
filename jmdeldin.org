@@ -648,7 +648,6 @@ with =npm install -g jslint=.)
 * Clojure
 #+begin_src emacs-lisp
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (setq nrepl-hide-special-buffers t)
   (setq cider-repl-result-prefix ";; => ")
   (add-hook 'cider-repl-mode-hook 'subword-mode)
   (setq cider-auto-select-error-buffer nil)
@@ -856,38 +855,3 @@ Load local config to override any of the above settings
 #+begin_src emacs-lisp
   (load (localize "local") 'noerror)
 #+end_src
-* Multi-Term
-Increase scrollback buffer
-#+begin_src emacs-lisp
-  (add-hook 'term-mode-hook
-            (lambda ()
-              (setq term-buffer-maximum-size 10000)))
-#+end_src
-
-Custom terminal bindings
-#+BEGIN_SRC emacs-lisp
-      ;; ("C-c C-c" . term-interrupt-subjob)
-      ;; ("C-c C-d" . term-send-eof)
-      ;; ("C-p" . previous-line)
-      ;; ("C-n" . next-line)
-      ;; ("C-s" . isearch-forward)
-      ;; ("C-r" . isearch-backward)
-      ;; ("C-m" . term-send-raw)
-      ;; ("M-f" . term-send-forward-word)
-      ;; ("M-b" . term-send-backward-word)
-      ;; ("M-o" . term-send-backspace)
-      ;; ("M-p" . term-send-up)
-      ;; ("M-n" . term-send-down)
-      ;; ("M-M" . term-send-forward-kill-word)
-      ;; ("M-N" . term-send-backward-kill-word)
-      ;; ("M-r" . term-send-reverse-search-history)
-      ;; ("M-," . term-send-input)
-      ;; ("M-." . comint-dynamic-complete))
-
-  (add-hook 'term-mode-hook
-            (lambda ()
-              (add-to-list 'term-bind-key-alist '("C-c C-d" . term-send-eof))
-              (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-              (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))))
-
-#+END_SRC
