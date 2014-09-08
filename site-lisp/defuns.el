@@ -12,15 +12,6 @@
 (fset 'align-key-value
       [?\C-u ?\M-x ?a ?l ?i ?g ?n ?- ?r ?e ?g ?e ?x ?p ?\C-m ?\C-a ?\C-k ?\\ ?\( ?: ?\\ ?\) ?\\ ?\( ?\\ ?s ?- ?* ?\\ ?\) ?\C-m ?\C-? ?2 ?\C-m ?\C-m ?n])
 
-(defun rido ()
-  "Find a recent file using Ido.
-
-From URL `http://www.emacswiki.org/emacs-es/RecentFiles#toc5'."
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
-
 (defun timestamp (format)
   "Inserts the timestamp given by FORMAT, or selects a default if nil.
 
