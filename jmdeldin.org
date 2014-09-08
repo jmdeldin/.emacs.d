@@ -827,11 +827,6 @@ Make the Cmd and Opt keys work for =M-x=
     (setq-default mac-command-modifier 'super)
     (setq-default mac-option-modifier 'meta))
 #+end_src
-
-** Ace-Jump Mode
-#+begin_src emacs-lisp
-  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
-#+end_src
 * Misc
 Use =~/.emacs.d/local/emacs-custom.el= for customizations (and don't barf if
 the file doesn't exist):
