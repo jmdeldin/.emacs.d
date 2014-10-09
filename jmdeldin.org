@@ -105,6 +105,12 @@ Prevent auto-joining =#erc=
   (setq erc-autojoin-channels-alist '())
 #+end_src
 
+Spell-check ERC:
+
+#+begin_src emacs-lisp
+  (erc-spelling-mode 1)
+#+end_src
+
 * Minibuffer
 *** IDO
 Interactively-do-things is the greatest Emacs extension.
