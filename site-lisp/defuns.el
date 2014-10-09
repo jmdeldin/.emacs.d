@@ -84,3 +84,21 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
   "Creates a unique shell buffer labeled NAME."
   (interactive (list (read-string "Shell: ")))
   (shell (concat "> " name)))
+
+(defvar jm/sql-regexp
+  (mapconcat 'downcase
+             (mapcar 'symbol-name '(select from inner outer left join where
+                                           and in on group by into min max
+                                           sum limit create alter table))
+             "\\|")
+  "Regexp of SQL keywords")
+
+(defun jm/fix-sql-case (start end)
+  "Uppercase SQL keywords"
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region start end)
+    (goto-char 1)
+    (let ((case-fold-search nil))
+      (while (search-forward-regexp jm/sql-regexp nil t)
+        (replace-match (upcase (match-string 0)) t nil)))))
