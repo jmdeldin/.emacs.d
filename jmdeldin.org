@@ -189,6 +189,7 @@ Only load the server if it isn't running.
   (ac-config-default)
   (setq ac-ignore-case nil)
   (add-to-list 'ac-modes 'ruby-mode)
+  (setq ac-comphist-file (localize "ac-comphist.dat"))
 #+end_src
 
 * Spelling
@@ -810,6 +811,7 @@ better commenting (replaces the original comment-dwim)
 
 =C-x p= -- find files in project
 #+begin_src emacs-lisp
+  (setq projectile-cache-file (localize "projectile-bookmarks.eld"))
   (global-set-key (kbd "C-x p") 'projectile-find-file)
 #+end_src
 
@@ -837,6 +839,7 @@ Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-e
 #+begin_src emacs-lisp
   (smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
+  (setq smex-save-file (localize "smex-items"))
 #+end_src
 
 ** Mac
