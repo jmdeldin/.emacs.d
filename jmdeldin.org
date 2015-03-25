@@ -98,6 +98,12 @@ Dump auto-save files in =~/.emacs.d/local/saves=:
 
 Test with =M-x do-auto-save=.
 
+* Jabber
+
+Don't notify if someone is online/offline in the buddy list:
+#+BEGIN_SRC emacs-lisp
+(setq jabber-alert-presence-message-function (lambda (who oldstatus newstatus statustext) nil))
+#+END_SRC
 * ERC
 Prevent auto-joining =#erc=
 #+begin_src emacs-lisp
@@ -109,6 +115,17 @@ Spell-check ERC:
 #+begin_src emacs-lisp
   (erc-spelling-mode 1)
 #+end_src
+
+Ignore noise:
+#+BEGIN_SRC emacs-lisp
+  (setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE"))
+  (setq erc-track-exclude-server-buffer t)
+#+END_SRC
+
+Highlight nick:
+#+BEGIN_SRC emacs-lisp
+  (setq erc-current-nick-highlight-type 'nick)
+#+END_SRC
 
 * Minibuffer
 *** IDO
@@ -183,7 +200,7 @@ Turn it on for some modes:
 #+BEGIN_SRC emacs-lisp
   (mapcar (lambda (mode)
             (add-hook mode (lambda () (flyspell-mode t))))
-          '(org-mode-hook markdown-mode git-commit-mode))
+          '(jabber-chat-mode-hook org-mode-hook markdown-mode git-commit-mode))
 #+END_SRC
 
 * Text Editing
