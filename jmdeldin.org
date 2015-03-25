@@ -182,7 +182,7 @@ Turn it on for comments
 #+begin_src emacs-lisp
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
           '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
-                               coffee-mode-hook js3-mode-hook))
+                               coffee-mode-hook))
   (ac-flyspell-workaround)
 #+end_src
 
