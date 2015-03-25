@@ -802,11 +802,9 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "C-x x") 'jm/shell)
 #+end_src
 
-=C-t= -- =ag-regexp-project-at-point=
+=C-x a= -- =ag-regexp-project-at-point=
 #+begin_src emacs-lisp
-  (global-set-key (kbd "s-e") 'ag-regexp-project-at-point)
   (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
-  (global-set-key (kbd "s-E") 'ag-project-regexp)
 #+end_src
 
 =C-x p= -- find files in project
