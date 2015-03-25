@@ -1,11 +1,11 @@
 ;;; init.el --- Jon-Michael Deldin's .emacs
 
-;; Copyright (C) 2010-2012 Jon-Michael Deldin
+;; Copyright (C) 2010-2015 Jon-Michael Deldin
 
 ;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
 ;; Keywords: local
 ;; Created:  2010-10-01
-;; Compatibility: 24.1
+;; Compatibility: 24.4
 
 ;;; Code:
 
