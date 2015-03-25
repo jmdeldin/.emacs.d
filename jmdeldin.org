@@ -681,6 +681,13 @@ Two spaces:
   (setq css-indent-offset 2)
 #+end_src
 
+* JavaScript
+2 space indent:
+
+#+BEGIN_SRC emacs-lisp
+  (setq js-indent-level 2)
+#+END_SRC
+
 * Markdown
 #+begin_src emacs-lisp
   (associate-file-type '(".md" ".markdown") 'markdown-mode)
