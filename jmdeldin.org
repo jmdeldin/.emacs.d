@@ -71,6 +71,8 @@ Prevent =package.el= from timing out on large installs:
 Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
 #+begin_src emacs-lisp
   (add-to-list 'package-archives
+               '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+  (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
 #+end_src
 
