@@ -152,3 +152,8 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
     (cond
      ((string-match mt-lib-dir dir) (find-file (mt-lib-to-test)))
      ((string-match mt-test-dir dir) (find-file (mt-test-to-lib))))))
+
+(defun pivotal-ticket (id)
+  "Inserts a Markdown link to a Pivotal Tracker ticket."
+  (interactive "nticket id: ")
+  (insert (format ":o: [Finishes #%s](https://www.pivotaltracker.com/story/show/%s)" id id)))
