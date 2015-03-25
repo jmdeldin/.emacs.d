@@ -628,7 +628,7 @@ Turn on =rdoc-mode=:
 
   (add-hook 'cider-mode-hook
             (lambda ()
-              (local-set-key (kbd "C-c ,") 'clojure-test-run-tests)))
+              (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
 
 #+end_src
 * CSS
