@@ -795,7 +795,9 @@ better commenting (replaces the original comment-dwim)
 
 =C-x p= -- find files in project
 #+begin_src emacs-lisp
-  (setq projectile-cache-file (jm/local-path "projectile-bookmarks.eld"))
+  (projectile-global-mode t)
+  (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+  (setq projectile-cache-file (jm/local-path "projectile-cache"))
   (global-set-key (kbd "C-x p") 'projectile-find-file)
 #+end_src
 
