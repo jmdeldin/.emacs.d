@@ -160,7 +160,7 @@ Only load the server if it isn't running.
   (require 'auto-complete-config)
   (ac-config-default)
   (setq ac-ignore-case nil)
-  (add-to-list 'ac-modes 'enh-ruby-mode)
+  (add-to-list 'ac-modes 'ruby-mode)
 #+end_src
 
 * Spelling
@@ -176,7 +176,7 @@ use a faster suggestion mode.
 Turn it on for comments
 #+begin_src emacs-lisp
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(c-mode-common-hook emacs-lisp-mode-hook enh-ruby-mode-hook
+          '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
                                coffee-mode-hook js3-mode-hook))
   (ac-flyspell-workaround)
 #+end_src
@@ -574,7 +574,7 @@ Turn on =rdoc-mode=:
 
 ** Hooks
 #+begin_src emacs-lisp
-  (add-hook 'enh-ruby-mode-hook
+  (add-hook 'ruby-mode-hook
             (lambda ()
               (rspec-mode 1)
               (autoload 'ri "ri")
@@ -595,7 +595,7 @@ Turn on =rdoc-mode=:
 * Highlight Stuff
 #+begin_src emacs-lisp
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(enh-ruby-mode-hook coffee-mode-hook slim-mode-hook))
+          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
 #+end_src
 * Scheme
 ** Variables
@@ -631,6 +631,7 @@ Turn on =rdoc-mode=:
               (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
 
 #+end_src
+
 * CSS
 Turn on =rainbow-mode= for colored hex values
 #+begin_src emacs-lisp
