@@ -96,10 +96,15 @@ Place backups in ~/.emacs.d/local/backups
 #+end_src
 
 * Auto-saves
-Dump auto-save files in ~/.emacs.d/local/saves
+Dump auto-save files in =~/.emacs.d/local/saves=:
+
 #+begin_src emacs-lisp
   (setq auto-save-list-file-prefix (localize "saves"))
+  (setq auto-save-file-name-transforms
+        `((".*" ,"~/.emacs.d/local/saves" t)))
 #+end_src
+
+Test with =M-x do-auto-save=.
 
 * ERC
 Prevent auto-joining =#erc=
