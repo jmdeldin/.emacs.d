@@ -15,9 +15,6 @@ and a host of miscellaneous other languages.
 
   (defvar my/local (concat user-emacs-directory "local")
     "Directory with site-local customizations. This shouldn't be checked-in.")
-
-  (defvar my/required-pkgs (concat user-emacs-directory "pkgs.el")
-    "File containing cached packages.")
 #+end_src
 
 * Helper Functions
@@ -34,18 +31,14 @@ and a host of miscellaneous other languages.
   ;; load personal elisp
   (load-directory my/site-lisp)
 
-  (defun get-installed-packages ()
-    "Caches packages installed with package.el to ~/.emacs.d/pkgs.el."
+
+  (defun jm/packages-installed-p
+    "Check whether packages are installed."
     (interactive)
-    (let ((buffer (find-file-noselect my/required-pkgs)))
-      (set-buffer buffer)
-      (erase-buffer)
-      (insert "(setq required-packages (quote ")
-      (insert (prin1-to-string package-activated-list))
-      (end-of-buffer)
-      (insert "))")
-      (save-buffer)
-      (kill-buffer buffer)))
+    (dolist (p jm/packages)
+      (unless (package-installed-p p)
+        (message "Installing %s" p)
+        (package-install p))))
 
   (defun setup-packages ()
     "Install required packages."
@@ -56,47 +49,11 @@ and a host of miscellaneous other languages.
         (message "Installing %s" p)
         (package-install p))))
 
+
   (defun associate-file-type (file-list mode)
     "Associates a FILE-LIST with a MODE."
     (let* ((regexp (concat (regexp-opt file-list t) "\\'")))
       (add-to-list 'auto-mode-alist (cons regexp mode))))
-#+end_src
-
-Prevent =package.el= from timing out on large installs:
-#+begin_src emacs-lisp
-  (setq url-http-attempt-keepalives nil)
-#+end_src
-
-Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
-#+begin_src emacs-lisp
-  (add-to-list 'package-archives
-               '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/") t)
-#+end_src
-
-** Required Packages
-#+begin_src emacs-lisp
-  (makunbound 'jm/packages)
-  (defvar jm/packages '(ag
-                        auto-complete
-                        cider
-                        clojure-mode
-                        coffee-mode
-                        evil
-                        highlight-indentation
-                        jabber
-                        magit
-                        markdown-mode
-                        mmm-mode
-                        projectile
-                        rainbow-mode
-                        rspec-mode
-                        ruby-compilation-mode
-                        scss-mode
-                        slim-mode
-                        smex
-                        yaml-mode))
 #+end_src
 
 * Lockfiles
@@ -111,7 +68,7 @@ Place backups in ~/.emacs.d/local/backups
 #+begin_src emacs-lisp
   (setq backup-by-copying t)
   (setq backup-directory-alist
-        (list (cons "." (localize "backups"))))
+        (list (cons "." (jm/local-path "backups"))))
   (setq delete-old-versions t)
   (setq kept-new-versions 6)
   (setq kept-old-versions 2)
@@ -122,7 +79,7 @@ Place backups in ~/.emacs.d/local/backups
 Dump auto-save files in =~/.emacs.d/local/saves=:
 
 #+begin_src emacs-lisp
-  (setq auto-save-list-file-prefix (localize "saves"))
+  (setq auto-save-list-file-prefix (jm/local-path "saves"))
   (setq auto-save-file-name-transforms
         `((".*" ,"~/.emacs.d/local/saves" t)))
 #+end_src
@@ -149,7 +106,7 @@ Interactively-do-things is the greatest Emacs extension.
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
   (setq ido-show-dot-for-dired t)
-  (setq ido-save-directory-list-file (localize ".ido.last"))
+  (setq ido-save-directory-list-file (jm/local-path ".ido.last"))
   (setq ido-use-virtual-buffers t)
   (ido-mode 1)
 #+end_src
@@ -164,13 +121,13 @@ Save minibuffer history:
 #+begin_src emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-  (setq savehist-file (localize ".savehist"))
+  (setq savehist-file (jm/local-path ".savehist"))
 #+end_src
 *** Recent Files
 Enable recent files:
 #+begin_src emacs-lisp
   (require 'recentf)
-  (setq recentf-save-file (localize ".recentf"))
+  (setq recentf-save-file (jm/local-path ".recentf"))
   (setq recentf-max-saved-items 100)
   (recentf-mode 1)
 #+end_src
@@ -189,7 +146,7 @@ Only load the server if it isn't running.
   (ac-config-default)
   (setq ac-ignore-case nil)
   (add-to-list 'ac-modes 'ruby-mode)
-  (setq ac-comphist-file (localize "ac-comphist.dat"))
+  (setq ac-comphist-file (jm/local-path "ac-comphist.dat"))
 #+end_src
 
 * Spelling
@@ -265,7 +222,7 @@ Remember last edit position
 #+begin_src emacs-lisp
   (require 'saveplace)
   (setq-default save-place t)
-  (setq save-place-file (localize "/.emacs-places"))
+  (setq save-place-file (jm/local-path "/.emacs-places"))
 #+end_src
 
 * UI
@@ -329,7 +286,7 @@ Save the point between sessions
 #+begin_src emacs-lisp
   (require 'saveplace)
   (setq-default save-place t)
-  (setq save-place-file (localize "places"))
+  (setq save-place-file (jm/local-path "places"))
 #+end_src
 
 ** Mouse
@@ -809,7 +766,7 @@ better commenting (replaces the original comment-dwim)
 
 =C-x p= -- find files in project
 #+begin_src emacs-lisp
-  (setq projectile-cache-file (localize "projectile-bookmarks.eld"))
+  (setq projectile-cache-file (jm/local-path "projectile-bookmarks.eld"))
   (global-set-key (kbd "C-x p") 'projectile-find-file)
 #+end_src
 
@@ -837,7 +794,7 @@ Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-e
 #+begin_src emacs-lisp
   (smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
-  (setq smex-save-file (localize "smex-items"))
+  (setq smex-save-file (jm/local-path "smex-items"))
 #+end_src
 
 ** Mac
@@ -851,13 +808,12 @@ Make the Cmd and Opt keys work for =M-x=
 Use =~/.emacs.d/local/emacs-custom.el= for customizations (and don't barf if
 the file doesn't exist):
 #+begin_src emacs-lisp
-  (setq custom-file (localize "emacs-custom.el"))
-  (load custom-file 'noerror)
+
 #+end_src
 
 Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+begin_src emacs-lisp
-  (setq bookmark-file (localize ".emacs.bmk"))
+  (setq bookmark-file (jm/local-path ".emacs.bmk"))
 #+end_src
 
 Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully
@@ -868,5 +824,5 @@ functional= messages.
 
 Load local config to override any of the above settings
 #+begin_src emacs-lisp
-  (load (localize "local") 'noerror)
+  (load (jm/local-path "local") 'noerror)
 #+end_src

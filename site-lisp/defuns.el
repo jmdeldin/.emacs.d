@@ -2,6 +2,18 @@
 ;;; Functions
 ;;
 
+(defun jm/filter (pred lst)
+  "Filter elements from a LST matching PRED."
+  (delq nil (mapcar (lambda (x) (and (funcall pred x) x)) lst)))
+
+(defun jm/emacs-path (file)
+  "Path to ~/.emacs.d/FILE."
+  (concat user-emacs-directory file))
+
+(defun jm/local-path (file)
+  "Path to ~/.emacs.d/local/FILE."
+  (jm/emacs-path (concat "local/" file)))
+
 ;; Align key-value strings, like
 ;;   foo: bar
 ;;   baz:1
