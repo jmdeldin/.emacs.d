@@ -185,6 +185,14 @@ Turn it on for comments
                                coffee-mode-hook js3-mode-hook))
   (ac-flyspell-workaround)
 #+end_src
+
+Turn it on for some modes:
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode)
+            (add-hook mode (lambda () (flyspell-mode t))))
+          '(org-mode-hook markdown-mode git-commit-mode))
+#+END_SRC
+
 * Text Editing
 Default to 72 column width for plain text
 #+begin_src emacs-lisp
