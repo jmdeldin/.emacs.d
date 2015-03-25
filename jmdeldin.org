@@ -597,40 +597,6 @@ Turn on =rdoc-mode=:
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
           '(enh-ruby-mode-hook coffee-mode-hook slim-mode-hook))
 #+end_src
-* JavaScript
-Use 4-spaces
-#+begin_src emacs-lisp
-  (setq js3-indent-level 4)
-#+end_src
-
-Integrate JSLint (from node.js), thanks to [[http://lapin-bleu.net/riviera/?p%3D191][Max Froumentin]]. (I installed JSLint
-with =npm install -g jslint=.)
-#+begin_src emacs-lisp
-  (when (load "flymake" t)
-    (defun flymake-jslint-init ()
-      (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                         'flymake-create-temp-inplace))
-             (local-file (file-relative-name
-                          temp-file
-                          (file-name-directory buffer-file-name))))
-        (list "jslint" (list "--terse" local-file))))
-
-    (setq flymake-err-line-patterns
-          (cons '("^\\(.*\\)(\\([[:digit:]]+\\)):\\(.*\\)$"
-                  1 2 nil 3)
-                flymake-err-line-patterns))
-
-    (add-to-list 'flymake-allowed-file-name-masks
-                 '("\\.js\\'" flymake-jslint-init))
-
-    (require 'flymake-cursor))
-
-  (add-hook 'js3-mode-hook
-            (lambda ()
-              (flymake-mode 1)
-              (define-key js3-mode-map "\C-c\C-n" 'flymake-goto-next-error)))
-  #+end_src
-
 * Scheme
 ** Variables
 #+begin_src emacs-lisp
