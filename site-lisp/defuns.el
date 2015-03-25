@@ -14,6 +14,11 @@
   "Path to ~/.emacs.d/local/FILE."
   (jm/emacs-path (concat "local/" file)))
 
+(defun associate-file-type (file-list mode)
+  "Associates a FILE-LIST with a MODE."
+  (let* ((regexp (concat (regexp-opt file-list t) "\\'")))
+    (add-to-list 'auto-mode-alist (cons regexp mode))))
+
 ;; Align key-value strings, like
 ;;   foo: bar
 ;;   baz:1

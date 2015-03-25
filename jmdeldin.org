@@ -6,56 +6,6 @@ I started using Emacs in the fall of 2010 after a few years of Vim. I use GNU
 Emacs 24.1+ on Mac OS X and Ubuntu for Org-Mode, Ruby, LaTeX, sh, R,
 and a host of miscellaneous other languages.
 
-[[https://github.com/jmdeldin/.emacs.d][View on GitHub]]
-
-* Variables
-#+begin_src emacs-lisp
-  (defvar my/site-lisp (concat user-emacs-directory "site-lisp")
-    "Local elisp directory (e.g., ~/.emacs.d/site-lisp).")
-
-  (defvar my/local (concat user-emacs-directory "local")
-    "Directory with site-local customizations. This shouldn't be checked-in.")
-#+end_src
-
-* Helper Functions
-#+begin_src emacs-lisp
-  (defun localize (file)
-    "Concatenates a FILE with my/local."
-    (expand-file-name file my/local))
-
-  (defun load-directory (directory)
-    "Load an entire DIRECTORY of elisp files."
-    (dolist (f (directory-files directory t ".el"))
-      (load-library (file-name-sans-extension f))))
-
-  ;; load personal elisp
-  (load-directory my/site-lisp)
-
-
-  (defun jm/packages-installed-p
-    "Check whether packages are installed."
-    (interactive)
-    (dolist (p jm/packages)
-      (unless (package-installed-p p)
-        (message "Installing %s" p)
-        (package-install p))))
-
-  (defun setup-packages ()
-    "Install required packages."
-    (interactive)
-    (package-refresh-contents)
-    (dolist (p jm/packages)
-      (unless (package-installed-p p)
-        (message "Installing %s" p)
-        (package-install p))))
-
-
-  (defun associate-file-type (file-list mode)
-    "Associates a FILE-LIST with a MODE."
-    (let* ((regexp (concat (regexp-opt file-list t) "\\'")))
-      (add-to-list 'auto-mode-alist (cons regexp mode))))
-#+end_src
-
 * Lockfiles
 Disable lockfiles -- there's only one user on this machine. This prevents
 [[https://github.com/guard/guard][guard]] from re-running specs everytime the file is edited (but not saved).
