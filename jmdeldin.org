@@ -51,8 +51,7 @@ and a host of miscellaneous other languages.
     "Install required packages."
     (interactive)
     (package-refresh-contents)
-    (load my/required-pkgs)
-    (dolist (p required-packages)
+    (dolist (p jm/packages)
       (unless (package-installed-p p)
         (message "Installing %s" p)
         (package-install p))))
@@ -74,6 +73,30 @@ Use [[http://melpa.milkbox.net/][MELPA]] in addition to the GNU repository:
                '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
+#+end_src
+
+** Required Packages
+#+begin_src emacs-lisp
+  (makunbound 'jm/packages)
+  (defvar jm/packages '(ag
+                        auto-complete
+                        cider
+                        clojure-mode
+                        coffee-mode
+                        evil
+                        highlight-indentation
+                        jabber
+                        magit
+                        markdown-mode
+                        mmm-mode
+                        projectile
+                        rainbow-mode
+                        rspec-mode
+                        ruby-compilation-mode
+                        scss-mode
+                        slim-mode
+                        smex
+                        yaml-mode))
 #+end_src
 
 * Lockfiles
