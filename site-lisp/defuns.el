@@ -102,3 +102,36 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
     (let ((case-fold-search nil))
       (while (search-forward-regexp jm/sql-regexp nil t)
         (replace-match (upcase (match-string 0)) t nil)))))
+
+;;;
+;;; Hacky code for toggling between minitest spec and implementation
+;;
+(defvar mt-lib-dir
+  "/home/jmdeldin/src/takky/lib/takky")
+
+(defvar mt-test-dir
+  "/home/jmdeldin/src/takky/spec")
+
+(defun mt-format-impl-name (fname)
+  (format "%s.rb" (replace-regexp-in-string "_spec" "" (file-name-sans-extension fname))))
+
+(defun mt-format-test-name (fname)
+  (format "%s_spec.rb" (replace-regexp-in-string "_spec" "" (file-name-sans-extension fname))))
+
+(defun mt-swap-directory (from-dir to-dir fname)
+  (replace-regexp-in-string from-dir to-dir fname))
+
+(defun mt-lib-to-test ()
+  (interactive)
+  (message (mt-format-test-name (mt-swap-directory mt-lib-dir mt-test-dir buffer-file-name))))
+
+(defun mt-test-to-lib ()
+  (interactive)
+  (message (mt-format-impl-name (mt-swap-directory mt-test-dir mt-lib-dir buffer-file-name))))
+
+(defun mt-toggle ()
+  (interactive)
+  (let ((dir (file-name-directory (buffer-file-name))))
+    (cond
+     ((string-match mt-lib-dir dir) (find-file (mt-lib-to-test)))
+     ((string-match mt-test-dir dir) (find-file (mt-test-to-lib))))))
