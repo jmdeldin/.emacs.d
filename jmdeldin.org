@@ -211,11 +211,6 @@ Default to 72 column width for plain text
                (set-fill-column 72)))
 #+end_src
 
-Enable camelCase navigation
-#+begin_src emacs-lisp
-  (global-subword-mode t)
-#+end_src
-
 Match parens and quotes
 #+begin_src emacs-lisp
   (electric-pair-mode t)
