@@ -23,25 +23,26 @@ install packages.
 
 ** Required Packages
 #+BEGIN_SRC emacs-lisp
-(makunbound 'jm/packages)
-(defvar jm/packages '(ag
-                      auto-complete
-                      cider
-                      clojure-mode
-                      coffee-mode
-                      evil
-                      highlight-indentation
-                      jabber
-                      magit
-                      markdown-mode
-                      mmm-mode
-                      projectile
-                      rainbow-mode
-                      rspec-mode
-                      scss-mode
-                      slim-mode
-                      smex
-                      yaml-mode))
+  (makunbound 'jm/packages)
+  (defvar jm/packages '(ag
+                        auto-complete
+                        cider
+                        clojure-mode
+                        coffee-mode
+                        evil
+                        highlight-indentation
+                        jabber
+                        magit
+                        markdown-mode
+                        mmm-mode
+                        nginx-mode
+                        projectile
+                        rainbow-mode
+                        rspec-mode
+                        scss-mode
+                        slim-mode
+                        smex
+                        yaml-mode))
 #+END_SRC
 
 ** Install Packages
