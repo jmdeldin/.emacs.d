@@ -42,6 +42,7 @@ install packages.
                         scss-mode
                         slim-mode
                         smex
+                        tuareg
                         yaml-mode))
 #+END_SRC
 
