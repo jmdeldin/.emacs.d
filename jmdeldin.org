@@ -26,10 +26,13 @@ install packages.
   (makunbound 'jm/packages)
   (defvar jm/packages '(ag
                         auto-complete
+                        ac-geiser
                         cider
                         clojure-mode
                         coffee-mode
                         evil
+                        evil-paredit
+                        geiser
                         highlight-indentation
                         jabber
                         magit
