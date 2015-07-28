@@ -157,3 +157,12 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
   "Inserts a Markdown link to a Pivotal Tracker ticket."
   (interactive "nticket id: ")
   (insert (format ":o: [Finishes #%s](https://www.pivotaltracker.com/story/show/%s)" id id)))
+
+(defun make-password ()
+  "Generates an XKCD-style password, prints it, and saves it to
+the kill ring. Shell-fu by @ckuttruff."
+  (interactive)
+  (let* ((cmd "egrep '{6,}' /usr/share/dict/words | shuf -n 4 | tr \"\\n\" ' '")
+         (pass (replace-regexp-in-string " $" "" (shell-command-to-string cmd))))
+    (message pass)
+    (kill-new pass)))
