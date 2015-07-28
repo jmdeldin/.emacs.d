@@ -205,7 +205,8 @@ Turn it on for some modes:
 #+BEGIN_SRC emacs-lisp
   (mapcar (lambda (mode)
             (add-hook mode (lambda () (flyspell-mode t))))
-          '(jabber-chat-mode-hook org-mode-hook markdown-mode git-commit-mode))
+          '(jabber-chat-mode-hook org-mode-hook markdown-mode text-mode))
+  (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
 #+END_SRC
 
 * Text Editing
