@@ -26,6 +26,7 @@
 ;;   foo: bar
 ;;   baz: 1
 ;; TODO: Convert to a function
+
 (fset 'align-key-value
       [?\C-u ?\M-x ?a ?l ?i ?g ?n ?- ?r ?e ?g ?e ?x ?p ?\C-m ?\C-a ?\C-k ?\\ ?\( ?: ?\\ ?\) ?\\ ?\( ?\\ ?s ?- ?* ?\\ ?\) ?\C-m ?\C-? ?2 ?\C-m ?\C-m ?n])
 
@@ -36,7 +37,9 @@ The format is any format accepted by `format-time-string'. The default
 is ISO 8601, which is ``%Y-%m-%dT%T%z''."
   (interactive "Mformat: ")
   (insert (format-time-string
-     (if (string= "" format) "%Y-%m-%dT%T%z" format))))
+           (if (string= "" format)
+               "%Y-%m-%dT%T%z"
+             format))))
 
 (defun pry ()
   "Inserts a pry debugging line."
@@ -158,6 +161,11 @@ By Chris Webber from URL `http://www.emacswiki.org/emacs/TransposeWindows'."
   (interactive "nticket id: ")
   (insert (format ":o: [Finishes #%s](https://www.pivotaltracker.com/story/show/%s)" id id)))
 
+(defun jira-ticket (id)
+  "Inserts a Markdown link to a Jira ticket."
+  (interactive "sticket id: ")
+  (insert (format ":o: [Finishes %s](https://jira.copiousinc.com/browse/%s)" id id)))
+
 (defun make-password ()
   "Generates an XKCD-style password, prints it, and saves it to
 the kill ring. Shell-fu by @ckuttruff."
@@ -166,3 +174,25 @@ the kill ring. Shell-fu by @ckuttruff."
          (pass (replace-regexp-in-string " $" "" (shell-command-to-string cmd))))
     (message pass)
     (kill-new pass)))
+
+(defun jm/org-copy-field ()
+  "Copy a table cell. Thanks to finster on #org-mode for the code!"
+  (interactive)
+  (kill-new (s-trim (substring-no-properties (org-table-get-field)))))
+
+(defun jm/copy-password ()
+  "Copy a password to the clipboard.
+
+(Passwords are stored in the last column of an org table.)"
+  (interactive)
+  (end-of-line)
+  (backward-char)
+  (jm/org-copy-field))
+
+(defun jm/yeller ()
+  (interactive)
+  (set-background-color "#FFFFDD"))
+
+(defun jm/minty ()
+  (interactive)
+  (set-background-color "#F0FFF0"))
