@@ -15,12 +15,10 @@ You can clone directly as =$HOME/.emacs.d=:
 
 * Notes
 ** Improvements
-*** TODO make this the README?
 *** TODO add org-mode/orgstruct to magit
 *** TODO evaluate company-mode
 *** TODO function to ensure there is a newline before org headings
 *** TODO better function for jumping to windows
-*** TODO better function for swapping windows?
 *** TODO WTF doesn't jabber work in 24.4
 I'm getting "Required feature `jabber-autoloads' was not provided".
 ** Keys
@@ -139,6 +137,7 @@ We can declare the origin of our packages with the
   (setq package-pinned-packages
         '(
           (ac-geiser . "melpa-stable")
+          (ace-window . "melpa-stable")
           (ag   . "melpa-stable")
           (auto-complete . "melpa-stable")
           (cider . "melpa-stable")
@@ -608,23 +607,10 @@ better commenting (replaces the original comment-dwim)
 #+END_SRC
 
 *** Windows
-Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
+=M-s/M-S= -- switch windows
 #+BEGIN_SRC emacs-lisp
-  (defun select-next-window ()
-    "Switch to the next window"
-    (interactive)
-    (select-window (next-window)))
-
-  (defun select-previous-window ()
-    "Switch to the previous window"
-    (interactive)
-    (select-window (previous-window)))
-#+END_SRC
-
-=M-s/M-S= -- switch to next/previous windows
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-s") 'select-next-window)
-  (global-set-key (kbd "M-S") 'select-previous-window)
+  (global-set-key (kbd "M-s") 'ace-window)
+  (global-set-key (kbd "M-S") 'ace-window)
 #+END_SRC
 
 *** Mac
