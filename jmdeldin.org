@@ -153,75 +153,6 @@ Highlight nick:
   (setq erc-current-nick-highlight-type 'nick)
 #+END_SRC
 
-* Minibuffer
-*** IDO
-Interactively-do-things is the greatest Emacs extension.
-
-#+BEGIN_SRC emacs-lisp
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (setq ido-show-dot-for-dired t)
-  (setq ido-save-directory-list-file (jm/local-path "ido.last"))
-  (setq ido-use-virtual-buffers t)
-  (ido-mode 1)
-#+END_SRC
-*** Uniquify
-Use part of the directory to distinguish between identically-named files:
-#+BEGIN_SRC emacs-lisp
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
-#+END_SRC
-*** Minibuffer History
-Save minibuffer history:
-#+BEGIN_SRC emacs-lisp
-  (savehist-mode 1)
-  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-  (setq savehist-file (jm/local-path "savehist"))
-#+END_SRC
-*** Recent Files
-Enable recent files:
-#+BEGIN_SRC emacs-lisp
-  (require 'recentf)
-  (setq recentf-save-file (jm/local-path "recentf"))
-  (setq recentf-max-saved-items 100)
-  (recentf-mode 1)
-#+END_SRC
-
-* Auto-Complete Mode
-#+BEGIN_SRC emacs-lisp
-  (require 'auto-complete-config)
-  (ac-config-default)
-  (setq ac-ignore-case nil)
-  (add-to-list 'ac-modes 'ruby-mode)
-  (setq ac-comphist-file (jm/local-path "ac-comphist.dat"))
-#+END_SRC
-
-* Spelling
-Use =aspell= instead of =ispell=, use =list= for faster region checking, and
-use a faster suggestion mode.
-
-#+BEGIN_SRC emacs-lisp
-  (setq ispell-program-name "aspell")
-  (setq ispell-list-command "list")
-  (setq ispell-extra-args '("--sug-mode=ultra"))
-#+END_SRC
-
-Turn it on for comments
-#+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
-                               coffee-mode-hook))
-  (ac-flyspell-workaround)
-#+END_SRC
-
-Turn it on for some modes:
-#+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode)
-            (add-hook mode (lambda () (flyspell-mode t))))
-          '(jabber-chat-mode-hook org-mode-hook markdown-mode text-mode))
-  (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
-#+END_SRC
-
 * Text Editing
 Default to 72 column width for plain text
 #+BEGIN_SRC emacs-lisp
@@ -266,6 +197,93 @@ Remember last edit position
   (require 'saveplace)
   (setq-default save-place t)
   (setq save-place-file (jm/local-path "places"))
+#+END_SRC
+
+** Auto-Complete Mode
+#+BEGIN_SRC emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (setq ac-ignore-case nil)
+  (add-to-list 'ac-modes 'ruby-mode)
+  (setq ac-comphist-file (jm/local-path "ac-comphist.dat"))
+#+END_SRC
+
+** Spelling
+Use =aspell= instead of =ispell=, use =list= for faster region checking, and
+use a faster suggestion mode.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "aspell")
+  (setq ispell-list-command "list")
+  (setq ispell-extra-args '("--sug-mode=ultra"))
+#+END_SRC
+
+Turn it on for comments
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
+          '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
+                               coffee-mode-hook))
+  (ac-flyspell-workaround)
+#+END_SRC
+
+Turn it on for some modes:
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode)
+            (add-hook mode (lambda () (flyspell-mode t))))
+          '(jabber-chat-mode-hook org-mode-hook markdown-mode text-mode))
+  (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+#+END_SRC
+
+** Whitespace
+Wrap lines at column 78
+#+BEGIN_SRC emacs-lisp
+  (setq-default fill-column 78)
+#+END_SRC
+
+Highlight right-margin when whitespace-mode is on
+#+BEGIN_SRC emacs-lisp
+  (setq whitespace-line-column fill-column)
+#+END_SRC
+
+Highlight empty lines
+#+BEGIN_SRC emacs-lisp
+  (setq-default indicate-empty-lines t)
+#+END_SRC
+
+Hard-wrap lines all the time
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+Use spaces, not tabs (C-q C-i to insert a hard-tab)
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+2-space tabs
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 2)
+#+END_SRC
+
+Insert tabs when appropriate
+#+BEGIN_SRC emacs-lisp
+  (setq indent-line-function 'insert-tab)
+#+END_SRC
+
+Insert a newline at the EOF
+#+BEGIN_SRC emacs-lisp
+  (setq-default require-final-newline t)
+#+END_SRC#+end_src
+
+Delete trailing whitespace on save
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+** Highlight Stuff
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
+          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
 #+END_SRC
 
 * UI
@@ -325,70 +343,7 @@ No bells
   (setq ring-bell-function 'ignore)
 #+END_SRC
 
-** Mouse
-Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
-
-#+BEGIN_SRC emacs-lisp
-  (unless window-system
-    (require 'mouse)
-    (xterm-mouse-mode t)
-    (global-set-key [mouse-4] '(lambda ()
-                                 (interactive)
-                                 (scroll-down 1)))
-    (global-set-key [mouse-5] '(lambda ()
-                                 (interactive)
-                                 (scroll-up 1)))
-    (defun track-mouse (e))
-    (setq mouse-sel-mode t))
-#+END_SRC
-
-* Whitespace
-Wrap lines at column 78
-#+BEGIN_SRC emacs-lisp
-  (setq-default fill-column 78)
-#+END_SRC
-
-Highlight right-margin when whitespace-mode is on
-#+BEGIN_SRC emacs-lisp
-  (setq whitespace-line-column fill-column)
-#+END_SRC
-
-Highlight empty lines
-#+BEGIN_SRC emacs-lisp
-  (setq-default indicate-empty-lines t)
-#+END_SRC
-
-Hard-wrap lines all the time
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
-#+END_SRC
-
-Use spaces, not tabs (C-q C-i to insert a hard-tab)
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
-
-2-space tabs
-#+BEGIN_SRC emacs-lisp
-  (setq-default tab-width 2)
-#+END_SRC
-
-Insert tabs when appropriate
-#+BEGIN_SRC emacs-lisp
-  (setq indent-line-function 'insert-tab)
-#+END_SRC
-
-Insert a newline at the EOF
-#+BEGIN_SRC emacs-lisp
-  (setq-default require-final-newline t)
-#+END_SRC#+end_src
-
-Delete trailing whitespace on save
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+END_SRC
-
-* Window Management
+** Window Management
 Restore window configuration with =C-c LEFT=
 #+BEGIN_SRC emacs-lisp
   (winner-mode)
@@ -408,15 +363,182 @@ Make windmove work in org-mode:
   (add-hook 'org-shiftright-final-hook 'windmove-right)
 #+END_SRC
 
-* Man
-Open man pages in a different window
+** Minibuffer
+*** IDO
+Interactively-do-things is the greatest Emacs extension.
+
 #+BEGIN_SRC emacs-lisp
-  (setq Man-notify-method 'friendly)
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-show-dot-for-dired t)
+  (setq ido-save-directory-list-file (jm/local-path "ido.last"))
+  (setq ido-use-virtual-buffers t)
+  (ido-mode 1)
+#+END_SRC
+**** Uniquify
+Use part of the directory to distinguish between identically-named files:
+#+BEGIN_SRC emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+END_SRC
+**** Minibuffer History
+Save minibuffer history:
+#+BEGIN_SRC emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-file (jm/local-path "savehist"))
+#+END_SRC
+**** Recent Files
+Enable recent files:
+#+BEGIN_SRC emacs-lisp
+  (require 'recentf)
+  (setq recentf-save-file (jm/local-path "recentf"))
+  (setq recentf-max-saved-items 100)
+  (recentf-mode 1)
 #+END_SRC
 
-I tend to keep man pages pretty narrow
+** Mouse
+Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
+
 #+BEGIN_SRC emacs-lisp
-  (setenv "MANWIDTH" "72")
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] '(lambda ()
+                                 (interactive)
+                                 (scroll-down 1)))
+    (global-set-key [mouse-5] '(lambda ()
+                                 (interactive)
+                                 (scroll-up 1)))
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t))
+#+END_SRC
+
+** Keybindings
+*** Evil
+Arguably the best Vim ever, but sometimes, I still want Emacs keys.
+#+BEGIN_SRC emacs-lisp
+(evil-mode t)
+(define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
+(define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
+(define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
+(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+(define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-z") 'suspend-emacs)
+(define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
+#+END_SRC
+
+*** Editing
+=C-c C-r= -- Revert buffer
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c C-r") 'revert-buffer)
+#+END_SRC
+
+Swap =C-j= and =RET=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+  (global-set-key (kbd "C-j") 'newline)
+#+END_SRC
+
+=C-c C-d= -- Remove trailing whitespace
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
+#+END_SRC
+
+=C-w= -- delete the previous word (like most shells)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+#+END_SRC
+
+C-x C-k -- kill region (since we just unbound it with C-w)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+#+END_SRC
+
+=C-x C-j= -- join line
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-j") 'join-line)
+#+END_SRC
+
+=C-c w= -- toggle whitespace mode
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c w") 'global-whitespace-mode)
+#+END_SRC
+
+better commenting (replaces the original comment-dwim)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
+#+END_SRC
+
+=C-x m= -- recompile
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x m") 'recompile)
+#+END_SRC
+
+=C-x g= -- =magit-status=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+=C-x x= -- =jm/shell=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x x") 'jm/shell)
+#+END_SRC
+
+=M-#= -- =jm/reload-init=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-#") 'jm/reload-init)
+#+END_SRC
+
+=C-x a= -- =ag-regexp-project-at-point=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
+#+END_SRC
+
+=C-x p= -- find files in project
+#+BEGIN_SRC emacs-lisp
+  (projectile-global-mode t)
+  (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+  (setq projectile-cache-file (jm/local-path "projectile-cache"))
+  (global-set-key (kbd "C-x p") 'projectile-find-file)
+#+END_SRC
+
+=M-x= -- ido-like completion for functions
+#+BEGIN_SRC emacs-lisp
+  (smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  (setq smex-save-file (jm/local-path "smex-items"))
+#+END_SRC
+
+*** Windows
+Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
+#+BEGIN_SRC emacs-lisp
+  (defun select-next-window ()
+    "Switch to the next window"
+    (interactive)
+    (select-window (next-window)))
+
+  (defun select-previous-window ()
+    "Switch to the previous window"
+    (interactive)
+    (select-window (previous-window)))
+#+END_SRC
+
+=M-s/M-S= -- switch to next/previous windows
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-s") 'select-next-window)
+  (global-set-key (kbd "M-S") 'select-previous-window)
+#+END_SRC
+
+*** Mac
+Make the Cmd and Opt keys work for =M-x=
+#+BEGIN_SRC emacs-lisp
+  (when system-type "darwin"
+    (setq-default mac-command-modifier 'super)
+    (setq-default mac-option-modifier 'meta))
 #+END_SRC
 
 * Languages
@@ -713,149 +835,29 @@ Turn on =rdoc-mode=:
               (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
 #+END_SRC
 
-* Highlight Stuff
+* Tools
+** Man
+Open man pages in a different window
 #+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
-#+END_SRC
-* Silver Searcher
-#+BEGIN_SRC emacs-lisp
-(require 'ag)
-(setq ag-highlight-search t)
+  (setq Man-notify-method 'friendly)
 #+END_SRC
 
-* Keybindings
-** Evil
-Arguably the best Vim ever, but sometimes, I still want Emacs keys.
+I tend to keep man pages pretty narrow
 #+BEGIN_SRC emacs-lisp
-(evil-mode t)
-(define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
-(define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-(define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
-(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-(define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
-(define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
-(define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
-(define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
-(define-key evil-insert-state-map (kbd "C-z") 'suspend-emacs)
-(define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
+  (setenv "MANWIDTH" "72")
 #+END_SRC
 
-** Editing
-=C-c C-r= -- Revert buffer
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c C-r") 'revert-buffer)
-#+END_SRC
-
-Swap =C-j= and =RET=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
-  (global-set-key (kbd "C-j") 'newline)
-#+END_SRC
-
-=C-c C-d= -- Remove trailing whitespace
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
-#+END_SRC
-
-=C-w= -- delete the previous word (like most shells)
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-w") 'backward-kill-word)
-#+END_SRC
-
-C-x C-k -- kill region (since we just unbound it with C-w)
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-k") 'kill-region)
-#+END_SRC
-
-=C-x C-j= -- join line
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-j") 'join-line)
-#+END_SRC
-
-=C-c w= -- toggle whitespace mode
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c w") 'global-whitespace-mode)
-#+END_SRC
-
-better commenting (replaces the original comment-dwim)
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
-#+END_SRC
-
-=C-x m= -- recompile
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x m") 'recompile)
-#+END_SRC
-
-=C-x g= -- =magit-status=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x g") 'magit-status)
-#+END_SRC
-
-=C-x x= -- =jm/shell=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x x") 'jm/shell)
-#+END_SRC
-
-=M-#= -- =jm/reload-init=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-#") 'jm/reload-init)
-#+END_SRC
-
-=C-x a= -- =ag-regexp-project-at-point=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
-#+END_SRC
-
-=C-x p= -- find files in project
-#+BEGIN_SRC emacs-lisp
-  (projectile-global-mode t)
-  (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
-  (setq projectile-cache-file (jm/local-path "projectile-cache"))
-  (global-set-key (kbd "C-x p") 'projectile-find-file)
-#+END_SRC
-
-** UI
-Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
-#+BEGIN_SRC emacs-lisp
-  (defun select-next-window ()
-    "Switch to the next window"
-    (interactive)
-    (select-window (next-window)))
-
-  (defun select-previous-window ()
-    "Switch to the previous window"
-    (interactive)
-    (select-window (previous-window)))
-#+END_SRC
-
-=M-s/M-S= -- switch to next/previous windows
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-s") 'select-next-window)
-  (global-set-key (kbd "M-S") 'select-previous-window)
-#+END_SRC
-
-=M-x= -- ido-like completion for functions
-#+BEGIN_SRC emacs-lisp
-  (smex-initialize)
-  (global-set-key (kbd "M-x") 'smex)
-  (setq smex-save-file (jm/local-path "smex-items"))
-#+END_SRC
-
-** Mac
-Make the Cmd and Opt keys work for =M-x=
-#+BEGIN_SRC emacs-lisp
-  (when system-type "darwin"
-    (setq-default mac-command-modifier 'super)
-    (setq-default mac-option-modifier 'meta))
-#+END_SRC
-
-* Shell
+** Shell
 Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully
 functional= messages.
 #+BEGIN_SRC emacs-lisp
   (setenv "PAGER" "cat")
+#+END_SRC
+
+** Silver Searcher
+#+BEGIN_SRC emacs-lisp
+(require 'ag)
+(setq ag-highlight-search t)
 #+END_SRC
 
 * Local configuration
