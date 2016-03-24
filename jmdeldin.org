@@ -76,6 +76,14 @@ We can declare the origin of our packages with the
     (jm/install-packages jm/packages))
 #+END_SRC
 
+** Server
+Only load the server if it isn't running:
+#+BEGIN_SRC emacs-lisp
+  (load "server")
+  (unless (server-running-p)
+    (server-start))
+#+END_SRC
+
 * Garbage
 This section is dedicated to all of the turd files Emacs leaves all over
 your machine.
@@ -109,13 +117,20 @@ Keep auto-save files together. Test with =M-x do-auto-save=.
         `((".*" ,new-dir t))))
 #+END_SRC
 
-* Jabber
+** Bookmarks
+Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
+#+BEGIN_SRC emacs-lisp
+  (setq bookmark-file (jm/local-path "bookmarks"))
+#+END_SRC
 
+* Communication
+** Jabber
 Don't notify if someone is online/offline in the buddy list:
 #+BEGIN_SRC emacs-lisp
 (setq jabber-alert-presence-message-function (lambda (who oldstatus newstatus statustext) nil))
 #+END_SRC
-* ERC
+
+** ERC
 Prevent auto-joining =#erc=
 #+BEGIN_SRC emacs-lisp
   (setq erc-autojoin-channels-alist '())
@@ -170,14 +185,6 @@ Enable recent files:
   (setq recentf-save-file (jm/local-path "recentf"))
   (setq recentf-max-saved-items 100)
   (recentf-mode 1)
-#+END_SRC
-
-* Server
-Only load the server if it isn't running.
-#+BEGIN_SRC emacs-lisp
-  (load "server")
-  (unless (server-running-p)
-    (server-start))
 #+END_SRC
 
 * Auto-Complete Mode
@@ -840,18 +847,15 @@ Make the Cmd and Opt keys work for =M-x=
     (setq-default mac-command-modifier 'super)
     (setq-default mac-option-modifier 'meta))
 #+END_SRC
-* Misc
-Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
-#+BEGIN_SRC emacs-lisp
-  (setq bookmark-file (jm/local-path "bookmarks"))
-#+END_SRC
 
+* Shell
 Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully
 functional= messages.
 #+BEGIN_SRC emacs-lisp
   (setenv "PAGER" "cat")
 #+END_SRC
 
+* Local configuration
 Load local config to override any of the above settings
 #+BEGIN_SRC emacs-lisp
   (load (jm/local-path "local") 'noerror)
