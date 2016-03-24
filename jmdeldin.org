@@ -3,74 +3,71 @@
 #+STYLE: <style>html { font: 14px Helvetica, sans-serif } body { width: 85%; margin: 2% auto;} pre, code { font-family: Monaco, Consolas, 'Bitstream Vera Sans', monospace; }</style>
 
 I started using Emacs in the fall of 2010 after a few years of Vim. I
-use GNU Emacs 24.1+ on Mac OS X and Ubuntu for Org-Mode, Ruby, LaTeX,
-sh, R, and a host of miscellaneous other languages.
+use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
+host of miscellaneous other languages.
 
-* Initial Setup
-Load helper functions:
+* TODO make this the README?
+
+* Initialization
+** Load custom helper functions
 #+BEGIN_SRC emacs-lisp
   (load-file (concat user-emacs-directory "site-lisp/defuns.el"))
 #+END_SRC
 
-On clean installs, some packages will try to append custom vars to init.el,
-breaking installation. The =custom-file= must be set before trying to
-install packages.
-
+** Set =custom-file=
+On clean installs, some packages will try to append custom vars to
+init.el, breaking installation. The =custom-file= must be set before
+trying to install packages.
 #+BEGIN_SRC emacs-lisp
-  (setq custom-file (jm/emacs-path "local/emacs-custom.el"))
+  (setq custom-file (concat user-emacs-directory "local/emacs-custom.el"))
   (load custom-file 'noerror)
 #+END_SRC
 
-** Required Packages
+** Set up repositories
 #+BEGIN_SRC emacs-lisp
-  (makunbound 'jm/packages)
-  (defvar jm/packages '(ag
-                        auto-complete
-                        ac-geiser
-                        cider
-                        clojure-mode
-                        coffee-mode
-                        evil
-                        evil-paredit
-                        geiser
-                        highlight-indentation
-                        jabber
-                        magit
-                        markdown-mode
-                        mmm-mode
-                        nginx-mode
-                        projectile
-                        rainbow-mode
-                        rspec-mode
-                        scss-mode
-                        slim-mode
-                        smex
-                        tuareg
-                        yaml-mode))
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")
+                           ("melpa-unstable" . "https://melpa.org/packages/")))
+#+END_SRC
+
+** Define required packages
+We can declare the origin of our packages with the
+=package-pinned-packages= variable:
+#+BEGIN_SRC emacs-lisp
+  (setq package-pinned-packages
+        '(
+          (ac-geiser . "melpa-stable")
+          (ag   . "melpa-stable")
+          (auto-complete . "melpa-stable")
+          (cider . "melpa-stable")
+          (clojure-mode . "melpa-stable")
+          (coffee-mode . "melpa-stable")
+          (evil . "melpa-unstable")
+          (evil-paredit . "melpa-unstable")
+          (geiser . "melpa-stable")
+          (highlight-indentation . "melpa-stable")
+          (jabber . "melpa-stable")
+          (magit . "melpa-stable")
+          (markdown-mode . "melpa-stable")
+          (mmm-mode . "melpa-stable")
+          (nginx-mode . "melpa-stable")
+          (projectile . "melpa-stable")
+          (rainbow-mode . "gnu")
+          (rspec-mode . "melpa-stable")
+          (scss-mode . "melpa-stable")
+          (slim-mode . "melpa-stable")
+          (smex . "melpa-stable")
+          (tuareg . "melpa-stable")
+          (yaml-mode . "melpa-stable")
+          ))
 #+END_SRC
 
 ** Install Packages
-Prevent =package.el= from timing out on large installs:
 #+BEGIN_SRC emacs-lisp
-  (setq url-http-attempt-keepalives nil)
-#+END_SRC
+  (setq jm/packages (mapcar 'car package-pinned-packages))
 
-Use MELPA in addition to the GNU repository:
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-#+END_SRC
-
-Install any missing packages:
-#+BEGIN_SRC emacs-lisp
-  (unless (= (length jm/packages)
-             (length (jm/filter 'package-installed-p jm/packages)))
-    (package-refresh-contents)
-    (mapcar (lambda (pkg)
-              (unless (package-installed-p pkg) (package-install pkg)))
-            jm/packages))
+  (unless (jm/packages-installed-p jm/packages)
+    (jm/install-packages jm/packages))
 #+END_SRC
 
 * Lockfiles
