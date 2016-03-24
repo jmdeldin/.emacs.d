@@ -525,6 +525,11 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
 #+END_SRC
 
 *** Editing
+=M-/= -- use a more powerful expansion
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-/") 'hippie-expand)
+#+END_SRC
+
 =C-c C-r= -- Revert buffer
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-r") 'revert-buffer)
