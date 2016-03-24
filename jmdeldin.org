@@ -6,11 +6,13 @@ I started using Emacs in the fall of 2010 after a few years of Vim. I
 use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
 host of miscellaneous other languages.
 
-* TODO
+* Improvements
 ** TODO make this the README?
 ** TODO add org-mode/orgstruct to magit
 ** TODO evaluate company-mode
 ** TODO function to ensure there is a newline before org headings
+** TODO better function for jumping to windows
+** TODO better function for swapping windows?
 
 * Initialization
 ** Load custom helper functions
@@ -86,7 +88,7 @@ Disable lockfiles -- there's only one user on this machine. This prevents
 #+end_src
 
 ** Backups
-Place backups in ~/.emacs.d/local/backups
+Place backups in =~/.emacs.d/local/backups=:
 #+begin_src emacs-lisp
   (setq backup-by-copying t)
   (setq backup-directory-alist
@@ -98,15 +100,14 @@ Place backups in ~/.emacs.d/local/backups
 #+end_src
 
 ** Auto-saves
-Dump auto-save files in =~/.emacs.d/local/saves=:
+Keep auto-save files together. Test with =M-x do-auto-save=.
 
 #+begin_src emacs-lisp
-  (setq auto-save-list-file-prefix (jm/local-path "saves"))
-  (setq auto-save-file-name-transforms
-        `((".*" ,"~/.emacs.d/local/saves" t)))
+  (let ((new-dir (jm/local-path "auto-saves/")))
+    (setq auto-save-list-file-prefix new-dir)
+    (setq auto-save-file-name-transforms
+        `((".*" ,new-dir t))))
 #+end_src
-
-Test with =M-x do-auto-save=.
 
 * Jabber
 
@@ -145,7 +146,7 @@ Interactively-do-things is the greatest Emacs extension.
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
   (setq ido-show-dot-for-dired t)
-  (setq ido-save-directory-list-file (jm/local-path ".ido.last"))
+  (setq ido-save-directory-list-file (jm/local-path "ido.last"))
   (setq ido-use-virtual-buffers t)
   (ido-mode 1)
 #+end_src
@@ -160,13 +161,13 @@ Save minibuffer history:
 #+begin_src emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-  (setq savehist-file (jm/local-path ".savehist"))
+  (setq savehist-file (jm/local-path "savehist"))
 #+end_src
 *** Recent Files
 Enable recent files:
 #+begin_src emacs-lisp
   (require 'recentf)
-  (setq recentf-save-file (jm/local-path ".recentf"))
+  (setq recentf-save-file (jm/local-path "recentf"))
   (setq recentf-max-saved-items 100)
   (recentf-mode 1)
 #+end_src
@@ -257,7 +258,7 @@ Remember last edit position
 #+begin_src emacs-lisp
   (require 'saveplace)
   (setq-default save-place t)
-  (setq save-place-file (jm/local-path "/.emacs-places"))
+  (setq save-place-file (jm/local-path "places"))
 #+end_src
 
 * UI
@@ -315,13 +316,6 @@ Use =ibuffer= instead of =list-buffers=
 No bells
 #+begin_src emacs-lisp
   (setq ring-bell-function 'ignore)
-#+end_src
-
-Save the point between sessions
-#+begin_src emacs-lisp
-  (require 'saveplace)
-  (setq-default save-place t)
-  (setq save-place-file (jm/local-path "places"))
 #+end_src
 
 ** Mouse
@@ -855,7 +849,7 @@ the file doesn't exist):
 
 Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+begin_src emacs-lisp
-  (setq bookmark-file (jm/local-path ".emacs.bmk"))
+  (setq bookmark-file (jm/local-path "bookmarks"))
 #+end_src
 
 Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully

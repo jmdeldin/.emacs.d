@@ -6,13 +6,9 @@
   "Filter elements from a LST matching PRED."
   (delq nil (mapcar (lambda (x) (and (funcall pred x) x)) lst)))
 
-(defun jm/emacs-path (file)
-  "Path to ~/.emacs.d/FILE."
-  (concat user-emacs-directory file))
-
 (defun jm/local-path (file)
   "Path to ~/.emacs.d/local/FILE."
-  (jm/emacs-path (concat "local/" file)))
+  (concat user-emacs-directory "local/" file))
 
 (defun jm/packages-installed-p (pkg-list)
   "Determine whether all packages declared in PKG-LIST are installed."
