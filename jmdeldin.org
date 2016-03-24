@@ -419,7 +419,8 @@ I tend to keep man pages pretty narrow
   (setenv "MANWIDTH" "72")
 #+END_SRC
 
-* C
+* Languages
+** C
 The only way to program.
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "k&r")
@@ -437,33 +438,89 @@ mode isn't supported).
 #+BEGIN_SRC emacs-lisp
   (setq gdb-many-windows t)
 #+END_SRC
-* Graphviz
+
+** Clojure
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (setq cider-repl-result-prefix ";; => ")
+  (add-hook 'cider-repl-mode-hook 'subword-mode)
+  (setq cider-auto-select-error-buffer nil)
+
+  (add-hook 'cider-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
+
+#+END_SRC
+
+** CSS
+Turn on =rainbow-mode= for colored hex values
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'css-mode-hook 'rainbow-mode)
+#+END_SRC
+
+Prevent SCSS from compiling at save time:
+#+BEGIN_SRC emacs-lisp
+  (setq scss-compile-at-save nil)
+#+END_SRC
+
+Two spaces:
+#+BEGIN_SRC emacs-lisp
+  (setq css-indent-offset 2)
+#+END_SRC
+
+** Graphviz
 #+BEGIN_SRC emacs-lisp
   (associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
 #+END_SRC
-* R
+
+** JavaScript
+2 space indent:
+
 #+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".R" ".r") 'r-mode)
-  (autoload 'r-mode "ess-site" nil t)
+  (setq js-indent-level 2)
 #+END_SRC
 
-Don't be so slow at evaluating buffers:
+** LaTeX
+Produce PDFs instead of DVIs
 #+BEGIN_SRC emacs-lisp
-  (setq ess-eval-visibly-p nil)
+  (setq TeX-PDF-mode t)
 #+END_SRC
-* Lisp
+
+** Lisp
 #+BEGIN_SRC emacs-lisp
   (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
 
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
-* Org-Mode
+
+** Markdown
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".md" ".markdown") 'markdown-mode)
+#+END_SRC
+
+** ERB
+Support editing mixed mode files, like ERB templates.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'mmm-auto)
+  (setq mmm-global-mode 'auto)
+  (setq mmm-submode-decoration-level 2)
+  (setq mmm-parse-when-idle t)
+
+  (mmm-add-mode-ext-class 'html-erb-mode "\\.html\\.erb\\'" 'erb)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-js)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-css)
+
+  (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
+#+END_SRC
+
+** Org-Mode
 Include the org-habit module for the agenda:
 #+BEGIN_SRC emacs-lisp
   (setq org-modules (quote (org-habit)))
 #+END_SRC
 
-** Paths
+*** Paths
 This configuration assumes org files live in the =~/org= directory. You can
 customize it by setting these variables in =../local/local.el=:
 #+BEGIN_SRC emacs-lisp
@@ -477,7 +534,7 @@ customize it by setting these variables in =../local/local.el=:
                                  (file-expand-wildcards org-directory)))
 #+END_SRC
 
-** Capture Templates
+*** Capture Templates
 Hit =C-c c= to trigger these:
 
 #+BEGIN_SRC emacs-lisp
@@ -491,7 +548,7 @@ Hit =C-c c= to trigger these:
           ))
 #+END_SRC
 
-** Skeleton
+*** Skeleton
 #+BEGIN_SRC emacs-lisp
   (define-skeleton orgmode-skeleton
     "Inserts orgmode defaults into the current buffer."
@@ -502,7 +559,7 @@ Hit =C-c c= to trigger these:
     \n _)
 #+END_SRC
 
-** Keybindings
+*** Keybindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -512,7 +569,7 @@ Hit =C-c c= to trigger these:
   (global-set-key (kbd "C-x t") 'org-cycle)
 #+END_SRC
 
-** Babel
+*** Babel
 Include these languages for babel
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
@@ -524,7 +581,8 @@ Highlight src blocks
 #+BEGIN_SRC emacs-lisp
   (setq org-src-fontify-natively t)
 #+END_SRC
-** Agenda
+
+*** Agenda
 Show the agenda from the current day:
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-start-on-weekday nil)
@@ -535,7 +593,7 @@ Show all habits
   (setq org-habit-show-habits-only-for-today nil)
 #+END_SRC
 
-** Exporting
+*** Exporting
 Remove "Valid XHTML" link
 #+BEGIN_SRC emacs-lisp
   (setq org-export-html-validation-link nil)
@@ -547,7 +605,7 @@ Minted latex export
         '(("fontsize" "\\scriptsize")))
 #+END_SRC
 
-* Perl
+** Perl
 Use the more modern =cperl-mode=
 #+BEGIN_SRC emacs-lisp
   (defalias 'perl-mode 'cperl-mode)
@@ -580,8 +638,19 @@ Fix indentation for lines not starting statements (e.g., hash members)
   (setq cperl-continued-statement-offset 0)
 #+END_SRC#+end_src
 
-* Ruby
-** Running
+** R
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".R" ".r") 'r-mode)
+  (autoload 'r-mode "ess-site" nil t)
+#+END_SRC
+
+Don't be so slow at evaluating buffers:
+#+BEGIN_SRC emacs-lisp
+  (setq ess-eval-visibly-p nil)
+#+END_SRC
+
+** Ruby
+*** Running
 Shortcut for running a script and returning focus to it:
 #+BEGIN_SRC emacs-lisp
   (defun ruby-run-buffer ()
@@ -591,7 +660,7 @@ Shortcut for running a script and returning focus to it:
     (other-window -1))
 #+END_SRC
 
-** Filetypes
+*** Filetypes
 #+BEGIN_SRC emacs-lisp
   (associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile" "Guardfile") 'ruby-mode)
 #+END_SRC
@@ -602,7 +671,7 @@ Turn on =rdoc-mode=:
   (associate-file-type '(".rdoc" ".rd") 'rdoc-mode)
 #+END_SRC
 
-** Hooks
+*** Hooks
 #+BEGIN_SRC emacs-lisp
   (add-hook 'ruby-mode-hook
             (lambda ()
@@ -616,24 +685,19 @@ Turn on =rdoc-mode=:
               (local-set-key (kbd "C-c , r") 'rspec-rerun)))
 #+END_SRC
 
-** RSpec
+*** RSpec
 #+BEGIN_SRC emacs-lisp
   (setq rspec-use-rake-when-possible nil)
   (setq rspec-use-spring-when-possible t)
 #+END_SRC
 
-* Highlight Stuff
-#+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
-#+END_SRC
-* Scheme
-** Variables
+** Scheme
+*** Variables
 #+BEGIN_SRC emacs-lisp
   (setq scheme-program-name "scheme")
 #+END_SRC
 
-** Helper functions
+*** Helper functions
 #+BEGIN_SRC emacs-lisp
   (defun scheme-run-buffer ()
     "Runs the current buffer through scheme and switches focus back to the script."
@@ -641,7 +705,7 @@ Turn on =rdoc-mode=:
     (scheme-send-region (point-min) (point-max)))
 #+END_SRC
 
-** Hooks
+*** Hooks
 #+BEGIN_SRC emacs-lisp
   (add-hook 'scheme-mode-hook
             (lambda ()
@@ -649,72 +713,11 @@ Turn on =rdoc-mode=:
               (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
 #+END_SRC
 
-* Clojure
+* Highlight Stuff
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (setq cider-repl-result-prefix ";; => ")
-  (add-hook 'cider-repl-mode-hook 'subword-mode)
-  (setq cider-auto-select-error-buffer nil)
-
-  (add-hook 'cider-mode-hook
-            (lambda ()
-              (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
-
+  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
+          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
 #+END_SRC
-
-* CSS
-Turn on =rainbow-mode= for colored hex values
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'css-mode-hook 'rainbow-mode)
-#+END_SRC
-
-Prevent SCSS from compiling at save time:
-#+BEGIN_SRC emacs-lisp
-  (setq scss-compile-at-save nil)
-#+END_SRC
-
-Two spaces:
-#+BEGIN_SRC emacs-lisp
-  (setq css-indent-offset 2)
-#+END_SRC
-
-* JavaScript
-2 space indent:
-
-#+BEGIN_SRC emacs-lisp
-  (setq js-indent-level 2)
-#+END_SRC
-
-* Markdown
-#+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".md" ".markdown") 'markdown-mode)
-#+END_SRC
-
-* LaTeX
-Produce PDFs instead of DVIs
-#+BEGIN_SRC emacs-lisp
-  (setq TeX-PDF-mode t)
-#+END_SRC
-
-* Multiple Major Modes
-Support editing mixed mode files, like ERB templates.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'mmm-auto)
-  (setq mmm-global-mode 'auto)
-  (setq mmm-submode-decoration-level 2)
-  (setq mmm-parse-when-idle t)
-#+END_SRC
-
-** ERB
-#+BEGIN_SRC emacs-lisp
-  (mmm-add-mode-ext-class 'html-erb-mode "\\.html\\.erb\\'" 'erb)
-  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-js)
-  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-css)
-
-  (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
-#+END_SRC
-
 * Silver Searcher
 #+BEGIN_SRC emacs-lisp
 (require 'ag)
