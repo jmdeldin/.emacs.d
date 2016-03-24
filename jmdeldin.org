@@ -6,7 +6,11 @@ I started using Emacs in the fall of 2010 after a few years of Vim. I
 use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
 host of miscellaneous other languages.
 
-* TODO make this the README?
+* TODO
+** TODO make this the README?
+** TODO add org-mode/orgstruct to magit
+** TODO evaluate company-mode
+** TODO function to ensure there is a newline before org headings
 
 * Initialization
 ** Load custom helper functions
@@ -70,14 +74,18 @@ We can declare the origin of our packages with the
     (jm/install-packages jm/packages))
 #+END_SRC
 
-* Lockfiles
+* Garbage
+This section is dedicated to all of the turd files Emacs leaves all over
+your machine.
+
+** Lockfiles
 Disable lockfiles -- there's only one user on this machine. This prevents
 [[https://github.com/guard/guard][guard]] from re-running specs everytime the file is edited (but not saved).
 #+begin_src emacs-lisp
   (setq create-lockfiles nil)
 #+end_src
 
-* Backups
+** Backups
 Place backups in ~/.emacs.d/local/backups
 #+begin_src emacs-lisp
   (setq backup-by-copying t)
@@ -89,7 +97,7 @@ Place backups in ~/.emacs.d/local/backups
   (setq version-control t)
 #+end_src
 
-* Auto-saves
+** Auto-saves
 Dump auto-save files in =~/.emacs.d/local/saves=:
 
 #+begin_src emacs-lisp
