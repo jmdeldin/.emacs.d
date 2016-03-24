@@ -13,6 +13,8 @@ host of miscellaneous other languages.
 ** TODO function to ensure there is a newline before org headings
 ** TODO better function for jumping to windows
 ** TODO better function for swapping windows?
+** TODO WTF doesn't jabber work in 24.4
+I'm getting "Required feature `jabber-autoloads' was not provided".
 
 * Initialization
 ** Load custom helper functions
@@ -109,7 +111,6 @@ Place backups in =~/.emacs.d/local/backups=:
 
 ** Auto-saves
 Keep auto-save files together. Test with =M-x do-auto-save=.
-
 #+BEGIN_SRC emacs-lisp
   (let ((new-dir (jm/local-path "auto-saves/")))
     (setq auto-save-list-file-prefix new-dir)
@@ -137,7 +138,6 @@ Prevent auto-joining =#erc=
 #+END_SRC
 
 Spell-check ERC:
-
 #+BEGIN_SRC emacs-lisp
   (erc-spelling-mode 1)
 #+END_SRC
