@@ -841,12 +841,6 @@ Make the Cmd and Opt keys work for =M-x=
     (setq-default mac-option-modifier 'meta))
 #+END_SRC
 * Misc
-Use =~/.emacs.d/local/emacs-custom.el= for customizations (and don't barf if
-the file doesn't exist):
-#+BEGIN_SRC emacs-lisp
-
-#+END_SRC
-
 Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+BEGIN_SRC emacs-lisp
   (setq bookmark-file (jm/local-path "bookmarks"))
