@@ -6,15 +6,109 @@ I started using Emacs in the fall of 2010 after a few years of Vim. I
 use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
 host of miscellaneous other languages.
 
-* Improvements
-** TODO make this the README?
-** TODO add org-mode/orgstruct to magit
-** TODO evaluate company-mode
-** TODO function to ensure there is a newline before org headings
-** TODO better function for jumping to windows
-** TODO better function for swapping windows?
-** TODO WTF doesn't jabber work in 24.4
+* Installation
+You can clone directly as =$HOME/.emacs.d=:
+
+#+BEGIN_SRC sh
+  git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
+#+END_SRC
+
+* Notes
+** Improvements
+*** TODO make this the README?
+*** TODO add org-mode/orgstruct to magit
+*** TODO evaluate company-mode
+*** TODO function to ensure there is a newline before org headings
+*** TODO better function for jumping to windows
+*** TODO better function for swapping windows?
+*** TODO WTF doesn't jabber work in 24.4
 I'm getting "Required feature `jabber-autoloads' was not provided".
+** Keys
+| Key         | Description                                     |
+|-------------+-------------------------------------------------|
+| C-q TAB     | Insert literal tab                              |
+| M-y         | Traverse kill-ring (after C-y)                  |
+| C-u C-SPC   | Jump to last mark                               |
+| M-n         | (In =cua-mode=) Increment digit                 |
+| C-M \       | Indent according to major mode                  |
+| C-c C-s     | Start IRB                                       |
+| C-c C-r     | Send region to IRB (C-c C-s first)              |
+| C-x v =     | Diff against HEAD                               |
+| C-u C-x v = | Diff against other branch                       |
+| C-x v u     | Discard changes                                 |
+| C-x v ~     | Checkout another rev                            |
+| C-x v l     | View commit log                                 |
+| C-Shift BS  | Kill whole line                                 |
+| C-c '       | Edit code block (org-babel)                     |
+| C-x r m     | Bookmark the current loc in a file              |
+| C-x r b     | Jump to bookmark                                |
+| C-x r l     | List bookmarks                                  |
+| C-x C-n     | Narrow region                                   |
+| C-x C-w     | Widen region                                    |
+| C-x r w     | Save window configuration                       |
+| C-x r j     | Restore configuration                           |
+| M-&         | Execute shell command asynchronously            |
+| C-x r t     | Removes the content in a rectangle (mark first) |
+| M-0 .. M-9  | Prefix argument                                 |
+| M-- M-c     | Capitalize last word (M-dash for back)          |
+| M-e         | Forward sentence                                |
+| M-a         | Backward sentence                               |
+| C-M-f       | Move forward by a balanced expr (e.g., ",', []) |
+| C-M-b       | Move backward by a balanced expr                |
+| M-m         | back-to-indentation (^ in Vim)                  |
+| M-r         | move the point w/o scrolling                    |
+| M-g M-g     | goto-line                                       |
+| M-o M-s     | Center text                                     |
+| C-x r N     | Number lines                                    |
+
+** Searching
+| Key     | Description                               |
+|---------+-------------------------------------------|
+| M-p     | previous search term                      |
+| M-n     | next search term                          |
+| M-c     | toggle case-sensitivity                   |
+| C-s C-w | search with the word at point (* inv Vim) |
+
+** Ido-mode
+These keys work inside the Ido minibuffer (C-x C-f).
+
+| Key       | Description                                           |
+|-----------+-------------------------------------------------------|
+| C-d       | Open a dired buffer in the current directory          |
+| C-a       | Toggles showing ignored files                         |
+| C-c       | Toggles case-sensitivity                              |
+| C-s & C-r | Move to the next/prev match                           |
+| C-SPC     | Restrict to an expr (C-x C-b .org C-SPC for just org) |
+
+** Functions and modes
+| Function               | Description                           |
+|------------------------+---------------------------------------|
+| follow-mode            | Browse splits like they're one window |
+| ielm-mode              | Elisp REPL                            |
+| hexl-mode              | Hex viewer                            |
+| bury-buffer            | Send buffer to end of list            |
+| highlight-changes-mode | Show newly changed text in red        |
+| info-apropos           | full-text search of info              |
+
+** org-mode
+| Command     | Decription                                 |
+|-------------+--------------------------------------------|
+| C-c C-n     | next heading                               |
+| C-c C-p     | previous heading                           |
+| C-c C-f     | next heading (same level)                  |
+| C-c C-b     | previous heading (same level)              |
+| C-c C-u     | back to a higher heading                   |
+| C-c /       | Sparse tree                                |
+| M-S-RET     | Insert new item with checkbox              |
+| M-S-UP/DOWN | Move items including subitems up/down      |
+| C-c -       | Cycle list level through different bullets |
+
+** Dired
+| Command | Description        |
+|---------+--------------------|
+| % u     | uppercase filename |
+| % l     | lowercase filename |
+| % R     | regex rename       |
 
 * Initialization
 ** Load custom helper functions
