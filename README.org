@@ -1,40 +1,28 @@
-#+TITLE:       README
-#+DESCRIPTION: This is my personal =.emacs.d= directory.
+#+TITLE:       Jon-Michael Deldin's Emacs Configuration
 #+STARTUP:     align hidestars indent
+#+STYLE: <style>html { font: 14px Helvetica, sans-serif } body { width: 85%; margin: 2% auto;} pre, code { font-family: Monaco, Consolas, 'Bitstream Vera Sans', monospace; }</style>
+
+I started using Emacs in the fall of 2010 after a few years of Vim. I
+use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
+host of miscellaneous other languages.
 
 * Installation
-
 You can clone directly as =$HOME/.emacs.d=:
 
 #+BEGIN_SRC sh
-$ git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
+  git clone git://github.com/jmdeldin/.emacs.d.git ~/.emacs.d/
 #+END_SRC
-
-* Uninstallation
-
-#+BEGIN_SRC sh
-$ rm ~/.emacs.d
-#+END_SRC
-
-* Customizations for =local/local.el=
-** User
-#+begin_src elisp
-  (setq user-full-name "...")
-  (setq user-mail-address "...")
-#+end_src
-
-** Org-Mode
-#+begin_src elisp
-(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
-#+end_src
 
 * Notes
-** Launching
-| Command        | Description                  |
-|----------------+------------------------------|
-| emacs --daemon | Start server                 |
-| emacsclient -c | Open frame in running server |
-
+** Improvements
+*** TODO make this the README?
+*** TODO add org-mode/orgstruct to magit
+*** TODO evaluate company-mode
+*** TODO function to ensure there is a newline before org headings
+*** TODO better function for jumping to windows
+*** TODO better function for swapping windows?
+*** TODO WTF doesn't jabber work in 24.4
+I'm getting "Required feature `jabber-autoloads' was not provided".
 ** Keys
 | Key         | Description                                     |
 |-------------+-------------------------------------------------|
@@ -121,3 +109,853 @@ These keys work inside the Ido minibuffer (C-x C-f).
 | % u     | uppercase filename |
 | % l     | lowercase filename |
 | % R     | regex rename       |
+
+* Initialization
+** Load custom helper functions
+#+BEGIN_SRC emacs-lisp
+  (load-file (concat user-emacs-directory "site-lisp/defuns.el"))
+#+END_SRC
+
+** Set =custom-file=
+On clean installs, some packages will try to append custom vars to
+init.el, breaking installation. The =custom-file= must be set before
+trying to install packages.
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file (concat user-emacs-directory "local/emacs-custom.el"))
+  (load custom-file 'noerror)
+#+END_SRC
+
+** Set up repositories
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")
+                           ("melpa-unstable" . "https://melpa.org/packages/")))
+#+END_SRC
+
+** Define required packages
+We can declare the origin of our packages with the
+=package-pinned-packages= variable:
+#+BEGIN_SRC emacs-lisp
+  (setq package-pinned-packages
+        '(
+          (ac-geiser . "melpa-stable")
+          (ag   . "melpa-stable")
+          (auto-complete . "melpa-stable")
+          (cider . "melpa-stable")
+          (clojure-mode . "melpa-stable")
+          (coffee-mode . "melpa-stable")
+          (evil . "melpa-unstable")
+          (evil-paredit . "melpa-unstable")
+          (geiser . "melpa-stable")
+          (highlight-indentation . "melpa-stable")
+          (jabber . "melpa-stable")
+          (magit . "melpa-stable")
+          (markdown-mode . "melpa-stable")
+          (mmm-mode . "melpa-stable")
+          (nginx-mode . "melpa-stable")
+          (projectile . "melpa-stable")
+          (rainbow-mode . "gnu")
+          (rspec-mode . "melpa-stable")
+          (scss-mode . "melpa-stable")
+          (slim-mode . "melpa-stable")
+          (smex . "melpa-stable")
+          (tuareg . "melpa-stable")
+          (yaml-mode . "melpa-stable")
+          ))
+#+END_SRC
+
+** Install Packages
+#+BEGIN_SRC emacs-lisp
+  (setq jm/packages (mapcar 'car package-pinned-packages))
+
+  (unless (jm/packages-installed-p jm/packages)
+    (jm/install-packages jm/packages))
+#+END_SRC
+
+** Server
+Only load the server if it isn't running:
+#+BEGIN_SRC emacs-lisp
+  (load "server")
+  (unless (server-running-p)
+    (server-start))
+#+END_SRC
+
+* Garbage
+This section is dedicated to all of the turd files Emacs leaves all over
+your machine.
+
+** Lockfiles
+Disable lockfiles -- there's only one user on this machine. This prevents
+[[https://github.com/guard/guard][guard]] from re-running specs everytime the file is edited (but not saved).
+#+BEGIN_SRC emacs-lisp
+  (setq create-lockfiles nil)
+#+END_SRC
+
+** Backups
+Place backups in =~/.emacs.d/local/backups=:
+#+BEGIN_SRC emacs-lisp
+  (setq backup-by-copying t)
+  (setq backup-directory-alist
+        (list (cons "." (jm/local-path "backups"))))
+  (setq delete-old-versions t)
+  (setq kept-new-versions 6)
+  (setq kept-old-versions 2)
+  (setq version-control t)
+#+END_SRC
+
+** Auto-saves
+Keep auto-save files together. Test with =M-x do-auto-save=.
+#+BEGIN_SRC emacs-lisp
+  (let ((new-dir (jm/local-path "auto-saves/")))
+    (setq auto-save-list-file-prefix new-dir)
+    (setq auto-save-file-name-transforms
+        `((".*" ,new-dir t))))
+#+END_SRC
+
+** Bookmarks
+Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
+#+BEGIN_SRC emacs-lisp
+  (setq bookmark-file (jm/local-path "bookmarks"))
+#+END_SRC
+
+* Communication
+** Jabber
+Don't notify if someone is online/offline in the buddy list:
+#+BEGIN_SRC emacs-lisp
+(setq jabber-alert-presence-message-function (lambda (who oldstatus newstatus statustext) nil))
+#+END_SRC
+
+** ERC
+Prevent auto-joining =#erc=
+#+BEGIN_SRC emacs-lisp
+  (setq erc-autojoin-channels-alist '())
+#+END_SRC
+
+Spell-check ERC:
+#+BEGIN_SRC emacs-lisp
+  (erc-spelling-mode 1)
+#+END_SRC
+
+Ignore noise:
+#+BEGIN_SRC emacs-lisp
+  (setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE"))
+  (setq erc-track-exclude-server-buffer t)
+#+END_SRC
+
+Highlight nick:
+#+BEGIN_SRC emacs-lisp
+  (setq erc-current-nick-highlight-type 'nick)
+#+END_SRC
+
+* Text Editing
+Default to 72 column width for plain text
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'text-mode-hook
+            '(lambda ()
+               (set-fill-column 72)))
+#+END_SRC
+
+Match parens and quotes
+#+BEGIN_SRC emacs-lisp
+  (electric-pair-mode t)
+#+END_SRC
+
+Enable on-the-fly reindentation
+#+BEGIN_SRC emacs-lisp
+  (electric-indent-mode t)
+#+END_SRC
+
+Insert a newline around special characters
+#+BEGIN_SRC emacs-lisp
+  (electric-layout-mode t)
+#+END_SRC
+
+Use single spaces between sentences for =fill-paragraph= (=M-q=)
+#+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+#+END_SRC
+
+Use Unicode everywhere
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'utf-8)
+#+END_SRC
+
+Changing a region's case is useful
+#+BEGIN_SRC emacs-lisp
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+#+END_SRC
+
+Remember last edit position
+#+BEGIN_SRC emacs-lisp
+  (require 'saveplace)
+  (setq-default save-place t)
+  (setq save-place-file (jm/local-path "places"))
+#+END_SRC
+
+** Auto-Complete Mode
+#+BEGIN_SRC emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (setq ac-ignore-case nil)
+  (add-to-list 'ac-modes 'ruby-mode)
+  (setq ac-comphist-file (jm/local-path "ac-comphist.dat"))
+#+END_SRC
+
+** Spelling
+Use =aspell= instead of =ispell=, use =list= for faster region checking, and
+use a faster suggestion mode.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "aspell")
+  (setq ispell-list-command "list")
+  (setq ispell-extra-args '("--sug-mode=ultra"))
+#+END_SRC
+
+Turn it on for comments
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
+          '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
+                               coffee-mode-hook))
+  (ac-flyspell-workaround)
+#+END_SRC
+
+Turn it on for some modes:
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode)
+            (add-hook mode (lambda () (flyspell-mode t))))
+          '(jabber-chat-mode-hook org-mode-hook markdown-mode text-mode))
+  (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+#+END_SRC
+
+** Whitespace
+Wrap lines at column 78
+#+BEGIN_SRC emacs-lisp
+  (setq-default fill-column 78)
+#+END_SRC
+
+Highlight right-margin when whitespace-mode is on
+#+BEGIN_SRC emacs-lisp
+  (setq whitespace-line-column fill-column)
+#+END_SRC
+
+Highlight empty lines
+#+BEGIN_SRC emacs-lisp
+  (setq-default indicate-empty-lines t)
+#+END_SRC
+
+Hard-wrap lines all the time
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+Use spaces, not tabs (C-q C-i to insert a hard-tab)
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+2-space tabs
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 2)
+#+END_SRC
+
+Insert tabs when appropriate
+#+BEGIN_SRC emacs-lisp
+  (setq indent-line-function 'insert-tab)
+#+END_SRC
+
+Insert a newline at the EOF
+#+BEGIN_SRC emacs-lisp
+  (setq-default require-final-newline t)
+#+END_SRC#+end_src
+
+Delete trailing whitespace on save
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+** Highlight Stuff
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
+          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
+#+END_SRC
+
+* UI
+Hide the {menu,tool,scroll}bars
+#+BEGIN_SRC emacs-lisp
+  (if window-system
+      (progn
+        (scroll-bar-mode -1)
+        (tool-bar-mode -1)))
+  (menu-bar-mode -1)
+#+END_SRC
+
+Hide the startup messages
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (setq inhibit-startup-echo-area-message t)
+#+END_SRC
+
+"y or n" instead of "yes or no"
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+Show line & column number in the mode line
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode t)
+#+END_SRC
+
+Show file size
+#+BEGIN_SRC emacs-lisp
+  (size-indication-mode t)
+#+END_SRC
+
+Highlight parens
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+  (setq show-paren-delay 0.0)
+#+END_SRC
+
+Highlight current line
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode 1)
+#+END_SRC
+
+Display the time
+#+BEGIN_SRC emacs-lisp
+  (display-time)
+#+END_SRC
+
+Use =ibuffer= instead of =list-buffers=
+#+BEGIN_SRC emacs-lisp
+  (defalias 'list-buffers 'ibuffer)
+#+END_SRC
+
+No bells
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Window Management
+Restore window configuration with =C-c LEFT=
+#+BEGIN_SRC emacs-lisp
+  (winner-mode)
+#+END_SRC
+
+Enable windmove -- default binding is shift
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
+  (setq windmove-wrap-around t)
+#+END_SRC
+
+Make windmove work in org-mode:
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
+#+END_SRC
+
+** Minibuffer
+*** IDO
+Interactively-do-things is the greatest Emacs extension.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-show-dot-for-dired t)
+  (setq ido-save-directory-list-file (jm/local-path "ido.last"))
+  (setq ido-use-virtual-buffers t)
+  (ido-mode 1)
+#+END_SRC
+**** Uniquify
+Use part of the directory to distinguish between identically-named files:
+#+BEGIN_SRC emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+END_SRC
+**** Minibuffer History
+Save minibuffer history:
+#+BEGIN_SRC emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-file (jm/local-path "savehist"))
+#+END_SRC
+**** Recent Files
+Enable recent files:
+#+BEGIN_SRC emacs-lisp
+  (require 'recentf)
+  (setq recentf-save-file (jm/local-path "recentf"))
+  (setq recentf-max-saved-items 100)
+  (recentf-mode 1)
+#+END_SRC
+
+** Mouse
+Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
+
+#+BEGIN_SRC emacs-lisp
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] '(lambda ()
+                                 (interactive)
+                                 (scroll-down 1)))
+    (global-set-key [mouse-5] '(lambda ()
+                                 (interactive)
+                                 (scroll-up 1)))
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t))
+#+END_SRC
+
+** Keybindings
+*** Evil
+Arguably the best Vim ever, but sometimes, I still want Emacs keys.
+#+BEGIN_SRC emacs-lisp
+(evil-mode t)
+(define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
+(define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
+(define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
+(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+(define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
+(define-key evil-insert-state-map (kbd "C-z") 'suspend-emacs)
+(define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
+#+END_SRC
+
+*** Editing
+=C-c C-r= -- Revert buffer
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c C-r") 'revert-buffer)
+#+END_SRC
+
+Swap =C-j= and =RET=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+  (global-set-key (kbd "C-j") 'newline)
+#+END_SRC
+
+=C-c C-d= -- Remove trailing whitespace
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c C-d") 'delete-trailing-whitespace)
+#+END_SRC
+
+=C-w= -- delete the previous word (like most shells)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+#+END_SRC
+
+C-x C-k -- kill region (since we just unbound it with C-w)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+#+END_SRC
+
+=C-x C-j= -- join line
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-j") 'join-line)
+#+END_SRC
+
+=C-c w= -- toggle whitespace mode
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c w") 'global-whitespace-mode)
+#+END_SRC
+
+better commenting (replaces the original comment-dwim)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-;") 'comment-or-uncomment-region)
+#+END_SRC
+
+=C-x m= -- recompile
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x m") 'recompile)
+#+END_SRC
+
+=C-x g= -- =magit-status=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+=C-x x= -- =jm/shell=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x x") 'jm/shell)
+#+END_SRC
+
+=M-#= -- =jm/reload-init=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-#") 'jm/reload-init)
+#+END_SRC
+
+=C-x a= -- =ag-regexp-project-at-point=
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
+#+END_SRC
+
+=C-x p= -- find files in project
+#+BEGIN_SRC emacs-lisp
+  (projectile-global-mode t)
+  (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+  (setq projectile-cache-file (jm/local-path "projectile-cache"))
+  (global-set-key (kbd "C-x p") 'projectile-find-file)
+#+END_SRC
+
+=M-x= -- ido-like completion for functions
+#+BEGIN_SRC emacs-lisp
+  (smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  (setq smex-save-file (jm/local-path "smex-items"))
+#+END_SRC
+
+*** Windows
+Window movement from [[http://nex-3.com/posts/45-efficient-window-switching-in-emacs][Nex3]]:
+#+BEGIN_SRC emacs-lisp
+  (defun select-next-window ()
+    "Switch to the next window"
+    (interactive)
+    (select-window (next-window)))
+
+  (defun select-previous-window ()
+    "Switch to the previous window"
+    (interactive)
+    (select-window (previous-window)))
+#+END_SRC
+
+=M-s/M-S= -- switch to next/previous windows
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-s") 'select-next-window)
+  (global-set-key (kbd "M-S") 'select-previous-window)
+#+END_SRC
+
+*** Mac
+Make the Cmd and Opt keys work for =M-x=
+#+BEGIN_SRC emacs-lisp
+  (when system-type "darwin"
+    (setq-default mac-command-modifier 'super)
+    (setq-default mac-option-modifier 'meta))
+#+END_SRC
+
+* Languages
+** C
+The only way to program.
+#+BEGIN_SRC emacs-lisp
+  (setq c-default-style "k&r")
+#+END_SRC
+
+Use four spaces for tabs.
+#+BEGIN_SRC emacs-lisp
+  (setq-default c-basic-offset 4)
+#+END_SRC
+
+Many-windows mode makes Emacs into a more traditional IDE for GDB. See
+=C-h f gdb= for details. *NOTE:* This doesn't work on OS 10.8 (non-stop
+mode isn't supported).
+
+#+BEGIN_SRC emacs-lisp
+  (setq gdb-many-windows t)
+#+END_SRC
+
+** Clojure
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (setq cider-repl-result-prefix ";; => ")
+  (add-hook 'cider-repl-mode-hook 'subword-mode)
+  (setq cider-auto-select-error-buffer nil)
+
+  (add-hook 'cider-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
+
+#+END_SRC
+
+** CSS
+Turn on =rainbow-mode= for colored hex values
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'css-mode-hook 'rainbow-mode)
+#+END_SRC
+
+Prevent SCSS from compiling at save time:
+#+BEGIN_SRC emacs-lisp
+  (setq scss-compile-at-save nil)
+#+END_SRC
+
+Two spaces:
+#+BEGIN_SRC emacs-lisp
+  (setq css-indent-offset 2)
+#+END_SRC
+
+** Graphviz
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
+#+END_SRC
+
+** JavaScript
+2 space indent:
+
+#+BEGIN_SRC emacs-lisp
+  (setq js-indent-level 2)
+#+END_SRC
+
+** LaTeX
+Produce PDFs instead of DVIs
+#+BEGIN_SRC emacs-lisp
+  (setq TeX-PDF-mode t)
+#+END_SRC
+
+** Lisp
+#+BEGIN_SRC emacs-lisp
+  (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
+
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+** Markdown
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".md" ".markdown") 'markdown-mode)
+#+END_SRC
+
+** ERB
+Support editing mixed mode files, like ERB templates.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'mmm-auto)
+  (setq mmm-global-mode 'auto)
+  (setq mmm-submode-decoration-level 2)
+  (setq mmm-parse-when-idle t)
+
+  (mmm-add-mode-ext-class 'html-erb-mode "\\.html\\.erb\\'" 'erb)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-js)
+  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-css)
+
+  (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
+#+END_SRC
+
+** Org-Mode
+Include the org-habit module for the agenda:
+#+BEGIN_SRC emacs-lisp
+  (setq org-modules (quote (org-habit)))
+#+END_SRC
+
+*** Paths
+This configuration assumes org files live in the =~/org= directory. You can
+customize it by setting these variables in =../local/local.el=:
+#+BEGIN_SRC emacs-lisp
+  (setq org-directory "~/org")
+  (setq org-default-notes-file "~/org/capture.org")
+  (setq org-journal-file "~/org/journal.org")
+  (setq org-log-file "~/org/log.org")
+  (setq org-archive-location "archive/%s_archive::")
+  (setq org-agenda-files (filter (lambda (fn)
+                                   (not (string-match (rx "#") fn)))
+                                 (file-expand-wildcards org-directory)))
+#+END_SRC
+
+*** Capture Templates
+Hit =C-c c= to trigger these:
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
+           "* TODO %^{Task} %^g \n%U \n%?")
+          ("j" "Journal" entry (file+datetree org-journal-file)
+           "* %^{Title}\n%U \n%?\n")
+          ("l" "Log" entry (file+datetree+prompt org-log-file)
+           "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
+          ))
+#+END_SRC
+
+*** Skeleton
+#+BEGIN_SRC emacs-lisp
+  (define-skeleton orgmode-skeleton
+    "Inserts orgmode defaults into the current buffer."
+    "Title: "
+    "#+TITLE:       " str | (file-name-nondirectory buffer-file-name) \n
+    "#+DESCRIPTION: " (skeleton-read "Description: ") \n
+    "#+STARTUP:     align hidestars indent lognotedone" \n
+    \n _)
+#+END_SRC
+
+*** Keybindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c b") 'org-iswitchb)
+  ;; for terminals -- TAB does not work
+  (global-set-key (kbd "C-x t") 'org-cycle)
+#+END_SRC
+
+*** Babel
+Include these languages for babel
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages (mapcar (lambda (l) (cons l t))
+          '(C calc emacs-lisp gnuplot latex perl python R ruby screen sh)))
+#+END_SRC
+
+Highlight src blocks
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-fontify-natively t)
+#+END_SRC
+
+*** Agenda
+Show the agenda from the current day:
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-start-on-weekday nil)
+#+END_SRC
+
+Show all habits
+#+BEGIN_SRC emacs-lisp
+  (setq org-habit-show-habits-only-for-today nil)
+#+END_SRC
+
+*** Exporting
+Remove "Valid XHTML" link
+#+BEGIN_SRC emacs-lisp
+  (setq org-export-html-validation-link nil)
+#+END_SRC
+
+Minted latex export
+#+BEGIN_SRC emacs-lisp
+  (setq org-export-latex-minted-options
+        '(("fontsize" "\\scriptsize")))
+#+END_SRC
+
+** Perl
+Use the more modern =cperl-mode=
+#+BEGIN_SRC emacs-lisp
+  (defalias 'perl-mode 'cperl-mode)
+#+END_SRC
+
+Use =cperl-mode= for =.t= tests
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".t") 'cperl-mode)
+#+END_SRC
+
+Use four-space indents
+#+BEGIN_SRC emacs-lisp
+  (setq cperl-indent-level 4)
+#+END_SRC
+
+Indent only four-spaces in broken-up calls like
+#+BEGIN_SRC perl
+  someCall(
+      $var,
+      $var2
+  )
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (setq cperl-indent-parens-as-block t)
+  (setq cperl-close-paren-offset -4)
+#+END_SRC
+
+Fix indentation for lines not starting statements (e.g., hash members)
+#+BEGIN_SRC emacs-lisp
+  (setq cperl-continued-statement-offset 0)
+#+END_SRC#+end_src
+
+** R
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".R" ".r") 'r-mode)
+  (autoload 'r-mode "ess-site" nil t)
+#+END_SRC
+
+Don't be so slow at evaluating buffers:
+#+BEGIN_SRC emacs-lisp
+  (setq ess-eval-visibly-p nil)
+#+END_SRC
+
+** Ruby
+*** Running
+Shortcut for running a script and returning focus to it:
+#+BEGIN_SRC emacs-lisp
+  (defun ruby-run-buffer ()
+    "Run the current Ruby script and switch focus back to the script."
+    (interactive)
+    (ruby-compilation-this-buffer)
+    (other-window -1))
+#+END_SRC
+
+*** Filetypes
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile" "Guardfile") 'ruby-mode)
+#+END_SRC
+
+Turn on =rdoc-mode=:
+#+BEGIN_SRC emacs-lisp
+  (autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
+  (associate-file-type '(".rdoc" ".rd") 'rdoc-mode)
+#+END_SRC
+
+*** Hooks
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'ruby-mode-hook
+            (lambda ()
+              (rspec-mode 1)
+              (autoload 'ri "ri")
+              (local-set-key (kbd "C-c , x") 'rspec-verify-single)
+              (local-set-key (kbd "C-h r") 'yari)
+              (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
+  (add-hook 'slim-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c , r") 'rspec-rerun)))
+#+END_SRC
+
+*** RSpec
+#+BEGIN_SRC emacs-lisp
+  (setq rspec-use-rake-when-possible nil)
+  (setq rspec-use-spring-when-possible t)
+#+END_SRC
+
+** Scheme
+*** Variables
+#+BEGIN_SRC emacs-lisp
+  (setq scheme-program-name "scheme")
+#+END_SRC
+
+*** Helper functions
+#+BEGIN_SRC emacs-lisp
+  (defun scheme-run-buffer ()
+    "Runs the current buffer through scheme and switches focus back to the script."
+    (interactive)
+    (scheme-send-region (point-min) (point-max)))
+#+END_SRC
+
+*** Hooks
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'scheme-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c C-c") 'scheme-run-buffer)
+              (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
+#+END_SRC
+
+* Tools
+** Man
+Open man pages in a different window
+#+BEGIN_SRC emacs-lisp
+  (setq Man-notify-method 'friendly)
+#+END_SRC
+
+I tend to keep man pages pretty narrow
+#+BEGIN_SRC emacs-lisp
+  (setenv "MANWIDTH" "72")
+#+END_SRC
+
+** Shell
+Set =$PAGER= to =cat= to avoid =WARNING: terminal is not fully
+functional= messages.
+#+BEGIN_SRC emacs-lisp
+  (setenv "PAGER" "cat")
+#+END_SRC
+
+** Silver Searcher
+#+BEGIN_SRC emacs-lisp
+(require 'ag)
+(setq ag-highlight-search t)
+#+END_SRC
+
+* Local configuration
+Load local config to override any of the above settings
+#+BEGIN_SRC emacs-lisp
+  (load (jm/local-path "local") 'noerror)
+#+END_SRC
