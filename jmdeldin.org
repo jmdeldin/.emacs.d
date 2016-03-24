@@ -786,6 +786,11 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "C-x x") 'jm/shell)
 #+end_src
 
+=M-#= -- =jm/reload-init=
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-#") 'jm/reload-init)
+#+end_src
+
 =C-x a= -- =ag-regexp-project-at-point=
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
