@@ -423,11 +423,6 @@ Highlight current line
   (global-hl-line-mode 1)
 #+END_SRC
 
-Display the time
-#+BEGIN_SRC emacs-lisp
-  (display-time)
-#+END_SRC
-
 Use =ibuffer= instead of =list-buffers=
 #+BEGIN_SRC emacs-lisp
   (defalias 'list-buffers 'ibuffer)
