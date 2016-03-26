@@ -18,7 +18,6 @@ You can clone directly as =$HOME/.emacs.d=:
 *** TODO add org-mode/orgstruct to magit
 *** TODO evaluate company-mode
 *** TODO function to ensure there is a newline before org headings
-*** TODO better function for jumping to windows
 *** TODO WTF doesn't jabber work in 24.4
 I'm getting "Required feature `jabber-autoloads' was not provided".
 ** Keys
