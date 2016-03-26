@@ -150,6 +150,7 @@ We can declare the origin of our packages with the
           (highlight-indentation . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (jabber . "melpa-stable")
+          (ledger-mode . "melpa-stable")
           (magit . "melpa-stable")
           (markdown-mode . "melpa-stable")
           (mmm-mode . "melpa-stable")
