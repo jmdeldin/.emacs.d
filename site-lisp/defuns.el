@@ -162,19 +162,28 @@ the kill ring. Shell-fu by @ckuttruff."
     (message pass)
     (kill-new pass)))
 
-(defun jm/org-copy-field ()
-  "Copy a table cell. Thanks to finster on #org-mode for the code!"
-  (interactive)
-  (kill-new (s-trim (substring-no-properties (org-table-get-field)))))
+(defun jm/clean-and-copy (str)
+  "Clean up a string and throw it on the clipboard"
+  (kill-new (s-trim (substring-no-properties str))))
 
-(defun jm/copy-password ()
+(defun jm/org-table-field (N)
+  "Wrapper around `org-table-get-field'."
+  (require 'org-table) ;; prevent undefined org-table-get-field errors
+  (org-table-get-field N))
+
+(defun copy-password ()
   "Copy a password to the clipboard.
 
 (Passwords are stored in the last column of an org table.)"
   (interactive)
-  (end-of-line)
-  (backward-char)
-  (jm/org-copy-field))
+  (jm/clean-and-copy (jm/org-table-field 3)))
+
+(defun copy-user ()
+  "Copy the username to the clipboard.
+
+(Usernames are stored in the second column of an org table.)"
+  (interactive)
+  (jm/clean-and-copy (jm/org-table-field 2)))
 
 (defun jm/yeller ()
   (interactive)
