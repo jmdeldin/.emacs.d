@@ -157,7 +157,7 @@ From URL `http://kill-0.com/duplo/2010/03/04/emacs-ruby-mode-comment-keybinding/
   "Generates an XKCD-style password, prints it, and saves it to
 the kill ring. Shell-fu by @ckuttruff."
   (interactive)
-  (let* ((cmd "egrep '{6,}' /usr/share/dict/words | shuf -n 4 | tr \"\\n\" ' '")
+  (let* ((cmd "egrep '{6,}' /usr/share/dict/words | fgrep -v \"'\" | shuf -n 4 | tr '[:upper:]' '[:lower:]' | tr \"\\n\" ' '")
          (pass (replace-regexp-in-string " $" "" (shell-command-to-string cmd))))
     (message pass)
     (kill-new pass)))
