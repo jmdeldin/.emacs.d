@@ -881,6 +881,7 @@ Turn on =rdoc-mode=:
 #+BEGIN_SRC emacs-lisp
   (add-hook 'ruby-mode-hook
             (lambda ()
+              (defun rspec-spring-p () t) ; default doesn't handle rails 3 well
               (rspec-mode 1)
               (autoload 'ri "ri")
               (local-set-key (kbd "C-c , x") 'rspec-verify-single)
