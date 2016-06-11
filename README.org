@@ -734,6 +734,7 @@ customize it by setting these variables in =../local/local.el=:
   (setq org-default-notes-file "~/org/capture.org")
   (setq org-journal-file "~/org/journal.org")
   (setq org-log-file "~/org/log.org")
+  (setq org-notes-file "~/org/notes.org")
   (setq org-archive-location "archive/%s_archive::")
   (setq org-agenda-files (filter (lambda (fn)
                                    (not (string-match (rx "#") fn)))
@@ -744,11 +745,27 @@ customize it by setting these variables in =../local/local.el=:
 Hit =C-c c= to trigger these:
 
 #+BEGIN_SRC emacs-lisp
+  (defun jm/find-org-headline (&optional heading)
+    "Prompts for and finds a heading.
+
+  Adapted from URL `http://emacs.stackexchange.com/a/5931'."
+    (let* ((target (save-excursion
+                     (org-refile-get-location heading nil t t)))
+           (file (nth 1 target))
+           (pos (nth 3 target)))
+      (with-current-buffer (find-file-noselect org-notes-file)
+        (goto-char pos)
+        (org-end-of-subtree)
+        (org-return))))
+
   (setq org-capture-templates
         '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
            "* TODO %^{Task} %^g \n%U \n%?")
           ("j" "Journal" entry (file+datetree org-journal-file)
            "* %^{Title}\n%U \n%?\n")
+          ("n" "Notes" entry (file+function org-notes-file jm/find-org-headline)
+           "* %^{Title}\n%U \n%?"
+           :empty-lines 1)
           ("l" "Log" entry (file+datetree+prompt org-log-file)
            "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
           ))
