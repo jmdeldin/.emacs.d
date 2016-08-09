@@ -732,7 +732,8 @@ customize it by setting these variables in =../local/local.el=:
 #+BEGIN_SRC emacs-lisp
   (setq org-directory "~/org")
   (setq org-default-notes-file "~/org/capture.org")
-  (setq org-journal-file "~/org/journal.org")
+  (setq org-journal-file "~/org/journal.org.gpg")
+  (setq org-work-journal-file "~/org/work.org")
   (setq org-log-file "~/org/log.org")
   (setq org-notes-file "~/org/notes.org")
   (setq org-archive-location "archive/%s_archive::")
@@ -761,11 +762,15 @@ Hit =C-c c= to trigger these:
   (setq org-capture-templates
         '(("t" "TODO" entry (file+headline org-default-notes-file "Tasks")
            "* TODO %^{Task} %^g \n%U \n%?")
+          ("w" "Work Journal" entry (file+datetree org-work-journal-file)
+           "* %^{Title}\n%U \n%?\n")
           ("j" "Journal" entry (file+datetree org-journal-file)
            "* %^{Title}\n%U \n%?\n")
           ("n" "Notes" entry (file+function org-notes-file jm/find-org-headline)
            "* %^{Title}\n%U \n%?"
            :empty-lines 1)
+          ("d" "Appointment" entry (file+headline org-default-notes-file "Tasks")
+            "* TODO %^{Description} %^g\n%?\nSCHEDULED: %t\n%i\n%a")
           ("l" "Log" entry (file+datetree+prompt org-log-file)
            "* %^{Task} %^g\n%?" :clock-in t :clock-resume t)
           ))
