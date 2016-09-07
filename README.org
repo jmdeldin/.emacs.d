@@ -485,7 +485,7 @@ Enable recent files:
 #+BEGIN_SRC emacs-lisp
   (require 'recentf)
   (setq recentf-save-file (jm/local-path "recentf"))
-  (setq recentf-max-saved-items 100)
+  (setq recentf-max-saved-items 1000)
   (recentf-mode 1)
 #+END_SRC
 
