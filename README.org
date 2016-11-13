@@ -231,7 +231,7 @@ Spell-check ERC:
 
 Ignore noise:
 #+BEGIN_SRC emacs-lisp
-  (setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE"))
+  (setq erc-network-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE"))
   (setq erc-track-exclude-server-buffer t)
 #+END_SRC
 
