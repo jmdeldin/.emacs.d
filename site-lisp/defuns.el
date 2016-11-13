@@ -192,3 +192,17 @@ the kill ring. Shell-fu by @ckuttruff."
 (defun jm/minty ()
   (interactive)
   (set-background-color "#F0FFF0"))
+
+(defun jm/invoice-template (starting-date)
+  "Scaffold an Org table with three columns (date, label, hours).
+
+Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
+  (require 'tiny)
+  (mapconcat
+   (lambda(x)
+     (let ((lst (list x)))
+       (format "| %s | TODO | 0.00 |"
+               (tiny-date starting-date (+ x 1))
+             (1+ x))))
+   (number-sequence 0 4)
+   "\n"))
