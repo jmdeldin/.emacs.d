@@ -1077,6 +1077,16 @@ Turn on =rdoc-mode=:
 #+END_SRC
 
 * Tools
+** Browsers
+There are far too many ways to configure which browser to use in emacs.
+xdg-open should be the default but alas, we need this:
+
+#+BEGIN_SRC emacs-lisp
+  (setq shr-external-browser 'browse-url-xdg-open)
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "chromium-browser")
+#+END_SRC
+
 ** Clock
 Customize =M-x display-time-world=:
 #+BEGIN_SRC emacs-lisp
