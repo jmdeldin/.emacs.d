@@ -610,6 +610,13 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
 (define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
 #+END_SRC
 
+Disable vi in some buffers:
+#+BEGIN_SRC emacs-lisp
+  (mapc (lambda (mode)
+          (evil-set-initial-state mode 'emacs))
+        '(elfeed-show-mode elfeed-search-mode Info-mode-hook Ledger-Report-Mode))
+#+END_SRC
+
 *** Editing
 =M-/= -- use a more powerful expansion
 #+BEGIN_SRC emacs-lisp
