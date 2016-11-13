@@ -206,3 +206,8 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
              (1+ x))))
    (number-sequence 0 4)
    "\n"))
+
+(defun jm/n-days-ago (days)
+  "Return a timestamp of the current date minus some # of days."
+  (format-time-string "%Y-%m-%d"
+    (time-subtract (current-time) (seconds-to-time (* 60 60 24 days)))))

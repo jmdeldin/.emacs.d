@@ -992,6 +992,38 @@ Turn on =rdoc-mode=:
 #+END_SRC
 
 * Tools
+** Ledger
+Add a few custom reports:
+#+BEGIN_SRC emacs-lisp
+  (require 'ledger-mode)
+
+  (add-to-list
+   'ledger-reports
+   '("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes"))
+
+  (add-to-list
+   'ledger-reports
+   '("bizincome" "ledger -f %(ledger-file) equity --cleared Biz:Income"))
+
+  (add-to-list
+   'ledger-reports
+   '("uncleared" "ledger -f %(ledger-file) reg --uncleared"))
+
+  (add-to-list
+   'ledger-reports
+   '("credit-cap1"
+     "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared"))
+
+  (add-to-list
+   'ledger-reports
+   '("checking-cap1"
+     "ledger -f %(ledger-file) reg Assets:Checking:CapitalOne --display 'd>=[last month]' --cleared"))
+
+  (add-to-list
+   'ledger-reports
+   '("net" "ledger -f %(ledger-file) bal Assets Liabilities --cleared"))
+#+END_SRC
+
 ** Man
 Open man pages in a different window
 #+BEGIN_SRC emacs-lisp
@@ -1015,6 +1047,7 @@ functional= messages.
 (require 'ag)
 (setq ag-highlight-search t)
 #+END_SRC
+
 
 * Local configuration
 Load local config to override any of the above settings
