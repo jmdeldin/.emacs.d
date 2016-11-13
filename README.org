@@ -140,6 +140,7 @@ We can declare the origin of our packages with the
           (clojure-mode . "melpa-stable")
           (coffee-mode . "melpa-stable")
           (dim . "melpa-unstable")
+          (elfeed . "melpa-unstable")
           (evil . "melpa-unstable")
           (evil-matchit . "melpa-stable")
           (evil-paredit . "melpa-unstable")
