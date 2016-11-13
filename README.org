@@ -157,9 +157,9 @@ We can declare the origin of our packages with the
           (projectile . "melpa-stable")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
-          (scss-mode . "melpa-stable")
           (slim-mode . "melpa-stable")
           (smex . "melpa-stable")
+          (tiny . "melpa-unstable") ; for invoices
           (tuareg . "melpa-stable")
           (yaml-mode . "melpa-stable")
           ))
