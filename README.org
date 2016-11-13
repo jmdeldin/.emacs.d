@@ -3,8 +3,8 @@
 #+STYLE: <style>html { font: 14px Helvetica, sans-serif } body { width: 85%; margin: 2% auto;} pre, code { font-family: Monaco, Consolas, 'Bitstream Vera Sans', monospace; }</style>
 
 I started using Emacs in the fall of 2010 after a few years of Vim. I
-use GNU Emacs 24.4+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a
-host of miscellaneous other languages.
+use GNU Emacs 25.1+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a host
+of miscellaneous other languages.
 
 * Installation
 You can clone directly as =$HOME/.emacs.d=:
@@ -17,9 +17,6 @@ You can clone directly as =$HOME/.emacs.d=:
 ** Improvements
 *** TODO add org-mode/orgstruct to magit
 *** TODO evaluate company-mode
-*** TODO function to ensure there is a newline before org headings
-*** TODO WTF doesn't jabber work in 24.4
-I'm getting "Required feature `jabber-autoloads' was not provided".
 ** Keys
 | Key         | Description                                     |
 |-------------+-------------------------------------------------|
@@ -150,7 +147,6 @@ We can declare the origin of our packages with the
           (haml-mode . "melpa-stable")
           (highlight-indentation . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
-          (jabber . "melpa-stable")
           (ledger-mode . "melpa-stable")
           (magit . "melpa-stable")
           (markdown-mode . "melpa-stable")
@@ -222,11 +218,6 @@ Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+END_SRC
 
 * Communication
-** Jabber
-Don't notify if someone is online/offline in the buddy list:
-#+BEGIN_SRC emacs-lisp
-(setq jabber-alert-presence-message-function (lambda (who oldstatus newstatus statustext) nil))
-#+END_SRC
 
 ** ERC
 Prevent auto-joining =#erc=
@@ -327,7 +318,7 @@ Turn it on for some modes:
 #+BEGIN_SRC emacs-lisp
   (mapcar (lambda (mode)
             (add-hook mode (lambda () (flyspell-mode t))))
-          '(jabber-chat-mode-hook org-mode-hook markdown-mode text-mode))
+          '(org-mode-hook markdown-mode text-mode))
   (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
 #+END_SRC
 
