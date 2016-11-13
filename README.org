@@ -719,6 +719,25 @@ Make the Cmd and Opt keys work for =M-x=
     (setq-default mac-option-modifier 'meta))
 #+END_SRC
 
+
+** Themes
+For dumb terminals:
+#+BEGIN_SRC emacs-lisp
+  (if (and (not window-system) (string= (getenv "TERM") "dumb"))
+      (progn
+        (set-face-background 'hl-line "#666")
+        (set-face-foreground 'hl-line "#fff")))
+#+END_SRC
+
+For GUIs:
+
+#+BEGIN_SRC emacs-lisp
+  (if window-system
+      (let ((jm/font "Source Code Pro-13"))
+        (set-face-attribute 'default nil :font jm/font)
+        (set-frame-font jm/font)))
+#+END_SRC
+
 * Languages
 ** C
 The only way to program.
