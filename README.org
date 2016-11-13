@@ -242,6 +242,42 @@ Highlight nick:
   (setq erc-current-nick-highlight-type 'nick)
 #+END_SRC
 
+* News
+Elfeed is a really nice RSS reader for Emacs that's easy to use and
+fast.
+
+** Elfeed Configuration
+Keep the database inside =~/.emacs.d= instead of in =$HOME=:
+#+BEGIN_SRC emacs-lisp
+  (setq elfeed-db-directory (concat user-emacs-directory "local/elfeed"))
+#+END_SRC
+
+Keybinding:
+#+BEGIN_SRC emacs-lisp
+  (defun jm/elfeed ()
+    "Download feed updates before using elfeed."
+    (interactive)
+    (elfeed-update)
+    (elfeed))
+
+  (global-set-key (kbd "<f9>") 'jm/elfeed)
+#+END_SRC
+
+** Feeds
+#+BEGIN_SRC emacs-lisp
+  (setq elfeed-feeds
+        '(
+          ("https://feeds.feedburner.com/lifehacker/full" drivel)
+          ("http://nullprogram.com/feed/" emacs)
+          ("https://www.reddit.com/r/emacs.xml" emacs)
+          ("https://www.masteringemacs.org/feed" emacs)
+          ("http://sachachua.com/blog/feed/" emacs)
+          ("http://matthewkirk.com/feed/" friends)
+          ("http://www.jmdeldin.com/atom.xml" personal)
+          ("https://jvns.ca/atom.xml" programming)
+          ("https://www.reddit.com/r/everett.xml" news)))
+#+END_SRC
+
 * Text Editing
 Default to 72 column width for plain text
 #+BEGIN_SRC emacs-lisp
