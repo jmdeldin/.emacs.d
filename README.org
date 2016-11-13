@@ -807,7 +807,14 @@ Highlight src blocks
   (setq org-src-fontify-natively t)
 #+END_SRC
 
-*** Agenda
+*** Diary/Agenda
+Hide some holidays:
+#+BEGIN_SRC emacs-lisp
+  (setq holiday-bahai-holidays nil)
+  (setq holiday-hebrew-holidays nil)
+  (setq holiday-islamic-holidays nil)
+#+END_SRC
+
 Show the agenda from the current day:
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-start-on-weekday nil)
@@ -816,6 +823,13 @@ Show the agenda from the current day:
 Show all habits
 #+BEGIN_SRC emacs-lisp
   (setq org-habit-show-habits-only-for-today nil)
+#+END_SRC
+
+Set the location for showing the sunrise/sunset in the agenda:
+#+BEGIN_SRC emacs-lisp
+  (setq calendar-latitude 47.9790)
+  (setq calendar-longitude -122.2021)
+  (setq calendar-location-name "Everett, WA")
 #+END_SRC
 
 *** Exporting
