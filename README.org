@@ -218,7 +218,6 @@ Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+END_SRC
 
 * Communication
-
 ** ERC
 Prevent auto-joining =#erc=
 #+BEGIN_SRC emacs-lisp
@@ -675,6 +674,11 @@ Two spaces:
 
 #+BEGIN_SRC emacs-lisp
   (setq js-indent-level 2)
+#+END_SRC
+
+Support React stuff:
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".jsx") 'js-mode)
 #+END_SRC
 
 ** LaTeX
