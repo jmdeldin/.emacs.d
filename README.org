@@ -143,6 +143,7 @@ We can declare the origin of our packages with the
           (elfeed . "melpa-unstable")
           (evil . "melpa-unstable")
           (evil-matchit . "melpa-stable")
+          (evil-numbers . "melpa-stable")
           (evil-paredit . "melpa-unstable")
           (geiser . "melpa-stable")
           (haml-mode . "melpa-stable")
