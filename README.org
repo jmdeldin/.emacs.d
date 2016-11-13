@@ -1077,6 +1077,16 @@ Turn on =rdoc-mode=:
 #+END_SRC
 
 * Tools
+** Clock
+Customize =M-x display-time-world=:
+#+BEGIN_SRC emacs-lisp
+(setq display-time-world-list
+      '(("America/Los_Angeles" "Seattle")
+        ("America/Denver" "Cascade")
+        ("America/Chicago" "Ann Arbor")
+        ("America/New_York" "New York")))
+#+END_SRC
+
 ** Ledger
 Add a few custom reports:
 #+BEGIN_SRC emacs-lisp
@@ -1132,7 +1142,6 @@ functional= messages.
 (require 'ag)
 (setq ag-highlight-search t)
 #+END_SRC
-
 
 * Local configuration
 Load local config to override any of the above settings
