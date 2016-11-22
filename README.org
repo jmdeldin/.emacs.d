@@ -1124,6 +1124,10 @@ Add a few custom reports:
 
   (add-to-list
    'ledger-reports
+   '("cc-spending" "ledger -f %(ledger-file) bal Liabilities:Credit -l 'amount < 0'"))
+
+  (add-to-list
+   'ledger-reports
    '("credit-cap1"
      "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared"))
 
