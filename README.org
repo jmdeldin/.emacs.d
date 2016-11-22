@@ -1108,7 +1108,15 @@ Add a few custom reports:
 
   (add-to-list
    'ledger-reports
-   '("bizincome" "ledger -f %(ledger-file) equity --cleared Biz:Income"))
+   '("biz-income" "ledger -f %(ledger-file) equity --cleared Biz:Income"))
+
+  (add-to-list
+   'ledger-reports
+   '("biz-outstanding" "ledger -f %(ledger-file) reg Biz:AccountsReceivable"))
+
+  (add-to-list
+   'ledger-reports
+   '("year-spending" "ledger -f %(ledger-file) --monthly --empty --collapse reg Expenses"))
 
   (add-to-list
    'ledger-reports
