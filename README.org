@@ -1035,7 +1035,6 @@ Turn on =rdoc-mode=:
 #+BEGIN_SRC emacs-lisp
   (add-hook 'ruby-mode-hook
             (lambda ()
-              (defun rspec-spring-p () t) ; default doesn't handle rails 3 well
               (rspec-mode 1)
               ; for binding.pry to work -- hit C-x C-q at breakpoint
               (add-hook 'after-init-hook 'inf-ruby-switch-setup)
