@@ -169,8 +169,11 @@ We can declare the origin of our packages with the
 #+BEGIN_SRC emacs-lisp
   (setq jm/packages (mapcar 'car package-pinned-packages))
 
-  (unless (jm/packages-installed-p jm/packages)
-    (jm/install-packages jm/packages))
+  (defun jm/install-packages ()
+    (unless (jm/packages-installed-p jm/packages)
+      (jm/install-packages jm/packages)))
+
+  (jm/install-packages)
 #+END_SRC
 
 ** Server
