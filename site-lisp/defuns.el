@@ -23,6 +23,11 @@
 	      (package-install pkg)))
 	  pkg-list))
 
+(defun jm/install-all-packages (pkgs)
+  "Avoid pulling down (M)ELPA if the packages are already installed."
+  (unless (jm/packages-installed-p pkgs)
+    (jm/install-packages pkgs)))
+
 (defun jm/reload-init ()
   "Reload `~/.emacs.d/init.el'"
   (interactive)
