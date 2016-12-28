@@ -922,7 +922,7 @@ Include these languages for babel
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages (mapcar (lambda (l) (cons l t))
-          '(C calc emacs-lisp gnuplot latex ledger perl python R ruby screen sh)))
+          '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen sh)))
 #+END_SRC
 
 Highlight src blocks
