@@ -459,7 +459,7 @@ Insert tabs when appropriate
 Insert a newline at the EOF
 #+BEGIN_SRC emacs-lisp
   (setq-default require-final-newline t)
-#+END_SRC#+end_src
+#+END_SRC
 
 Delete trailing whitespace on save
 #+BEGIN_SRC emacs-lisp
