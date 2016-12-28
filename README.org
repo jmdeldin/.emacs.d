@@ -154,6 +154,7 @@ We can declare the origin of our packages with the
           (markdown-mode . "melpa-stable")
           (mmm-mode . "melpa-stable")
           (nginx-mode . "melpa-stable")
+          (org . "gnu")
           (projectile . "melpa-stable")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
@@ -921,7 +922,7 @@ Include these languages for babel
 #+BEGIN_SRC emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages (mapcar (lambda (l) (cons l t))
-          '(C calc emacs-lisp gnuplot latex perl python R ruby screen sh)))
+          '(C calc emacs-lisp gnuplot latex ledger perl python R ruby screen sh)))
 #+END_SRC
 
 Highlight src blocks
@@ -1105,6 +1106,10 @@ Add a few custom reports:
   (add-to-list
    'ledger-reports
    '("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes"))
+
+  (add-to-list
+   'ledger-reports
+   '("donations" "ledger -f %(ledger-file) bal Expenses:Donations Liabilities:Donations"))
 
   (add-to-list
    'ledger-reports
