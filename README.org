@@ -1106,6 +1106,14 @@ Customize =M-x display-time-world=:
         ("America/New_York" "New York")))
 #+END_SRC
 
+** Dired
+Make it so hitting =C= on a filename in a dired window defaults to the
+other dired window:
+
+#+BEGIN_SRC emacs-lisp
+  (setq dired-dwim-target t)
+#+END_SRC
+
 ** Ledger
 Add a few custom reports:
 #+BEGIN_SRC emacs-lisp
