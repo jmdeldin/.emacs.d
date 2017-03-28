@@ -931,6 +931,13 @@ Highlight src blocks
   (setq org-src-fontify-natively t)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defun jm/org-confirm-babel-evaluate (lang body)
+    "Don't ask to confirm evaluating a ledger block."
+    (not (string= lang "ledger")))
+  (setq org-confirm-babel-evaluate 'jm/org-confirm-babel-evaluate)
+#+END_SRC
+
 *** Diary/Agenda
 Hide some holidays:
 #+BEGIN_SRC emacs-lisp
