@@ -146,6 +146,7 @@ We can declare the origin of our packages with the
           (evil-numbers . "melpa-stable")
           (evil-paredit . "melpa-unstable")
           (geiser . "melpa-stable")
+          (go-mode . "melpa-stable")
           (haml-mode . "melpa-stable")
           (highlight-indentation . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
