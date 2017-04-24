@@ -722,6 +722,28 @@ Make the Cmd and Opt keys work for =M-x=
     (setq-default mac-option-modifier 'meta))
 #+END_SRC
 
+** Clutter
+Hide a bunch of minor modes:
+#+BEGIN_SRC emacs-lisp
+  (dim-minor-names '(
+             (auto-complete-mode "")
+             (auto-fill-function "") ; the "Fill" text
+             (eldoc-mode "")
+             (flyspell-mode "")
+             (highlight-indentation-current-column-mode "")
+             (org-indent-mode "")
+             (projectile-mode "")
+             (rspec-mode "")
+             (undo-tree-mode "")
+             ))
+#+END_SRC
+
+VC mode does not need to show more than the branch. The following code
+[[http://emacs.stackexchange.com/a/10957][from Malabrba]] does just that:
+#+BEGIN_SRC emacs-lisp
+  (setcdr (assq 'vc-mode mode-line-format)
+          '((:eval (replace-regexp-in-string "^ Git" " " vc-mode))))
+#+END_SRC
 
 ** Themes
 For dumb terminals:
@@ -1191,26 +1213,4 @@ functional= messages.
 Load local config to override any of the above settings
 #+BEGIN_SRC emacs-lisp
   (load (jm/local-path "local") 'noerror)
-#+END_SRC
-
-Hide a bunch of minor modes:
-#+BEGIN_SRC emacs-lisp
-  (dim-minor-names '(
-             (auto-complete-mode "")
-             (auto-fill-function "") ; the "Fill" text
-             (eldoc-mode "")
-             (flyspell-mode "")
-             (highlight-indentation-current-column-mode "")
-             (org-indent-mode "")
-             (projectile-mode "")
-             (rspec-mode "")
-             (undo-tree-mode "")
-             ))
-#+END_SRC
-
-VC mode does not need to show more than the branch. The following code
-[[http://emacs.stackexchange.com/a/10957][from Malabrba]] does just that:
-#+BEGIN_SRC emacs-lisp
-  (setcdr (assq 'vc-mode mode-line-format)
-          '((:eval (replace-regexp-in-string "^ Git" " " vc-mode))))
 #+END_SRC
