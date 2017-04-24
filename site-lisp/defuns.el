@@ -216,3 +216,10 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
   "Return a timestamp of the current date minus some # of days."
   (format-time-string "%Y-%m-%d"
     (time-subtract (current-time) (seconds-to-time (* 60 60 24 days)))))
+
+(defun lvar-cookie (char cmd)
+  "Inserts a local variable line to prepopulate `M-x compile'."
+  (interactive (list (read-string "Character: ")
+                     (read-string "Command: ")))
+  (beginning-of-buffer)
+  (insert (concat char " -*- " "\"" cmd "\"" " -*-\n")))
