@@ -1203,6 +1203,11 @@ functional= messages.
   (setenv "PAGER" "cat")
 #+END_SRC
 
+Ensure eshell garbage stays in =~/.emacs.d/local=:
+#+BEGIN_SRC emacs-lisp
+  (setq eshell-directory-name (concat user-emacs-directory "local/eshell"))
+#+END_SRC
+
 ** Silver Searcher
 #+BEGIN_SRC emacs-lisp
 (require 'ag)
