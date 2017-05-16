@@ -284,6 +284,11 @@ Convert HTML emails:
 #+END_SRC
 
 *** Writing
+Don't reply to yourself:
+#+BEGIN_SRC emacs-lisp
+  (setq mu4e-compose-dont-reply-to-self t)
+#+END_SRC
+
 Close the compose buffer after sending:
 #+BEGIN_SRC emacs-lisp
   (setq message-kill-buffer-on-exit t)
