@@ -284,6 +284,10 @@ Convert HTML emails:
 (setq mu4e-html2text-command 'mu4e-shr2text)
 #+END_SRC
 
+View in browser:
+#+BEGIN_SRC emacs-lisp
+  ; (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+#+END_SRC
 *** Writing
 Don't reply to yourself:
 #+BEGIN_SRC emacs-lisp
