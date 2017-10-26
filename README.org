@@ -135,6 +135,7 @@ We can declare the origin of our packages with the
           (ac-geiser . "melpa-stable")
           (ace-window . "melpa-stable")
           (ag   . "melpa-stable")
+          (alchemist . "melpa-stable")
           (auto-complete . "melpa-stable")
           (cider . "melpa-stable")
           (clojure-mode . "melpa-stable")
