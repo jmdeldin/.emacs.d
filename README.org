@@ -1157,11 +1157,11 @@ Add a few custom reports:
 
   (add-to-list
    'ledger-reports
-   '("biz-income" "ledger -f %(ledger-file) equity --cleared Biz:Income"))
+   '("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable"))
 
   (add-to-list
    'ledger-reports
-   '("biz-outstanding" "ledger -f %(ledger-file) reg Biz:AccountsReceivable"))
+   '("biz-outstanding" "ledger -f %(ledger-file) reg Biz:Receivable"))
 
   (add-to-list
    'ledger-reports
