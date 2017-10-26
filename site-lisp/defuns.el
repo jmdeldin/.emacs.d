@@ -212,6 +212,11 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
    (number-sequence 0 4)
    "\n"))
 
+(defun invoice-template ()
+  "Interactively insert a date."
+  (interactive)
+  (insert (jm/invoice-template (org-read-date))))
+
 (defun jm/n-days-ago (days)
   "Return a timestamp of the current date minus some # of days."
   (format-time-string "%Y-%m-%d"
