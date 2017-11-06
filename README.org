@@ -408,6 +408,7 @@ Remember last edit position
   (use-package auto-complete-config
     :ensure auto-complete
     :pin melpa-stable
+    :defer 2
     :diminish auto-complete-mode
     :config
     (ac-config-default)
@@ -417,6 +418,7 @@ Remember last edit position
 
   (use-package org-ac
     :ensure t
+    :defer 2
     :pin melpa-stable
     :config (org-ac/config-default))
 #+END_SRC
@@ -754,7 +756,6 @@ Hide a bunch of minor modes:
              (flyspell-mode "")
              (org-indent-mode "")
              (projectile-mode "")
-             (rspec-mode "")
              (undo-tree-mode "")
              ))
 #+END_SRC
