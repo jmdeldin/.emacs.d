@@ -577,27 +577,34 @@ Interactively-do-things is the greatest Emacs extension.
   (setq ido-use-virtual-buffers t)
   (ido-mode 1)
 #+END_SRC
-**** Uniquify
+
+*** Uniquify
 Use part of the directory to distinguish between identically-named files:
 #+BEGIN_SRC emacs-lisp
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
+  (use-package uniquify
+    :config
+    (setq uniquify-buffer-name-style 'forward))
 #+END_SRC
-**** Minibuffer History
+
+*** Minibuffer History
 Save minibuffer history:
 #+BEGIN_SRC emacs-lisp
   (savehist-mode 1)
   (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
   (setq savehist-file (jm/local-path "savehist"))
 #+END_SRC
-**** Recent Files
+
+*** Recent Files
 Enable recent files:
 #+BEGIN_SRC emacs-lisp
-  (require 'recentf)
-  (setq recentf-save-file (jm/local-path "recentf"))
-  (setq recentf-max-saved-items 1000)
-  (recentf-mode 1)
+  (use-package recentf
+    :defer 1
+    :config
+    (setq recentf-save-file (jm/local-path "recentf"))
+    (setq recentf-max-saved-items 1000)
+    (recentf-mode 1))
 #+END_SRC
+
 *** SMEX
 =M-x= -- ido-like completion for functions:
 
