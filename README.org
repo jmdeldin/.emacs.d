@@ -132,7 +132,6 @@ We can declare the origin of our packages with the
 #+BEGIN_SRC emacs-lisp
   (setq package-pinned-packages
         '(
-          (ace-window . "melpa-stable")
           (alchemist . "melpa-stable")
           (cider . "melpa-stable")
           (clojure-mode . "melpa-stable")
@@ -728,8 +727,11 @@ better commenting (replaces the original comment-dwim)
 *** Windows
 =M-s/M-S= -- switch windows
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-s") 'ace-window)
-  (global-set-key (kbd "M-S") 'ace-window)
+  (use-package ace-window
+    :bind (("M-s" . ace-window)
+           ("M-S" . ace-window))
+    :ensure t
+    :pin melpa-stable)
 #+END_SRC
 
 *** Mac
