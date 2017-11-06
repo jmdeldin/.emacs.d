@@ -151,7 +151,6 @@ We can declare the origin of our packages with the
           (ledger-mode . "melpa-stable")
           (magit . "melpa-stable")
           (markdown-mode . "melpa-stable")
-          (mmm-mode . "melpa-stable")
           (nginx-mode . "melpa-stable")
           (org . "gnu")
           (projectile . "melpa-stable")
@@ -874,16 +873,15 @@ Produce PDFs instead of DVIs
 Support editing mixed mode files, like ERB templates.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'mmm-auto)
-  (setq mmm-global-mode 'auto)
-  (setq mmm-submode-decoration-level 2)
-  (setq mmm-parse-when-idle t)
-
-  (mmm-add-mode-ext-class 'html-erb-mode "\\.html\\.erb\\'" 'erb)
-  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-js)
-  (mmm-add-mode-ext-class 'html-erb-mode nil 'html-css)
-
-  (associate-file-type '(".html.erb" ".erb") 'html-erb-mode)
+  (use-package mmm-auto
+    :ensure mmm-mode
+    :pin melpa-stable
+    :mode ((".html.erb" . html-erb-mode)
+           (".erb" . html-erb-mode))
+    :config
+    (setq mmm-global-mode 'auto)
+    (setq mmm-submode-decoration-level 2)
+    (setq mmm-parse-when-idle t))
 #+END_SRC
 
 ** Org-Mode
