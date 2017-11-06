@@ -148,7 +148,6 @@ We can declare the origin of our packages with the
           (go-mode . "melpa-stable")
           (haml-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
-          (ledger-mode . "melpa-stable")
           (magit . "melpa-stable")
           (markdown-mode . "melpa-stable")
           (nginx-mode . "melpa-stable")
@@ -1161,49 +1160,23 @@ other dired window:
 ** Ledger
 Add a few custom reports:
 #+BEGIN_SRC emacs-lisp
-  (require 'ledger-mode)
-
-  (add-to-list
-   'ledger-reports
-   '("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes"))
-
-  (add-to-list
-   'ledger-reports
-   '("donations" "ledger -f %(ledger-file) bal Expenses:Donations Liabilities:Donations"))
-
-  (add-to-list
-   'ledger-reports
-   '("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable"))
-
-  (add-to-list
-   'ledger-reports
-   '("biz-outstanding" "ledger -f %(ledger-file) reg Biz:Receivable"))
-
-  (add-to-list
-   'ledger-reports
-   '("year-spending" "ledger -f %(ledger-file) --monthly --empty --collapse reg Expenses"))
-
-  (add-to-list
-   'ledger-reports
-   '("uncleared" "ledger -f %(ledger-file) reg --uncleared"))
-
-  (add-to-list
-   'ledger-reports
-   '("cc-spending" "ledger -f %(ledger-file) bal Liabilities:Credit -l 'amount < 0'"))
-
-  (add-to-list
-   'ledger-reports
-   '("credit-cap1"
-     "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared"))
-
-  (add-to-list
-   'ledger-reports
-   '("checking-cap1"
-     "ledger -f %(ledger-file) reg Assets:Checking:CapitalOne --display 'd>=[last month]' --cleared"))
-
-  (add-to-list
-   'ledger-reports
-   '("net" "ledger -f %(ledger-file) bal Assets Liabilities --cleared"))
+  (use-package ledger-mode
+    :defer t
+    :config
+    (setq ledger-reports
+          '(
+            ("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes")
+            ("donations" "ledger -f %(ledger-file) bal Expenses:Donations Liabilities:Donations")
+            ("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable")
+            ("biz-outstanding" "ledger -f %(ledger-file) reg Biz:Receivable")
+            ("year-spending" "ledger -f %(ledger-file) --monthly --empty --collapse reg Expenses")
+            ("uncleared" "ledger -f %(ledger-file) reg --uncleared")
+            ("cc-spending" "ledger -f %(ledger-file) bal Liabilities:Credit -l 'amount < 0'")
+            ("credit-cap1"
+             "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared")
+            ("checking-cap1"
+             "ledger -f %(ledger-file) reg Assets:Checking:CapitalOne --display 'd>=[last month]' --cleared")
+            ("net" "ledger -f %(ledger-file) bal Assets Liabilities --cleared"))))
 #+END_SRC
 
 ** Man
