@@ -154,7 +154,6 @@ We can declare the origin of our packages with the
           (projectile . "melpa-stable")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
-          (smex . "melpa-stable")
           (tiny . "melpa-unstable") ; for invoices
           (tuareg . "melpa-stable")
           (use-package . "melpa-stable") ; until bundled with Emacs
@@ -600,6 +599,15 @@ Enable recent files:
   (setq recentf-max-saved-items 1000)
   (recentf-mode 1)
 #+END_SRC
+*** SMEX
+=M-x= -- ido-like completion for functions:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :bind ("M-x" . smex)
+    :config
+    (setq smex-save-file (jm/local-path "smex-items")))
+#+END_SRC
 
 ** Mouse
 Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
@@ -715,13 +723,6 @@ better commenting (replaces the original comment-dwim)
   (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
   (setq projectile-cache-file (jm/local-path "projectile-cache"))
   (global-set-key (kbd "C-x p") 'projectile-find-file)
-#+END_SRC
-
-=M-x= -- ido-like completion for functions
-#+BEGIN_SRC emacs-lisp
-  (smex-initialize)
-  (global-set-key (kbd "M-x") 'smex)
-  (setq smex-save-file (jm/local-path "smex-items"))
 #+END_SRC
 
 *** Windows
