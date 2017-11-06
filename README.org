@@ -149,7 +149,6 @@ We can declare the origin of our packages with the
           (geiser . "melpa-stable")
           (go-mode . "melpa-stable")
           (haml-mode . "melpa-stable")
-          (highlight-indentation . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (ledger-mode . "melpa-stable")
           (magit . "melpa-stable")
@@ -160,10 +159,10 @@ We can declare the origin of our packages with the
           (projectile . "melpa-stable")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
-          (slim-mode . "melpa-stable")
           (smex . "melpa-stable")
           (tiny . "melpa-unstable") ; for invoices
           (tuareg . "melpa-stable")
+          (use-package . "melpa-stable") ; until bundled with Emacs
           (yaml-mode . "melpa-stable")
           ))
 #+END_SRC
@@ -173,6 +172,7 @@ We can declare the origin of our packages with the
   (setq jm/packages (mapcar 'car package-pinned-packages))
 
   (jm/install-all-packages jm/packages)
+  (setq use-package-verbose t)
 #+END_SRC
 
 ** Server
@@ -426,9 +426,6 @@ use a faster suggestion mode.
 
 Turn it on for comments
 #+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(c-mode-common-hook emacs-lisp-mode-hook ruby-mode-hook
-                               coffee-mode-hook))
   (ac-flyspell-workaround)
 #+END_SRC
 
@@ -488,8 +485,13 @@ Delete trailing whitespace on save
 
 ** Highlight Stuff
 #+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode-hook) (add-hook mode-hook 'highlight-indentation-current-column-mode))
-          '(ruby-mode-hook coffee-mode-hook slim-mode-hook))
+  (use-package highlight-indent-guides
+    :ensure t
+    :pin melpa-unstable
+    :config
+    (setq highlight-indent-guides-method 'fill)
+    (mapcar (lambda (hook) (add-hook hook 'highlight-indent-guides-mode))
+            '(prog-mode-hook yaml-mode-hook)))
 #+END_SRC
 
 * UI
@@ -749,7 +751,6 @@ Hide a bunch of minor modes:
              (auto-fill-function "") ; the "Fill" text
              (eldoc-mode "")
              (flyspell-mode "")
-             (highlight-indentation-current-column-mode "")
              (org-indent-mode "")
              (projectile-mode "")
              (rspec-mode "")
@@ -858,6 +859,7 @@ Produce PDFs instead of DVIs
 #+BEGIN_SRC emacs-lisp
   (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
 
+  ; probably not needed with 25+ 4
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 
