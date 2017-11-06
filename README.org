@@ -133,7 +133,6 @@ We can declare the origin of our packages with the
   (setq package-pinned-packages
         '(
           (ace-window . "melpa-stable")
-          (ag   . "melpa-stable")
           (alchemist . "melpa-stable")
           (cider . "melpa-stable")
           (clojure-mode . "melpa-stable")
@@ -710,11 +709,6 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "M-#") 'jm/reload-init)
 #+END_SRC
 
-=C-x a= -- =ag-regexp-project-at-point=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x a") 'ag-regexp-project-at-point)
-#+END_SRC
-
 =C-x p= -- find files in project
 #+BEGIN_SRC emacs-lisp
   (projectile-global-mode t)
@@ -1204,8 +1198,12 @@ Ensure eshell garbage stays in =~/.emacs.d/local=:
 
 ** Silver Searcher
 #+BEGIN_SRC emacs-lisp
-(require 'ag)
-(setq ag-highlight-search t)
+  (use-package ag
+    :ensure t
+    :pin melpa-stable
+    :bind ("C-x a" . ag-regexp-project-at-point)
+    :config
+    (setq ag-highlight-search t))
 #+END_SRC
 
 * Local configuration
