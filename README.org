@@ -784,15 +784,10 @@ mode isn't supported).
 
 ** Clojure
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (setq cider-repl-result-prefix ";; => ")
-  (add-hook 'cider-repl-mode-hook 'subword-mode)
-  (setq cider-auto-select-error-buffer nil)
-
-  (add-hook 'cider-mode-hook
-            (lambda ()
-              (local-set-key (kbd "C-c ,") 'cider-test-run-tests)))
-
+  (use-package cider
+    :pin melpa-stable
+    :ensure t
+    :mode ("\\.clj\\'" . clojure-mode))
 #+END_SRC
 
 ** CSS
