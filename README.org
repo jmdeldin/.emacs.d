@@ -138,10 +138,6 @@ We can declare the origin of our packages with the
           (coffee-mode . "melpa-stable")
           (dim . "melpa-unstable")
           (elfeed . "melpa-unstable")
-          (evil . "melpa-unstable")
-          (evil-matchit . "melpa-stable")
-          (evil-numbers . "melpa-stable")
-          (evil-paredit . "melpa-unstable")
           (geiser . "melpa-stable")
           (go-mode . "melpa-stable")
           (haml-mode . "melpa-stable")
@@ -635,25 +631,43 @@ Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73
 ** Keybindings
 *** Evil
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
-#+BEGIN_SRC emacs-lisp
-(evil-mode t)
-(define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
-(define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-(define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
-(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-(define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
-(define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
-(define-key evil-insert-state-map (kbd "C-p") 'evil-previous-line)
-(define-key evil-insert-state-map (kbd "C-n") 'evil-next-line)
-(define-key evil-insert-state-map (kbd "C-z") 'suspend-emacs)
-(define-key evil-normal-state-map (kbd "C-z") 'suspend-emacs)
-#+END_SRC
 
-Disable vi in some buffers:
 #+BEGIN_SRC emacs-lisp
-  (mapc (lambda (mode)
-          (evil-set-initial-state mode 'emacs))
-        '(elfeed-show-mode elfeed-search-mode Info-mode-hook Ledger-Report-Mode))
+  (use-package evil
+    :pin melpa-unstable
+    :ensure t
+    :bind (
+           :map evil-insert-state-map
+           ("C-a" . beginning-of-line)
+           ("C-e" . end-of-line)
+           ("C-d" . delete-forward-char)
+           ("C-k" . kill-line)
+           ("C-p" . evil-previous-line)
+           ("C-p" . evil-previous-line)
+           ("C-n" . evil-next-line)
+           ("C-z" . suspend-emacs)
+           :map evil-normal-state-map
+           ("C-n" . evil-next-line)
+           ("C-p" . evil-previous-line)
+           ("C-z" . suspend-emacs))
+    :config
+    ;; disable evil in some buffers:
+    (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
+          '(elfeed-show-mode elfeed-search-mode Info-mode-hook Ledger-Report-Mode))
+
+    (evil-mode t))
+
+  ;; Jump between tags with %
+  (use-package evil-matchit
+    :pin melpa-stable
+    :config (global-evil-matchit-mode t))
+
+  ;; increment/decrement numbers like Vim (just not with C-a/C-x)
+  (use-package evil-numbers
+    :pin melpa-stable
+    :bind (("C-c +" . evil-numbers/inc-at-pt)
+           ("C-c -" . evil-numbers/dec-at-pt)))
+
 #+END_SRC
 
 *** Editing
