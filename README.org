@@ -146,7 +146,7 @@ We can declare the origin of our packages with the
 ** Utility packages
 #+BEGIN_SRC emacs-lisp
   (use-package tiny
-    :pin melpa-stable
+    :pin melpa-unstable
     :ensure t
     :defer t)
 
