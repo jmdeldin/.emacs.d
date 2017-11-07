@@ -1071,6 +1071,12 @@ Don't be so slow at evaluating buffers:
   (use-package ruby-mode
     :mode
     ("\\.rb\\'" "\\.rake\\'" "Capfile" "Gemfile" "Guardfile" "Rakefile" "\\.ru\\'")
+    :preface
+    (defun jm/run-ruby-buffer ()
+      "Run the current Ruby script and switch focus back to the script."
+      (interactive)
+      (ruby-compilation-this-buffer)
+      (other-window -1))
     :bind (:map ruby-mode-map ("C-c C-c" . jm/run-ruby-buffer))
     :interpreter "ruby"
     :config
