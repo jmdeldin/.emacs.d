@@ -136,8 +136,6 @@ We can declare the origin of our packages with the
           (elfeed . "melpa-unstable")
           (go-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
-          (markdown-mode . "melpa-stable")
-          (nginx-mode . "melpa-stable")
           (org . "gnu")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
@@ -860,7 +858,18 @@ Produce PDFs instead of DVIs
 
 ** Markdown
 #+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".md" ".markdown") 'markdown-mode)
+  (use-package markdown-mode
+    :pin melpa-stable
+    :ensure t
+    :mode ("\\.md\\'" "\\.markdown\\'"))
+#+END_SRC
+
+** Nginx
+#+BEGIN_SRC emacs-lisp
+  (use-package nginx-mode
+    :pin melpa-stable
+    :ensure t
+    :mode "nginx.conf")
 #+END_SRC
 
 ** ERB
