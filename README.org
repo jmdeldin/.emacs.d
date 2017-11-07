@@ -135,7 +135,6 @@ We can declare the origin of our packages with the
           (go-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
-          (rainbow-mode . "gnu")
           (tiny . "melpa-unstable") ; for invoices
           (use-package . "melpa-stable") ; until bundled with Emacs
           ))
@@ -799,7 +798,12 @@ mode isn't supported).
 ** CSS
 Turn on =rainbow-mode= for colored hex values
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'css-mode-hook 'rainbow-mode)
+  (use-package rainbow-mode
+    :pin gnu
+    :ensure t
+    :defer t
+    :init
+    (add-hook 'css-mode-hook 'rainbow-mode))
 #+END_SRC
 
 Prevent SCSS from compiling at save time:
