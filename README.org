@@ -133,7 +133,6 @@ We can declare the origin of our packages with the
   (setq package-pinned-packages
         '(
           (dim . "melpa-unstable")
-          (elfeed . "melpa-unstable")
           (go-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
@@ -294,21 +293,19 @@ One last chance to undo:
 Elfeed is a really nice RSS reader for Emacs that's easy to use and
 fast.
 
-** Elfeed Configuration
-Keep the database inside =~/.emacs.d= instead of in =$HOME=:
 #+BEGIN_SRC emacs-lisp
-  (setq elfeed-db-directory (concat user-emacs-directory "local/elfeed"))
-#+END_SRC
-
-Keybinding:
-#+BEGIN_SRC emacs-lisp
-  (defun jm/elfeed ()
-    "Download feed updates before using elfeed."
-    (interactive)
-    (elfeed-update)
-    (elfeed))
-
-  (global-set-key (kbd "<f9>") 'jm/elfeed)
+  (use-package elfeed
+    :pin melpa-unstable
+    :ensure t
+    :preface
+    (defun jm/elfeed ()
+      "Download feed updates before using elfeed."
+      (interactive)
+      (elfeed-update)
+      (elfeed))
+    :bind ("<f9>" . jm/elfeed)
+    :config
+    (setq elfeed-db-directory (concat user-emacs-directory "local/elfeed")))
 #+END_SRC
 
 ** Feeds
