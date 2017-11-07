@@ -132,7 +132,6 @@ We can declare the origin of our packages with the
 #+BEGIN_SRC emacs-lisp
   (setq package-pinned-packages
         '(
-          (dim . "melpa-unstable")
           (go-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
@@ -739,17 +738,6 @@ Make the Cmd and Opt keys work for =M-x=
 #+END_SRC
 
 ** Clutter
-Hide a bunch of minor modes:
-#+BEGIN_SRC emacs-lisp
-  (dim-minor-names '(
-             (auto-fill-function "") ; the "Fill" text
-             (eldoc-mode "")
-             (flyspell-mode "")
-             (org-indent-mode "")
-             (undo-tree-mode "")
-             ))
-#+END_SRC
-
 VC mode does not need to show more than the branch. The following code
 [[http://emacs.stackexchange.com/a/10957][from Malabrba]] does just that:
 #+BEGIN_SRC emacs-lisp
