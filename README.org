@@ -655,11 +655,13 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
   ;; Jump between tags with %
   (use-package evil-matchit
     :pin melpa-stable
+    :ensure t
     :config (global-evil-matchit-mode t))
 
   ;; increment/decrement numbers like Vim (just not with C-a/C-x)
   (use-package evil-numbers
     :pin melpa-stable
+    :ensure t
     :bind (("C-c +" . evil-numbers/inc-at-pt)
            ("C-c -" . evil-numbers/dec-at-pt)))
 
