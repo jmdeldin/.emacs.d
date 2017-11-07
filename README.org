@@ -1064,6 +1064,13 @@ Don't be so slow at evaluating buffers:
 
 ** Ruby
 #+BEGIN_SRC emacs-lisp
+  (use-package rspec-mode
+    :pin melpa-stable
+    :ensure t
+    :bind (:map ruby-mode-map ("C-c , x" . rspec-verify-single))
+    :config
+    (setq rspec-use-rake-when-possible nil)
+    (setq rspec-use-spring-when-possible t))
   (use-package ruby-mode
     :mode
     ("\\.rb\\'" "\\.rake\\'" "Capfile" "Gemfile" "Guardfile" "Rakefile" "\\.ru\\'")
@@ -1091,13 +1098,7 @@ Don't be so slow at evaluating buffers:
     ;; for binding.pry to work
     (add-hook 'after-init-hook 'inf-ruby-switch-setup))
 
-  (use-package rspec-mode
-    :pin melpa-stable
-    :ensure t
-    :bind (:map ruby-mode-map ("C-c , x" . rspec-verify-single))
-    :config
-    (setq rspec-use-rake-when-possible nil)
-    (setq rspec-use-spring-when-possible t))
+
 #+END_SRC
 
 ** Scheme
