@@ -142,7 +142,6 @@ We can declare the origin of our packages with the
           (go-mode . "melpa-stable")
           (haml-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
-          (magit . "melpa-stable")
           (markdown-mode . "melpa-stable")
           (nginx-mode . "melpa-stable")
           (org . "gnu")
@@ -721,11 +720,6 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "C-x m") 'recompile)
 #+END_SRC
 
-=C-x g= -- =magit-status=
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x g") 'magit-status)
-#+END_SRC
-
 =C-x x= -- =jm/shell=
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x x") 'jm/shell)
@@ -1198,11 +1192,21 @@ I tend to keep man pages pretty narrow
   (setenv "MANWIDTH" "72")
 #+END_SRC
 
+** Magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :pin melpa-stable
+    :ensure t
+    :bind ("C-x g" . magit-status))
+#+END_SRC
+
+
 ** Projectile
 Find files in a project:
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :pin melpa-stable
+    :ensure t
     :bind ("C-x p" . projectile-find-file)
     :config
     (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
