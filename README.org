@@ -137,10 +137,8 @@ We can declare the origin of our packages with the
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
           (rainbow-mode . "gnu")
-          (rspec-mode . "melpa-stable")
           (tiny . "melpa-unstable") ; for invoices
           (use-package . "melpa-stable") ; until bundled with Emacs
-          (yaml-mode . "melpa-stable")
           ))
 #+END_SRC
 
@@ -1123,6 +1121,14 @@ Don't be so slow at evaluating buffers:
               (local-set-key (kbd "C-j") 'scheme-send-last-sexp)))
 #+END_SRC
 
+*** YAML
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :pin melpa-stable
+    :ensure t
+    :mode ("\\.yml\\'" "\\.yaml\\'")
+    :bind (:map yaml-mode-map ("C-m" . newline-and-indent)))
+#+END_SRC
 * Tools
 ** Browsers
 There are far too many ways to configure which browser to use in emacs.
