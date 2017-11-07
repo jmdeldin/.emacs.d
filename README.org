@@ -623,6 +623,7 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
     :pin melpa-unstable
     :ensure t
     :demand t
+    :diminish undo-tree-mode
     :bind (
            :map evil-insert-state-map
            ("C-a" . beginning-of-line)
