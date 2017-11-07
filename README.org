@@ -146,7 +146,6 @@ We can declare the origin of our packages with the
           (markdown-mode . "melpa-stable")
           (nginx-mode . "melpa-stable")
           (org . "gnu")
-          (projectile . "melpa-stable")
           (rainbow-mode . "gnu")
           (rspec-mode . "melpa-stable")
           (tiny . "melpa-unstable") ; for invoices
@@ -737,14 +736,6 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "M-#") 'jm/reload-init)
 #+END_SRC
 
-=C-x p= -- find files in project
-#+BEGIN_SRC emacs-lisp
-  (projectile-global-mode t)
-  (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
-  (setq projectile-cache-file (jm/local-path "projectile-cache"))
-  (global-set-key (kbd "C-x p") 'projectile-find-file)
-#+END_SRC
-
 *** Windows
 =M-s/M-S= -- switch windows
 #+BEGIN_SRC emacs-lisp
@@ -771,7 +762,6 @@ Hide a bunch of minor modes:
              (eldoc-mode "")
              (flyspell-mode "")
              (org-indent-mode "")
-             (projectile-mode "")
              (undo-tree-mode "")
              ))
 #+END_SRC
@@ -1206,6 +1196,17 @@ Open man pages in a different window
 I tend to keep man pages pretty narrow
 #+BEGIN_SRC emacs-lisp
   (setenv "MANWIDTH" "72")
+#+END_SRC
+
+** Projectile
+Find files in a project:
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :pin melpa-stable
+    :bind ("C-x p" . projectile-find-file)
+    :config
+    (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+    (setq projectile-cache-file (jm/local-path "projectile-cache")))
 #+END_SRC
 
 ** Shell
