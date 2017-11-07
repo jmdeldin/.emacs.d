@@ -896,6 +896,27 @@ Support editing mixed mode files, like ERB templates.
 #+END_SRC
 
 ** Org-Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :pin gnu
+    :ensure t
+    :mode ("\\.org" . org-mode)
+    :bind (
+           ("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           ("C-c b" . org-iswitchb)
+           ("C-c C-x h" . org-html-export-to-html)
+           ;; for terminals -- TAB does not work
+           ("C-x t" . org-cycle)))
+
+  ;; for org-html export
+  (use-package htmlize
+    :pin melpa-stable
+    :ensure t
+    :defer t)
+#+END_SRC
+
 Include the org-habit module for the agenda:
 #+BEGIN_SRC emacs-lisp
   (setq org-modules (quote (org-habit)))
@@ -960,17 +981,6 @@ Hit =C-c c= to trigger these:
     "#+DESCRIPTION: " (skeleton-read "Description: ") \n
     "#+STARTUP:     align hidestars indent lognotedone" \n
     \n _)
-#+END_SRC
-
-*** Keybindings
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c b") 'org-iswitchb)
-  ;; for terminals -- TAB does not work
-  (global-set-key (kbd "C-x t") 'org-cycle)
-  (global-set-key (kbd "C-c C-x h") 'org-html-export-to-html)
 #+END_SRC
 
 *** Babel
@@ -1063,17 +1073,6 @@ Fix indentation for lines not starting statements (e.g., hash members)
   (setq cperl-continued-statement-offset 0)
 #+END_SRC#+end_src
 
-** R
-#+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".R" ".r") 'r-mode)
-  (autoload 'r-mode "ess-site" nil t)
-#+END_SRC
-
-Don't be so slow at evaluating buffers:
-#+BEGIN_SRC emacs-lisp
-  (setq ess-eval-visibly-p nil)
-#+END_SRC
-
 ** Ruby
 #+BEGIN_SRC emacs-lisp
   (use-package rspec-mode
@@ -1109,8 +1108,6 @@ Don't be so slow at evaluating buffers:
     :init
     ;; for binding.pry to work
     (add-hook 'after-init-hook 'inf-ruby-switch-setup))
-
-
 #+END_SRC
 
 ** Scheme
