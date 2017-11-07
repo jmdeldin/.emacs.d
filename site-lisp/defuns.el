@@ -228,3 +228,9 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
                      (read-string "Command: ")))
   (beginning-of-buffer)
   (insert (concat char " -*- " "\"" cmd "\"" " -*-\n")))
+
+(defun jm/run-ruby-buffer ()
+  "Run the current Ruby script and switch focus back to the script."
+  (interactive)
+  (ruby-compilation-this-buffer)
+  (other-window -1))

@@ -1058,47 +1058,35 @@ Don't be so slow at evaluating buffers:
 #+END_SRC
 
 ** Ruby
-*** Running
-Shortcut for running a script and returning focus to it:
 #+BEGIN_SRC emacs-lisp
-  (defun ruby-run-buffer ()
-    "Run the current Ruby script and switch focus back to the script."
-    (interactive)
-    (ruby-compilation-this-buffer)
-    (other-window -1))
-#+END_SRC
+  (use-package ruby-mode
+    :mode
+    ("\\.rb\\'" "\\.rake\\'" "Capfile" "Gemfile" "Guardfile" "Rakefile" "\\.ru\\'")
+    :bind (:map ruby-mode-map ("C-c C-c" . jm/run-ruby-buffer))
+    :interpreter "ruby"
+    :config
+    (rspec-mode t))
 
-*** Filetypes
-#+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".rake" "Gemfile" "Rakefile" ".ru" "Capfile" "Guardfile") 'ruby-mode)
-#+END_SRC
+  (use-package ruby-compilation
+    :pin melpa-stable
+    :ensure t
+    :defer t)
 
-Turn on =rdoc-mode=:
-#+BEGIN_SRC emacs-lisp
-  (autoload 'rdoc-mode "rdoc-mode" "Major mode for rdoc files" t)
-  (associate-file-type '(".rdoc" ".rd") 'rdoc-mode)
-#+END_SRC
+  (use-package inf-ruby
+    :pin melpa-stable
+    :defer t
+    :ensure t
+    :init
+    ;; for binding.pry to work
+    (add-hook 'after-init-hook 'inf-ruby-switch-setup))
 
-*** Hooks
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'ruby-mode-hook
-            (lambda ()
-              (rspec-mode 1)
-              ; for binding.pry to work -- hit C-x C-q at breakpoint
-              (add-hook 'after-init-hook 'inf-ruby-switch-setup)
-              (autoload 'ri "ri")
-              (local-set-key (kbd "C-c , x") 'rspec-verify-single)
-              (local-set-key (kbd "C-h r") 'yari)
-              (local-set-key (kbd "C-c C-c") 'ruby-run-buffer)))
-  (add-hook 'slim-mode-hook
-            (lambda ()
-              (local-set-key (kbd "C-c , r") 'rspec-rerun)))
-#+END_SRC
-
-*** RSpec
-#+BEGIN_SRC emacs-lisp
-  (setq rspec-use-rake-when-possible nil)
-  (setq rspec-use-spring-when-possible t)
+  (use-package rspec-mode
+    :pin melpa-stable
+    :ensure t
+    :bind (:map ruby-mode-map ("C-c , x" . rspec-verify-single))
+    :config
+    (setq rspec-use-rake-when-possible nil)
+    (setq rspec-use-spring-when-possible t))
 #+END_SRC
 
 ** Scheme
