@@ -1238,7 +1238,7 @@ Ensure eshell garbage stays in =~/.emacs.d/local=:
   (use-package ag
     :ensure t
     :pin melpa-stable
-    :bind ("C-x a" . ag-regexp-project-at-point)
+    :bind ("C-x a" . ag-project-regexp)
     :config
     (setq ag-highlight-search t))
 #+END_SRC
