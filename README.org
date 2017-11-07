@@ -134,7 +134,6 @@ We can declare the origin of our packages with the
         '(
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
-          (tiny . "melpa-unstable") ; for invoices
           (use-package . "melpa-stable") ; until bundled with Emacs
           ))
 #+END_SRC
@@ -145,6 +144,19 @@ We can declare the origin of our packages with the
 
   (jm/install-all-packages jm/packages)
   (setq use-package-verbose t)
+#+END_SRC
+
+** Utility packages
+#+BEGIN_SRC emacs-lisp
+  (use-package tiny
+    :pin melpa-stable
+    :ensure t
+    :defer t)
+
+  (use-package s
+    :pin melpa-stable
+    :ensure t
+    :defer t)
 #+END_SRC
 
 ** Server

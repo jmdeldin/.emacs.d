@@ -169,6 +169,7 @@ the kill ring. Shell-fu by @ckuttruff."
 
 (defun jm/clean-and-copy (str)
   "Clean up a string and throw it on the clipboard"
+  (require 's)
   (kill-new (s-trim (substring-no-properties str))))
 
 (defun jm/org-table-field (N)
