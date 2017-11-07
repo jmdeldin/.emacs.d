@@ -909,7 +909,11 @@ Support editing mixed mode files, like ERB templates.
            ("C-c b" . org-iswitchb)
            ("C-c C-x h" . org-html-export-to-html)
            ;; for terminals -- TAB does not work
-           ("C-x t" . org-cycle)))
+           ("C-x t" . org-cycle))
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages (mapcar (lambda (l) (cons l t))
+                                       '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen sh))))
 
   ;; for org-html export
   (use-package htmlize
@@ -985,13 +989,6 @@ Hit =C-c c= to trigger these:
 #+END_SRC
 
 *** Babel
-Include these languages for babel
-#+BEGIN_SRC emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages (mapcar (lambda (l) (cons l t))
-          '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen sh)))
-#+END_SRC
-
 Highlight src blocks
 #+BEGIN_SRC emacs-lisp
   (setq org-src-fontify-natively t)
