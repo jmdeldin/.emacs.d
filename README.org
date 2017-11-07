@@ -620,6 +620,7 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
   (use-package evil
     :pin melpa-unstable
     :ensure t
+    :demand t
     :bind (
            :map evil-insert-state-map
            ("C-a" . beginning-of-line)
