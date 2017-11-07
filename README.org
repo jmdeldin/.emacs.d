@@ -590,6 +590,8 @@ Enable recent files:
 
 #+BEGIN_SRC emacs-lisp
   (use-package smex
+    :pin melpa-stable
+    :ensure t
     :bind ("M-x" . smex)
     :config
     (setq smex-save-file (jm/local-path "smex-items")))
