@@ -214,7 +214,8 @@ Prevent auto-joining =#erc=
 
 Spell-check ERC:
 #+BEGIN_SRC emacs-lisp
-  (erc-spelling-mode 1)
+  (with-eval-after-load 'erc
+    (erc-spelling-mode 1))
 #+END_SRC
 
 Ignore noise:
