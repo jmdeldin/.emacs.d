@@ -132,7 +132,6 @@ We can declare the origin of our packages with the
 #+BEGIN_SRC emacs-lisp
   (setq package-pinned-packages
         '(
-          (go-mode . "melpa-stable")
           (htmlize . "melpa-unstable") ; for org exports
           (org . "gnu")
           (tiny . "melpa-unstable") ; for invoices
@@ -817,6 +816,14 @@ Two spaces:
     :pin melpa-stable
     :ensure t
     :mode ("\\.gv\\'" "\\.dot\\'"))
+#+END_SRC
+
+** Go
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :pin melpa-stable
+    :ensure t
+    :mode "\\.go\\'")
 #+END_SRC
 
 ** JavaScript
