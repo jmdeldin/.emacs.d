@@ -818,7 +818,10 @@ Two spaces:
 
 ** Graphviz
 #+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".gv" ".dot") 'graphviz-dot-mode)
+  (use-package graphviz-dot-mode
+    :pin melpa-stable
+    :ensure t
+    :mode ("\\.gv\\'" "\\.dot\\'"))
 #+END_SRC
 
 ** JavaScript
