@@ -649,6 +649,7 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
   (use-package evil-matchit
     :pin melpa-stable
     :ensure t
+    :defer 1
     :config (global-evil-matchit-mode t))
 
   ;; increment/decrement numbers like Vim (just not with C-a/C-x)
@@ -1163,6 +1164,8 @@ other dired window:
 Add a few custom reports:
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
+    :pin melpa-stable
+    :ensure t
     :defer t
     :config
     (setq ledger-reports
