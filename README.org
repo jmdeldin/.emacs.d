@@ -717,6 +717,13 @@ better commenting (replaces the original comment-dwim)
   (global-set-key (kbd "M-#") 'jm/reload-init)
 #+END_SRC
 
+=F12= -- calculate and insert result in buffer
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f12>") (lambda ()
+                                  (interactive)
+                                  (quick-calc t)))
+#+END_SRC
+
 *** Windows
 =M-s/M-S= -- switch windows
 #+BEGIN_SRC emacs-lisp
