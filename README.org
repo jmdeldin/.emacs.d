@@ -220,71 +220,65 @@ Highlight nick:
 #+END_SRC
 
 ** mu4e
-*** Initialization
-Run this in your =local/local.el= file to actually initialize mu4e. I
-keep this in a function for the machines I don't use mu4e on.
+#+BEGIN_SRC emacs-lisp
+  ;; install sudo apt install mu4e gnutls-bin
+  (use-package mu4e
+    :bind ("<f8>" . mu4e)
+    :init
+    (defun jm/email (user domain)
+      "Builds an email address to dodge some spam bot harvesting
+      for public config."
+      (combine-and-quote-strings (list user domain) "@"))
+    (defun jm/match-mu4e-context (email msg)
+      (when msg
+        (mu4e-message-contact-field-matches msg :to email)))
+    :config
+    (add-hook 'message-send-hook
+              (lambda ()
+                (unless (yes-or-no-p "Are you sure you want to send this?")
+                  (signal 'quit nil))))
 
-#+BEGIN_SRC emacs-lisp
-  (defun jm/setup-mu4e ()
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
-    (require 'mu4e)
-    (require 'mu4e-contrib))
-#+END_SRC
+    ;; when viewing a message, hit a V to view message in browser
+    (add-to-list 'mu4e-view-actions
+                 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
-*** Network
-I use =nullmailer= locally for SMTP, which acts just like sendmail:
-#+BEGIN_SRC emacs-lisp
-  (setq message-send-mail-function 'message-send-mail-with-sendmail)
-#+END_SRC
+    (setq mu4e-get-mail-command "offlineimap")
+    (setq mu4e-maildir "~/Maildir")
 
-=getmail= is a pretty simple client to configure:
-#+BEGIN_SRC emacs-lisp
-  (setq mu4e-get-mail-command "getmail")
-#+END_SRC
+    (setq send-mail-function 'smtpmail-send-it)
+    (setq message-send-mail-function 'smtpmail-send-it)
 
-*** Reading
-Enable inline-images:
-#+BEGIN_SRC emacs-lisp
-  (setq mu4e-view-show-images t)
-#+END_SRC
+    ;; enable inline images:
+    (setq mu4e-view-show-images t)
+    (when (fboundp 'imagemagick-register-types)
+      (imagemagick-register-types))
 
-Use imagemagick to convert a file when necessary:
-#+BEGIN_SRC emacs-lisp
-  (when (fboundp 'imagemagick-register-types)
-    (imagemagick-register-types))
-#+END_SRC
+    ;; TODO: not sure this is actually useful:
+    (setq mu4e-compose-format-flowed t)
+    (setq mu4e-compose-dont-reply-to-self t)
+    (setq message-kill-buffer-on-exit t)
 
-Convert HTML emails:
-#+BEGIN_SRC emacs-lisp
-(setq mu4e-html2text-command 'mu4e-shr2text)
-#+END_SRC
+    ;; gmail already keeps copies in the sent folder:
+    (setq mu4e-sent-messages-behavior 'trash)
 
-View in browser:
-#+BEGIN_SRC emacs-lisp
-  ; (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-#+END_SRC
-*** Writing
-Don't reply to yourself:
-#+BEGIN_SRC emacs-lisp
-  (setq mu4e-compose-dont-reply-to-self t)
-#+END_SRC
+    (setq mu4e-context-policy 'ask-if-none)
+    (setq mu4e-compose-context-policy 'ask-if-none)
 
-Close the compose buffer after sending:
-#+BEGIN_SRC emacs-lisp
-  (setq message-kill-buffer-on-exit t)
-#+END_SRC
-
-One last chance to undo:
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'message-send-hook
-    (lambda ()
-      (unless (yes-or-no-p "Are you sure you want to send this?")
-        (signal 'quit nil))))
-#+END_SRC
-
-*** Keybindings
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<f8>") 'mu4e)
+    ;; the backquote is needed to evaluate the alist values
+    (setq mu4e-contexts `( ,(make-mu4e-context
+                             :name "HighSeas"
+                             :match-func (lambda (msg)
+                                           (jm/match-mu4e-context msg (jm/email "jmdeldin" "highseas.com")))
+                             :vars `( (user-mail-address . ,(jm/email "jmdeldin" "highseas.com"))
+                                      (smtpmail-smtp-user . ,(jm/email "jmdeldin" "highseas.com"))
+                                      (smtpmail-smtp-server . "smtp.gmail.com")
+                                      (smtpmail-default-smtp-server "smtp.gmail.com")
+                                      (smtpmail-smtp-service . 587)
+                                      (smtpmail-stream-type . starttls)
+                                      (mu4e-drafts-folder . "/HighSeas/[Gmail].Drafts")
+                                      (mu4e-sent-folder . "/HighSeas/[Gmail].Sent Mail")
+                                      (mu4e-trash-folder . "/HighSeas/[Gmail].Trash")
+                                      )))))
 #+END_SRC
 
 * News
