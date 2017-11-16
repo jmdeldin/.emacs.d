@@ -838,11 +838,32 @@ Two spaces:
 
 #+BEGIN_SRC emacs-lisp
   (setq js-indent-level 2)
+  (setq js2-basic-offset 2)
+  (setq js2-bounce-indent-p t)
 #+END_SRC
 
-Support React stuff:
+Show errors immediately:
 #+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".jsx") 'js-mode)
+  (setq flycheck-display-errors-delay 0)
+#+END_SRC
+
+*** JSON
+
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :pin melpa-stable
+    :ensure t
+    :mode (".babelrc" "\\.json\\'"))
+#+END_SRC
+
+*** React
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rjsx-mode
+    :pin melpa-unstable
+    :ensure t
+    :mode (("\\.jsx" . rjsx-mode))
+    :bind (:map rjsx-mode-map ("<" . nil)))
 #+END_SRC
 
 ** LaTeX
@@ -1159,6 +1180,15 @@ other dired window:
 
 #+BEGIN_SRC emacs-lisp
   (setq dired-dwim-target t)
+#+END_SRC
+
+** Editorconfig
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :pin melpa-stable
+    :ensure t
+    :config (editorconfig-mode t))
 #+END_SRC
 
 ** Ledger
