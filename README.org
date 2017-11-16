@@ -1201,18 +1201,22 @@ Add a few custom reports:
     :config
     (setq ledger-reports
           '(
-            ("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes")
-            ("donations" "ledger -f %(ledger-file) bal Expenses:Donations Liabilities:Donations")
             ("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable")
             ("biz-outstanding" "ledger -f %(ledger-file) reg Biz:Receivable")
-            ("year-spending" "ledger -f %(ledger-file) --monthly --empty --collapse reg Expenses")
-            ("uncleared" "ledger -f %(ledger-file) reg --uncleared")
+            ("cash" "ledger -f %(ledger-file) bal Assets:Checking Assets:Savings --cleared")
             ("cc-spending" "ledger -f %(ledger-file) bal Liabilities:Credit -l 'amount < 0'")
-            ("credit-cap1"
-             "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared")
-            ("checking-cap1"
-             "ledger -f %(ledger-file) reg Assets:Checking:CapitalOne --display 'd>=[last month]' --cleared")
-            ("net" "ledger -f %(ledger-file) bal Assets Liabilities --cleared"))))
+            ("checking-cap1" "ledger -f %(ledger-file) reg Assets:Checking:CapitalOne --display 'd>=[last month]' --cleared")
+            ("credit-cap1" "ledger -f %(ledger-file) reg Liabilities:Credit:CapitalOne --display 'd>=[last month]' --cleared")
+            ("donations" "ledger -f %(ledger-file) bal Expenses:Donations Liabilities:Donations")
+            ("net" "ledger -f %(ledger-file) bal Assets Liabilities --cleared")
+            ("savings-emergency" "ledger -f %(ledger-file) reg Assets:Savings:Emergency --display 'd>=[last month]' --cleared")
+            ("savings-fun" "ledger -f %(ledger-file) reg Assets:Savings:Fun --display 'd>=[last month]' --cleared")
+            ("savings-fun" "ledger -f %(ledger-file) reg Assets:Savings:Fun --display 'd>=[last month]' --cleared")
+            ("savings-taxes" "ledger -f %(ledger-file) reg Assets:Savings:Taxes --display 'd>=[last month]' --cleared")
+            ("taxes" "ledger -f %(ledger-file) bal --cleared Liabilities:Taxes Savings:Taxes")
+            ("uncleared" "ledger -f %(ledger-file) reg --uncleared")
+            ("year-spending" "ledger -f %(ledger-file) --monthly --empty --collapse reg Expenses")
+            )))
 #+END_SRC
 
 ** Man
