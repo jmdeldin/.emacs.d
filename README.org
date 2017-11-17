@@ -1192,10 +1192,9 @@ other dired window:
 #+END_SRC
 
 ** Ledger
-Add a few custom reports:
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
-    :pin melpa-stable
+    :pin melpa-unstable
     :ensure t
     :defer t
     :config
@@ -1209,8 +1208,15 @@ Add a few custom reports:
       (ledger-report-redo))
 
     (define-key ledger-report-mode-map (kbd "C-c C-c") 'ledger-toggle-cleared)
+
+    ;; for consistency with ledger-mode:
+    (define-key ledger-report-mode-map (kbd "C-c C-o C-r") 'ledger-report-select-report)
+
     (setq ledger-reports
           '(
+            ("bal" "%(binary) -f %(ledger-file) bal")
+            ("reg" "%(binary) -f %(ledger-file) reg")
+            ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
             ("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable")
             ("biz-outstanding" "ledger -f %(ledger-file) reg Biz:Receivable")
             ("cash" "ledger -f %(ledger-file) bal Assets:Checking Assets:Savings --cleared")
