@@ -635,7 +635,7 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
     :config
     ;; disable evil in some buffers:
     (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
-          '(elfeed-show-mode elfeed-search-mode Info-mode-hook Ledger-Report-Mode))
+          '(elfeed-show-mode elfeed-search-mode Info-mode-hook ledger-report-mode))
 
     (evil-mode t))
 
