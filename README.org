@@ -1209,6 +1209,12 @@ other dired window:
 
     (define-key ledger-report-mode-map (kbd "C-c C-c") 'ledger-toggle-cleared)
 
+    (defun jm/ledger-format ()
+      "Clean up a ledger buffer automatically."
+      (interactive)
+      (ledger-sort-buffer)
+      (ledger-post-align-postings (point-min) (point-max)))
+
     ;; for consistency with ledger-mode:
     (define-key ledger-report-mode-map (kbd "C-c C-o C-r") 'ledger-report-select-report)
 
