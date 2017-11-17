@@ -1199,6 +1199,16 @@ Add a few custom reports:
     :ensure t
     :defer t
     :config
+    (defun ledger-toggle-cleared ()
+      "Toggle --cleared flag on an open ledger report."
+      (interactive)
+      (setq ledger-report-cmd
+            (if (string-match-p "--cleared" ledger-report-cmd)
+                (replace-regexp-in-string "--cleared" "" ledger-report-cmd)
+              (replace-regexp-in-string "$" " --cleared" ledger-report-cmd)))
+      (ledger-report-redo))
+
+    (define-key ledger-report-mode-map (kbd "C-c C-c") 'ledger-toggle-cleared)
     (setq ledger-reports
           '(
             ("biz-income" "ledger -f %(ledger-file) equity --cleared Revenue Biz:Receivable")
