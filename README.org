@@ -192,7 +192,7 @@ Keep auto-save files together. Test with =M-x do-auto-save=.
 ** Bookmarks
 Use =~/.emacs.d/local/.emacs.bmk= for bookmarks:
 #+BEGIN_SRC emacs-lisp
-  (setq bookmark-file (jm/local-path "bookmarks"))
+  (setq bookmark-default-file (jm/local-path "bookmarks"))
 #+END_SRC
 
 * Communication
