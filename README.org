@@ -653,6 +653,12 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
     :bind (("C-c +" . evil-numbers/inc-at-pt)
            ("C-c -" . evil-numbers/dec-at-pt)))
 
+  (use-package evil-surround
+    :pin melpa-stable
+    :ensure t
+    :defer 1
+    :config
+    (global-evil-surround-mode 1))
 #+END_SRC
 
 *** Editing
