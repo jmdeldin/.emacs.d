@@ -128,12 +128,20 @@ trying to install packages.
 
 ** Install =use-package=
 #+BEGIN_SRC emacs-lisp
-    (setq package-pinned-packages '((use-package . "melpa-unstable")))
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
+  (setq package-pinned-packages '((use-package . "melpa-unstable")))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-    (setq use-package-verbose t)
+  (setq use-package-verbose t)
+#+END_SRC
+
+** Load =use-package=
+#+BEGIN_SRC emacs-lisp
+  (eval-when-compile
+    (require 'use-package))
+  (require 'diminish)
+  (require 'bind-key)
 #+END_SRC
 
 ** Utility packages
