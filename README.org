@@ -1212,6 +1212,13 @@ other dired window:
     :ensure t
     :defer t
     :config
+    (define-skeleton monthly-interest-skeleton
+      "Inserts an interest accrued entry into ledger."
+      "" (insert (replace-regexp-in-string "-" "/" (org-read-date))) " * Monthly Interest Paid" \n
+      "    Assets:"(skeleton-read "Account: ") "    " (skeleton-read "Amount: ") \n
+      "Income:Interest:CapitalOne" \n
+      \n _)
+
     (defun ledger-toggle-cleared ()
       "Toggle --cleared flag on an open ledger report."
       (interactive)
