@@ -818,7 +818,7 @@ Turn on =rainbow-mode= for colored hex values
     :ensure t
     :defer t
     :init
-    (add-hook 'css-mode-hook 'rainbow-mode))
+    (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
 
 Prevent SCSS from compiling at save time:
