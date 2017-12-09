@@ -211,3 +211,12 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
                      (read-string "Command: ")))
   (beginning-of-buffer)
   (insert (concat char " -*- " "\"" cmd "\"" " -*-\n")))
+
+(define-skeleton figure-skeleton
+  "Inserts figure format for HTML"
+  "Path: "
+  "#+HTML: <figure>"\n
+  "#+HTML: <img src=\"" str | \n "\" alt=\"" (skeleton-read "Alt: ") "\">"\n
+  "#+HTML: <figcaption>" (skeleton-read "Caption: ") "</figcaption>"\n
+  "#+HTML: </figure>"
+  \n _)
