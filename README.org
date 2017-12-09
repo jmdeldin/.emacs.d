@@ -1196,6 +1196,15 @@ other dired window:
   (setq dired-dwim-target t)
 #+END_SRC
 
+** Dumb Jump
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :pin melpa-stable
+    :ensure t
+    :bind (("M-g o" . dumb-jump-go)
+           ("M-g p" . dumb-jump-back)))
+#+END_SRC
+
 ** Editorconfig
 
 #+BEGIN_SRC emacs-lisp
@@ -1279,7 +1288,6 @@ I tend to keep man pages pretty narrow
     :ensure t
     :bind ("C-x g" . magit-status))
 #+END_SRC
-
 
 ** Projectile
 Find files in a project:
