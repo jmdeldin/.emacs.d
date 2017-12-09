@@ -1289,6 +1289,23 @@ I tend to keep man pages pretty narrow
     :bind ("C-x g" . magit-status))
 #+END_SRC
 
+** MOTD
+
+#+BEGIN_SRC emacs-lisp
+  (defun motd ()
+    "Inspirational quotes and such."
+    (interactive)
+    (let ((quotes '(("Victor Frankl" . "Between stimulus and response there is a space. In that space is our power to choose our response. In our response lies our growth and our freedom.")
+                    ("Steve Jobs" . "If today were the last day of my life, would I want to do what I am about to do today? And whenever the answer has been ``no'' for too many days in a row, I know I need to change something."))))
+      (let ((record (nth (random (length quotes)) quotes)))
+        (message "> %s\n> —%s" (cdr record) (car record)))))
+#+END_SRC
+
+Run the above every few hours:
+#+BEGIN_SRC emacs-lisp
+  (setq my-timer (run-with-idle-timer 14400 t 'motd))
+#+END_SRC
+
 ** Projectile
 Find files in a project:
 #+BEGIN_SRC emacs-lisp
