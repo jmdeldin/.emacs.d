@@ -107,6 +107,7 @@ These keys work inside the Ido minibuffer (C-x C-f).
 * Initialization
 ** Load custom helper functions
 #+BEGIN_SRC emacs-lisp
+;; dependency issue - these defuns should not bother with install crap
   (load-file (concat user-emacs-directory "site-lisp/defuns.el"))
 #+END_SRC
 
@@ -126,13 +127,21 @@ trying to install packages.
                            ("melpa-unstable" . "https://melpa.org/packages/")))
 #+END_SRC
 
-** Install =use-package=
+** Define required packages
+We can declare the origin of our packages with the
+=package-pinned-packages= variable:
 #+BEGIN_SRC emacs-lisp
-  (setq package-pinned-packages '((use-package . "melpa-unstable")))
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+  (setq package-pinned-packages '((use-package . "melpa-unstable")
+                                  (diminish . "melpa-unstable")))
 
+  (setq use-package-verbose t)
+#+END_SRC
+
+** Install packages
+#+BEGIN_SRC emacs-lisp
+  (setq jm/packages (mapcar 'car package-pinned-packages))
+
+  (jm/install-all-packages jm/packages)
   (setq use-package-verbose t)
 #+END_SRC
 
@@ -237,6 +246,7 @@ Highlight nick:
       "Builds an email address to dodge some spam bot harvesting
       for public config."
       (combine-and-quote-strings (list user domain) "@"))
+
     (defun jm/match-mu4e-context (email msg)
       (when msg
         (mu4e-message-contact-field-matches msg :to email)))
@@ -708,7 +718,7 @@ C-x C-k -- kill region (since we just unbound it with C-w)
 
 =C-c w= -- toggle whitespace mode
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c w") 'global-whitespace-mode)
+  (global-set-key (kbd "C-c w") 'whitespace-mode)
 #+END_SRC
 
 better commenting (replaces the original comment-dwim)
@@ -1306,6 +1316,22 @@ Run the above every few hours:
   (setq my-timer (run-with-idle-timer 14400 t 'motd))
 #+END_SRC
 
+** Music
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emms
+    :pin melpa-unstable
+    :ensure t
+    :bind (("<f10>" . emms-browser)
+           ("<f11>" . emms-playlist-mode-go))
+    :config
+    (setq emms-source-file-default-directory "~/Music")
+    (emms-all)
+    ;; (emms-default-players)
+    (add-to-list 'emms-info-functions 'emms-info-mpd)
+    (add-to-list 'emms-player-list 'emms-player-mpd))
+
+#+END_SRC
 ** Projectile
 Find files in a project:
 #+BEGIN_SRC emacs-lisp

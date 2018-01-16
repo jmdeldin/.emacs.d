@@ -10,6 +10,24 @@
   "Path to ~/.emacs.d/local/FILE."
   (concat user-emacs-directory "local/" file))
 
+(defun jm/packages-installed-p (pkg-list)
+  "Determine whether all packages declared in PKG-LIST are installed."
+  (= (length pkg-list)
+     (length (jm/filter 'package-installed-p pkg-list))))
+
+(defun jm/install-packages (pkg-list)
+  "Install all packages declared in PKG-LIST."
+  (package-refresh-contents)
+  (mapcar (lambda (pkg)
+	    (unless (package-installed-p pkg)
+	      (package-install pkg)))
+	  pkg-list))
+
+(defun jm/install-all-packages (pkgs)
+  "Avoid pulling down (M)ELPA if the packages are already installed."
+  (unless (jm/packages-installed-p pkgs)
+    (jm/install-packages pkgs)))
+
 (defun jm/reload-init ()
   "Reload `~/.emacs.d/init.el'"
   (interactive)
