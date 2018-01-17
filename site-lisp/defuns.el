@@ -238,3 +238,9 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
   "#+HTML: <figcaption>" (skeleton-read "Caption: ") "</figcaption>"\n
   "#+HTML: </figure>"
   \n _)
+
+(defun copy-word ()
+  "Copy a word in front of the cursor to the kill-ring."
+  (interactive)
+  (call-interactively 'mark-word)
+  (call-interactively 'copy-region-as-kill))
