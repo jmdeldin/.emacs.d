@@ -256,7 +256,7 @@ Highlight nick:
                 (unless (yes-or-no-p "Are you sure you want to send this?")
                   (signal 'quit nil))))
 
-    ;; when viewing a message, hit a V to view message in browser
+    ;; when viewing a message, hit `a V' to view message in browser
     (add-to-list 'mu4e-view-actions
                  '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
@@ -281,19 +281,33 @@ Highlight nick:
     (setq mu4e-compose-context-policy 'ask-if-none)
 
     ;; the backquote is needed to evaluate the alist values
-    (setq mu4e-contexts `( ,(make-mu4e-context
+    (setq mu4e-contexts `(
+                          ,(make-mu4e-context
                              :name "HighSeas"
                              :match-func (lambda (msg)
                                            (jm/match-mu4e-context (jm/email "jmdeldin" "highseas.com") msg))
                              :vars `( (user-mail-address . ,(jm/email "jmdeldin" "highseas.com"))
                                       (smtpmail-smtp-user . ,(jm/email "jmdeldin" "highseas.com"))
                                       (smtpmail-smtp-server . "smtp.gmail.com")
-                                      (smtpmail-default-smtp-server "smtp.gmail.com")
                                       (smtpmail-smtp-service . 587)
                                       (smtpmail-stream-type . starttls)
                                       (mu4e-drafts-folder . "/HighSeas/[Gmail].Drafts")
                                       (mu4e-sent-folder . "/HighSeas/[Gmail].Sent Mail")
                                       (mu4e-trash-folder . "/HighSeas/[Gmail].Trash")
+                                      ))
+                          ,(make-mu4e-context
+                             :name "Personal"
+                             :match-func (lambda (msg)
+                                           (when msg
+                                             (string-prefix-p "/Personal" (mu4e-message-field msg :maildir))))
+                             :vars `( (user-mail-address . ,(jm/email "jm" "deldin.us"))
+                                      (smtpmail-smtp-user . ,(jm/email "jm" "deldin.us"))
+                                      (smtpmail-smtp-server . "smtp.fastmail.com")
+                                      (smtpmail-smtp-service . 587)
+                                      (smtpmail-stream-type . starttls)
+                                      (mu4e-drafts-folder . "/Personal/Drafts")
+                                      (mu4e-sent-folder . "/Personal/Sent")
+                                      (mu4e-trash-folder . "/Personal/Trash")
                                       )))))
 #+END_SRC
 
