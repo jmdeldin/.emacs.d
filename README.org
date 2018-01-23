@@ -269,13 +269,8 @@ Highlight nick:
     (when (fboundp 'imagemagick-register-types)
       (imagemagick-register-types))
 
-    ;; TODO: not sure this is actually useful:
-    (setq mu4e-compose-format-flowed t)
     (setq mu4e-compose-dont-reply-to-self t)
     (setq message-kill-buffer-on-exit t)
-
-    ;; gmail already keeps copies in the sent folder:
-    (setq mu4e-sent-messages-behavior 'trash)
 
     (setq mu4e-context-policy 'ask-if-none)
     (setq mu4e-compose-context-policy 'ask-if-none)
@@ -290,6 +285,7 @@ Highlight nick:
                                       (smtpmail-smtp-user . ,(jm/email "jmdeldin" "highseas.com"))
                                       (smtpmail-smtp-server . "smtp.gmail.com")
                                       (smtpmail-smtp-service . 587)
+                                      (mu4e-sent-messages-behavior . delete) ; gmail copies emails for us
                                       (smtpmail-stream-type . starttls)
                                       (mu4e-drafts-folder . "/HighSeas/[Gmail].Drafts")
                                       (mu4e-sent-folder . "/HighSeas/[Gmail].Sent Mail")
