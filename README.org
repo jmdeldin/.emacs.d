@@ -410,12 +410,6 @@ Remember last edit position
     (ac-flyspell-workaround)
     (setq ac-ignore-case nil)
     (setq ac-comphist-file (jm/local-path "ac-comphist.dat")))
-
-  (use-package org-ac
-    :ensure t
-    :defer 2
-    :pin melpa-stable
-    :config (org-ac/config-default))
 #+END_SRC
 
 ** Spelling
