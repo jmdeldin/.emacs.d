@@ -244,3 +244,13 @@ Adapted from URL `http://stackoverflow.com/a/22307087/73492'."
   (interactive)
   (call-interactively 'mark-word)
   (call-interactively 'copy-region-as-kill))
+
+(defun append-window ()
+  "Append a region from your current buffer to another
+window (e.g., shell buffer). Requires ace-window."
+  (interactive)
+  (aw-select "Append Target"
+             (lambda (window)
+               (append-to-buffer (window-buffer window)
+                                 (region-beginning)
+                                 (region-end)))))

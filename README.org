@@ -751,10 +751,13 @@ better commenting (replaces the original comment-dwim)
 =M-s/M-S= -- switch windows
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
-    :bind (("M-s" . ace-window)
-           ("M-S" . ace-window))
+    :bind (("M-s" . ace-window))
     :ensure t
     :pin melpa-stable)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-S") 'append-window)
 #+END_SRC
 
 *** Mac
