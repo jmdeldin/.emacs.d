@@ -330,14 +330,11 @@ fast.
 #+BEGIN_SRC emacs-lisp
   (setq elfeed-feeds
         '(
-          ("https://feeds.feedburner.com/lifehacker/full" drivel)
           ("http://nullprogram.com/feed/" emacs)
           ("http://planet.emacsen.org/atom.xml" emacs)
           ("http://sachachua.com/blog/feed/" emacs)
           ("https://www.masteringemacs.org/feed" emacs)
-          ("https://www.reddit.com/r/emacs.xml" emacs)
           ("http://matthewkirk.com/feed/" friends)
-          ("https://www.reddit.com/r/linux.rss" linux)
           ("http://www.jmdeldin.com/atom.xml" personal)
           ("https://jvns.ca/atom.xml" programming)
           ("https://www.reddit.com/r/everett.xml" news)))
