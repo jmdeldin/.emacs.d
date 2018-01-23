@@ -432,7 +432,7 @@ Turn it on for some modes:
 #+BEGIN_SRC emacs-lisp
   (mapcar (lambda (mode)
             (add-hook mode (lambda () (flyspell-mode t))))
-          '(org-mode-hook markdown-mode text-mode))
+          '(org-mode-hook markdown-mode mu4e-compose-mode-hook text-mode))
   (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
 #+END_SRC
 
