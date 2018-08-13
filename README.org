@@ -788,6 +788,22 @@ For dumb terminals:
 For GUIs:
 
 #+BEGIN_SRC emacs-lisp
+  (defvar jm/font-size
+    130
+    "Default font size. #pixels height * 10.")
+
+  (defun old-man ()
+    "Increase the font size of all buffers."
+    (interactive)
+    (set-face-attribute 'default nil :height (+ 100 jm/font-size)))
+
+  (defun set-default-font-size (size)
+    "Scale things back down. Optionally invoke with C-u SIZE to set
+  the global size. Remember that the font size is pixels*10, e.g.,
+  150 == 15 px."
+    (interactive "P")
+    (set-face-attribute 'default nil :height (if size size jm/font-size)))
+
   (if window-system
       (let ((jm/font "Source Code Pro-13"))
         (set-face-attribute 'default nil :font jm/font)
