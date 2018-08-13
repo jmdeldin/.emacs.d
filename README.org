@@ -849,6 +849,11 @@ Turn on =rainbow-mode= for colored hex values
     (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
 
+Associate less and scss:
+#+BEGIN_SRC emacs-lisp
+  (associate-file-type '(".less" ".scss" ".sass") 'css-mode)
+#+END_SRC
+
 Prevent SCSS from compiling at save time:
 #+BEGIN_SRC emacs-lisp
   (setq scss-compile-at-save nil)
