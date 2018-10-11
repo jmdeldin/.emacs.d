@@ -1349,22 +1349,6 @@ Run the above every few hours:
   (setq my-timer (run-with-idle-timer 14400 t 'motd))
 #+END_SRC
 
-** Music
-
-#+BEGIN_SRC emacs-lisp
-  (use-package emms
-    :pin melpa-unstable
-    :ensure t
-    :bind (("<f10>" . emms-browser)
-           ("<f11>" . emms-playlist-mode-go))
-    :config
-    (setq emms-source-file-default-directory "~/Music")
-    (emms-all)
-    ;; (emms-default-players)
-    (add-to-list 'emms-info-functions 'emms-info-mpd)
-    (add-to-list 'emms-player-list 'emms-player-mpd))
-
-#+END_SRC
 ** Projectile
 Find files in a project:
 #+BEGIN_SRC emacs-lisp
