@@ -980,7 +980,7 @@ Support editing mixed mode files, like ERB templates.
     :config
     (org-babel-do-load-languages
      'org-babel-load-languages (mapcar (lambda (l) (cons l t))
-                                       '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen sh))))
+                                       '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen shell))))
 
   ;; for org-html export
   (use-package htmlize
