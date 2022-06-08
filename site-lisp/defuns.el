@@ -254,3 +254,10 @@ window (e.g., shell buffer). Requires ace-window."
                (append-to-buffer (window-buffer window)
                                  (region-beginning)
                                  (region-end)))))
+
+(defun collapse-blank-lines (start end)
+  "Collapse multiple blank lines.
+
+From URL `https://www.masteringemacs.org/article/removing-blank-lines-buffer'"
+  (interactive "r")
+  (replace-regexp "^\n\\{2,\\}" "\n" nil start end))
