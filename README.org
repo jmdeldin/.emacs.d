@@ -1001,6 +1001,12 @@ Include the org-habit module for the agenda:
   (setq org-modules (quote (org-habit)))
 #+END_SRC
 
+Use Org-Mode for the =*scratch*= buffer:
+#+begin_src emacs-lisp
+  (setq initial-major-mode 'org-mode)
+  (setq initial-scratch-message nil)
+#+end_src
+
 *** Paths
 This configuration assumes org files live in the =~/org= directory. You can
 customize it by setting these variables in =../local/local.el=:
