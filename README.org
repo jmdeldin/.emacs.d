@@ -1390,9 +1390,12 @@ Find files in a project:
     :pin melpa-stable
     :ensure t
     :bind ("C-x p" . projectile-find-file)
+    :bind-keymap ("C-x P" . projectile-command-map)
     :config
-    (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+    (projectile-mode t)
+    (setq projectile-enable-caching t)
     (setq projectile-cache-file (jm/local-path "projectile-cache")))
+    (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
 #+END_SRC
 
 ** Shell
