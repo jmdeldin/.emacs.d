@@ -1220,17 +1220,23 @@ xdg-open should be the default but alas, we need this:
 #+BEGIN_SRC emacs-lisp
   (setq shr-external-browser 'browse-url-xdg-open)
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "chromium-browser")
+        browse-url-generic-program "sensible-browser")
 #+END_SRC
 
 ** Clock
 Customize =M-x display-time-world=:
 #+BEGIN_SRC emacs-lisp
-(setq display-time-world-list
-      '(("America/Los_Angeles" "Seattle")
-        ("America/Denver" "Cascade")
-        ("America/Chicago" "Ann Arbor")
-        ("America/New_York" "New York")))
+  (setq display-time-world-list
+        '(("America/Los_Angeles" "Seattle")
+          ("America/Denver" "Cascade")
+          ; coworkers:
+          ("America/Chicago" "Ann Arbor")
+          ("America/New_York" "New York")
+          ("America/Sao_Paulo" "Brazil")
+          ("America/Bogota" "Columbia")
+          ("Asia/Karachi" "Karachi")
+          ("Asia/Manila" "Manila")
+          ("UTC" "UTC")))
 #+END_SRC
 
 ** Dired
