@@ -962,7 +962,8 @@ Support editing mixed mode files, like ERB templates.
   (use-package mmm-auto
     :ensure mmm-mode
     :pin melpa-stable
-    :mode ((".html.erb" . html-erb-mode)
+    :mode ((".rhtml" . html-erb-mode)
+           (".html.erb" . html-erb-mode)
            (".erb" . html-erb-mode))
     :config
     (setq mmm-global-mode 'auto)
