@@ -1145,6 +1145,18 @@ Fix indentation for lines not starting statements (e.g., hash members)
   (setq cperl-continued-statement-offset 0)
 #+END_SRC#+end_src
 
+** PlantUML
+
+  #+begin_src emacs-lisp
+    (use-package plantuml-mode
+      :pin melpa-unstable
+      :ensure t
+      :mode ("\\.plantuml" . plantuml-mode)
+      :config
+      (setq plantuml-default-exec-mode 'jar)
+      (setq plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
+      )
+  #+end_src
 ** Ruby
 #+BEGIN_SRC emacs-lisp
   (use-package rspec-mode
