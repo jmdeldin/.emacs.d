@@ -1165,6 +1165,9 @@ Fix indentation for lines not starting statements (e.g., hash members)
   #+end_src
 ** Ruby
 #+BEGIN_SRC emacs-lisp
+  ; default for Ruby 2+ is UTF-8, so no need for this anymore
+  (setq ruby-insert-encoding-magic-comment nil)
+
   (use-package rspec-mode
     :pin melpa-stable
     :ensure t
