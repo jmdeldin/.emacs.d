@@ -1358,7 +1358,8 @@ I tend to keep man pages pretty narrow
   (use-package magit
     :pin melpa-stable
     :ensure t
-    :bind ("C-x g" . magit-status))
+    :bind (("C-x g" . magit-status)
+           ("C-x G" . magit-blame-addition)))
 #+END_SRC
 
 ** MOTD
