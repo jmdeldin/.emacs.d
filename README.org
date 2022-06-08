@@ -400,6 +400,18 @@ Remember last edit position
   (setq save-place-file (jm/local-path "places"))
 #+END_SRC
 
+** Snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :pin melpa-stable
+    :ensure t
+    :config
+    (yas-global-mode t))
+
+  (use-package yasnippet-snippets
+    :pin melpa-stable
+    :ensure t)
+#+END_SRC
 ** Auto-Complete Mode
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete-config
