@@ -828,7 +828,7 @@ For GUIs:
     (interactive "P")
     (set-face-attribute 'default nil :height (if size size jm/font-size)))
 
-  (if window-system
+  (if (and window-system (eq system-type 'gnu/linux))
       (let ((jm/font "Source Code Pro-13"))
         (set-face-attribute 'default nil :font jm/font)
         (set-frame-font jm/font)))
