@@ -242,8 +242,12 @@ Highlight nick:
 #+END_SRC
 
 ** mu4e
+
 #+BEGIN_SRC emacs-lisp
-  ;; install sudo apt install mu4e gnutls-bin
+  ;; Once =mu= is installed, run =mu init --my-address="foo@example.com"
+  ;; --my-address="bar@example.com"= and =mu index=
+  ;;
+  ;; sudo apt install mu4e gnutls-bin
   (use-package mu4e
     :bind ("<f8>" . mu4e)
     :init
@@ -282,21 +286,7 @@ Highlight nick:
 
     ;; the backquote is needed to evaluate the alist values
     (setq mu4e-contexts `(
-                          ,(make-mu4e-context
-                             :name "HighSeas"
-                             :match-func (lambda (msg)
-                                           (jm/match-mu4e-context (jm/email "jmdeldin" "highseas.com") msg))
-                             :vars `( (user-mail-address . ,(jm/email "jmdeldin" "highseas.com"))
-                                      (smtpmail-smtp-user . ,(jm/email "jmdeldin" "highseas.com"))
-                                      (smtpmail-smtp-server . "smtp.gmail.com")
-                                      (smtpmail-smtp-service . 587)
-                                      (mu4e-sent-messages-behavior . delete) ; gmail copies emails for us
-                                      (smtpmail-stream-type . starttls)
-                                      (mu4e-drafts-folder . "/HighSeas/[Gmail].Drafts")
-                                      (mu4e-sent-folder . "/HighSeas/[Gmail].Sent Mail")
-                                      (mu4e-trash-folder . "/HighSeas/[Gmail].Trash")
-                                      ))
-                          ,(make-mu4e-context
+                          (make-mu4e-context
                              :name "Personal"
                              :match-func (lambda (msg)
                                            (when msg
@@ -339,9 +329,17 @@ fast.
           ("http://planet.emacsen.org/atom.xml" emacs)
           ("http://sachachua.com/blog/feed/" emacs)
           ("https://www.masteringemacs.org/feed" emacs)
-          ("http://matthewkirk.com/feed/" friends)
+          ("https://www.matthewkirk.com/news?format=rss" friends)
+          ("http://nelsonware.com/feed.xml" friends)
+          ("https://goto10line.net/feed/" friends)
+          ("https://www.lyonwj.com/atom.xml" friends)
           ("http://www.jmdeldin.com/atom.xml" personal)
           ("https://jvns.ca/atom.xml" programming)
+          ("https://toolguyd.com/feed/" tools)
+          ("https://slickdeals.net/newsearch.php?src=SearchBarV2&q=tools&searcharea=deals&searchin=first&rss=1" tools)
+          ("https://slickdeals.net/newsearch.php?src=SearchBarV2&q=knipex&searcharea=deals&searchin=first&rss=1" tools)
+          ("https://slickdeals.net/newsearch.php?src=SearchBarV2&q=eneloop&searcharea=deals&searchin=first&rss=1" tools)
+          ("https://blog.lostartpress.com/feed/" woodworking)
           ("https://www.reddit.com/r/everett.xml" news)))
 #+END_SRC
 
@@ -647,59 +645,60 @@ Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :ensure t
-    :init
-    (global-undo-tree-mode))
+      (use-package undo-tree
+        :ensure t
+        :init
+        (global-undo-tree-mode)
+        (setq undo-tree-history-directory-alist (list (cons "." (jm/local-path "backups")))))
 
-  (use-package evil
-    :pin melpa-unstable
-    :ensure t
-    :demand t
-    :diminish undo-tree-mode
-    :bind (
-           :map evil-insert-state-map
-           ("C-a" . beginning-of-line)
-           ("C-e" . end-of-line)
-           ("C-d" . delete-forward-char)
-           ("C-k" . kill-line)
-           ("C-p" . evil-previous-line)
-           ("C-p" . evil-previous-line)
-           ("C-n" . evil-next-line)
-           ("C-z" . suspend-emacs)
-           :map evil-normal-state-map
-           ("C-n" . evil-next-line)
-           ("C-p" . evil-previous-line)
-           ("C-z" . suspend-emacs))
-    :config
-    ;; disable evil in some buffers:
-    (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
-          '(elfeed-show-mode elfeed-search-mode Info-mode-hook ledger-report-mode))
-    (evil-set-undo-system 'undo-tree)
+      (use-package evil
+        :pin melpa-unstable
+        :ensure t
+        :demand t
+        :diminish undo-tree-mode
+        :bind (
+               :map evil-insert-state-map
+               ("C-a" . beginning-of-line)
+               ("C-e" . end-of-line)
+               ("C-d" . delete-forward-char)
+               ("C-k" . kill-line)
+               ("C-p" . evil-previous-line)
+               ("C-p" . evil-previous-line)
+               ("C-n" . evil-next-line)
+               ("C-z" . suspend-emacs)
+               :map evil-normal-state-map
+               ("C-n" . evil-next-line)
+               ("C-p" . evil-previous-line)
+               ("C-z" . suspend-emacs))
+        :config
+        ;; disable evil in some buffers:
+        (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
+              '(elfeed-show-mode elfeed-search-mode Info-mode-hook ledger-report-mode))
+        (evil-set-undo-system 'undo-tree)
 
-    (evil-mode t))
+        (evil-mode t))
 
-  ;; Jump between tags with %
-  (use-package evil-matchit
-    :pin melpa-stable
-    :ensure t
-    :defer 1
-    :config (global-evil-matchit-mode t))
+      ;; Jump between tags with %
+      (use-package evil-matchit
+        :pin melpa-stable
+        :ensure t
+        :defer 1
+        :config (global-evil-matchit-mode t))
 
-  ;; increment/decrement numbers like Vim (just not with C-a/C-x)
-  (use-package evil-numbers
-    :pin melpa-stable
-    :ensure t
-    :bind (("C-c +" . evil-numbers/inc-at-pt)
-           ("C-c -" . evil-numbers/dec-at-pt)))
+      ;; increment/decrement numbers like Vim (just not with C-a/C-x)
+      (use-package evil-numbers
+        :pin melpa-stable
+        :ensure t
+        :bind (("C-c +" . evil-numbers/inc-at-pt)
+               ("C-c -" . evil-numbers/dec-at-pt)))
 
-  (use-package evil-surround
-    :pin melpa-stable
-    :ensure t
-    :defer 1
-    :config
-    (global-evil-surround-mode 1)
-)
+      (use-package evil-surround
+        :pin melpa-stable
+        :ensure t
+        :defer 1
+        :config
+        (global-evil-surround-mode 1)
+    )
 #+END_SRC
 
 *** Editing
@@ -780,10 +779,6 @@ better commenting (replaces the original comment-dwim)
     :pin melpa-stable)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-S") 'append-window)
-#+END_SRC
-
 *** Mac
 Make the Cmd and Opt keys work for =M-x=
 #+BEGIN_SRC emacs-lisp
@@ -813,15 +808,20 @@ For GUIs:
 
 #+BEGIN_SRC emacs-lisp
   (defvar jm/font-size
-    130
+    150
     "Default font size. #pixels height * 10.")
 
-  (defun old-man ()
+  (defun font/old-man ()
     "Increase the font size of all buffers."
     (interactive)
-    (set-face-attribute 'default nil :height (+ 100 jm/font-size)))
+    (font/default (+ 100 jm/font-size)))
 
-  (defun set-default-font-size (size)
+  (defun font/standing-desk ()
+    "Drop the font size down for my external monitor."
+    (interactive)
+    (font/default 110))
+
+  (defun font/default (size)
     "Scale things back down. Optionally invoke with C-u SIZE to set
   the global size. Remember that the font size is pixels*10, e.g.,
   150 == 15 px."
@@ -1246,6 +1246,12 @@ Fix indentation for lines not starting statements (e.g., hash members)
     :mode ("\\.yml\\'" "\\.yaml\\'")
     :bind (:map yaml-mode-map ("C-m" . newline-and-indent)))
 #+END_SRC
+
+*** Docker
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode
+    :mode ("Dockerfile.*" ".*\\.docker'"))
+#+end_src
 * Tools
 ** Browsers
 There are far too many ways to configure which browser to use in emacs.
@@ -1285,7 +1291,7 @@ other dired window:
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :init
-    (bind-key "C-:" 'avy-goto-char-2))
+    (bind-key "M-S" 'avy-goto-char-2))
 #+END_SRC
 
 ** Editorconfig
