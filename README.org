@@ -138,8 +138,6 @@ We can declare the origin of our packages with the
 #+BEGIN_SRC emacs-lisp
   (setq package-pinned-packages '((use-package . "melpa-unstable")
                                   (diminish . "melpa-unstable")))
-
-  (setq use-package-verbose t)
 #+END_SRC
 
 ** Install packages
@@ -147,7 +145,6 @@ We can declare the origin of our packages with the
   (setq jm/packages (mapcar 'car package-pinned-packages))
 
   (jm/install-all-packages jm/packages)
-  (setq use-package-verbose t)
 #+END_SRC
 
 ** Load =use-package=
@@ -393,7 +390,7 @@ Changing a region's case is useful
 
 Remember last edit position
 #+BEGIN_SRC emacs-lisp
-  (setq-default save-place t)
+  (save-place-mode 1)
   (setq save-place-file (jm/local-path "places"))
 #+END_SRC
 
@@ -402,25 +399,14 @@ Remember last edit position
   (use-package yasnippet
     :pin melpa-stable
     :ensure t
+    :defer 1
     :config
     (yas-global-mode t))
 
   (use-package yasnippet-snippets
     :pin melpa-stable
-    :ensure t)
-#+END_SRC
-** Auto-Complete Mode
-#+BEGIN_SRC emacs-lisp
-  (use-package auto-complete-config
-    :ensure auto-complete
-    :pin melpa-stable
-    :defer 2
-    :diminish auto-complete-mode
-    :config
-    (ac-config-default)
-    (ac-flyspell-workaround)
-    (setq ac-ignore-case nil)
-    (setq ac-comphist-file (jm/local-path "ac-comphist.dat")))
+    :ensure t
+    :after yasnippet)
 #+END_SRC
 
 ** Spelling
@@ -433,12 +419,11 @@ use a faster suggestion mode.
   (setq ispell-extra-args '("--sug-mode=ultra"))
 #+END_SRC
 
-Turn it on for some modes:
+Turn it on for text and prose modes:
 #+BEGIN_SRC emacs-lisp
-  (mapcar (lambda (mode)
-            (add-hook mode (lambda () (flyspell-mode t))))
-          '(org-mode-hook markdown-mode mu4e-compose-mode-hook text-mode))
-  (add-hook 'git-commit-mode-hook 'turn-on-flyspell)
+  (dolist (hook '(org-mode-hook markdown-mode-hook mu4e-compose-mode-hook
+                  text-mode-hook git-commit-mode-hook))
+    (add-hook hook #'flyspell-mode))
 #+END_SRC
 
 ** Whitespace
@@ -492,10 +477,11 @@ Delete trailing whitespace on save
   (use-package highlight-indent-guides
     :ensure t
     :pin melpa-unstable
+    :defer t
+    :hook ((prog-mode     . highlight-indent-guides-mode)
+           (yaml-ts-mode  . highlight-indent-guides-mode))
     :config
-    (setq highlight-indent-guides-method 'fill)
-    (mapcar (lambda (hook) (add-hook hook 'highlight-indent-guides-mode))
-            '(prog-mode-hook yaml-mode-hook)))
+    (setq highlight-indent-guides-method 'fill))
 #+END_SRC
 
 * UI
@@ -516,7 +502,7 @@ Hide the startup messages
 
 "y or n" instead of "yes or no"
 #+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (setq use-short-answers t)
 #+END_SRC
 
 Show line & column number in the mode line
@@ -576,16 +562,13 @@ Make windmove work in org-mode:
 #+END_SRC
 
 ** Minibuffer
-*** IDO
-Interactively-do-things is the greatest Emacs extension.
-
+*** Completion
 #+BEGIN_SRC emacs-lisp
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (setq ido-show-dot-for-dired t)
-  (setq ido-save-directory-list-file (jm/local-path "ido.last"))
-  (setq ido-use-virtual-buffers t)
-  (ido-mode 1)
+  (fido-vertical-mode 1)
+  (setq completion-styles '(flex basic))
+  (setq tab-always-indent 'complete)
+  (when (fboundp 'completion-preview-mode)
+    (global-completion-preview-mode 1))
 #+END_SRC
 
 *** Uniquify
@@ -610,17 +593,6 @@ Enable recent files:
   (recentf-mode 1)
 #+END_SRC
 
-*** SMEX
-=M-x= -- ido-like completion for functions:
-
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package smex
-  ;;   :pin melpa-stable
-  ;;   :ensure t
-  ;;   :bind ("M-x" . smex)
-  ;;   :config
-  ;;   (setq smex-save-file (jm/local-path "smex-items")))
-#+END_SRC
 
 ** Mouse
 Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
@@ -644,17 +616,10 @@ Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73
 Arguably the best Vim ever, but sometimes, I still want Emacs keys.
 
 #+BEGIN_SRC emacs-lisp
-      (use-package undo-tree
-        :ensure t
-        :init
-        (global-undo-tree-mode)
-        (setq undo-tree-history-directory-alist (list (cons "." (jm/local-path "backups")))))
-
       (use-package evil
         :pin melpa-unstable
         :ensure t
         :demand t
-        :diminish undo-tree-mode
         :bind (
                :map evil-insert-state-map
                ("C-a" . beginning-of-line)
@@ -673,7 +638,7 @@ Arguably the best Vim ever, but sometimes, I still want Emacs keys.
         ;; disable evil in some buffers:
         (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
               '(elfeed-show-mode elfeed-search-mode Info-mode-hook ledger-report-mode))
-        (evil-set-undo-system 'undo-tree)
+        (evil-set-undo-system 'undo-redo)
 
         (evil-mode t))
 
@@ -834,6 +799,19 @@ For GUIs:
 #+END_SRC
 
 * Languages
+** Tree-sitter
+Automatically installs grammars on demand and remaps major modes to their
+tree-sitter counterparts:
+#+BEGIN_SRC emacs-lisp
+  (use-package treesit-auto
+    :ensure t
+    :init
+    (add-to-list 'treesit-extra-load-path (jm/local-path "tree-sitter"))
+    :config
+    (setq treesit-auto-install t)
+    (global-treesit-auto-mode))
+#+END_SRC
+
 ** C
 The only way to program.
 #+BEGIN_SRC emacs-lisp
@@ -874,12 +852,7 @@ Turn on =rainbow-mode= for colored hex values
 
 Associate less and scss:
 #+BEGIN_SRC emacs-lisp
-  (associate-file-type '(".less" ".scss" ".sass") 'css-mode)
-#+END_SRC
-
-Prevent SCSS from compiling at save time:
-#+BEGIN_SRC emacs-lisp
-  (setq scss-compile-at-save nil)
+  (associate-file-type '(".less" ".scss" ".sass") 'css-ts-mode)
 #+END_SRC
 
 Two spaces:
@@ -904,36 +877,15 @@ Two spaces:
 #+END_SRC
 
 ** JavaScript
-2 space indent:
+Two spaces:
 
 #+BEGIN_SRC emacs-lisp
   (setq js-indent-level 2)
-  (setq js2-basic-offset 2)
-  (setq js2-bounce-indent-p t)
 #+END_SRC
 
 Show errors immediately:
 #+BEGIN_SRC emacs-lisp
   (setq flycheck-display-errors-delay 0)
-#+END_SRC
-
-*** JSON
-
-#+BEGIN_SRC emacs-lisp
-  (use-package json-mode
-    :pin melpa-stable
-    :ensure t
-    :mode (".babelrc" "\\.json\\'"))
-#+END_SRC
-
-*** React
-
-#+BEGIN_SRC emacs-lisp
-  (use-package rjsx-mode
-    :pin melpa-unstable
-    :ensure t
-    :mode (("\\.jsx" . rjsx-mode))
-    :bind (:map rjsx-mode-map ("<" . nil)))
 #+END_SRC
 
 ** LaTeX
@@ -945,9 +897,6 @@ Produce PDFs instead of DVIs
 ** Lisp
 #+BEGIN_SRC emacs-lisp
   (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-buffer)
-
-  ; probably not needed with 25+ 4
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 
 ** Markdown
@@ -988,6 +937,8 @@ Support editing mixed mode files, like ERB templates.
     :pin gnu
     :ensure t
     :mode ("\\.org" . org-mode)
+    :init
+    (setq org-persist-directory (jm/local-path "org-persist"))
     :bind (
            ("C-c l" . org-store-link)
            ("C-c a" . org-agenda)
@@ -998,8 +949,10 @@ Support editing mixed mode files, like ERB templates.
            ("C-x t" . org-cycle))
     :config
     (org-babel-do-load-languages
-     'org-babel-load-languages (mapcar (lambda (l) (cons l t))
-                                       '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen shell))))
+     'org-babel-load-languages
+     (seq-filter (lambda (pair) (locate-library (format "ob-%s" (car pair))))
+                 (mapcar (lambda (l) (cons l t))
+                         '(C calc emacs-lisp gnuplot latex ledger perl python ruby screen shell)))))
 
   ;; for org-html export
   (use-package htmlize
@@ -1177,17 +1130,17 @@ Fix indentation for lines not starting statements (e.g., hash members)
   #+end_src
 ** Ruby
 #+BEGIN_SRC emacs-lisp
-  ; default for Ruby 2+ is UTF-8, so no need for this anymore
   (setq ruby-insert-encoding-magic-comment nil)
 
   (use-package rspec-mode
     :pin melpa-stable
     :ensure t
-    :bind (:map ruby-mode-map ("C-c , x" . rspec-verify-single))
+    :bind (:map ruby-ts-mode-map ("C-c , x" . rspec-verify-single))
     :config
     (setq rspec-use-rake-when-possible nil)
     (setq rspec-use-spring-when-possible t))
-  (use-package ruby-mode
+
+  (use-package ruby-ts-mode
     :mode
     ("\\.rb\\'" "\\.rake\\'" "Capfile" "Gemfile" "Guardfile" "Rakefile" "\\.ru\\'")
     :preface
@@ -1196,7 +1149,7 @@ Fix indentation for lines not starting statements (e.g., hash members)
       (interactive)
       (ruby-compilation-this-buffer)
       (other-window -1))
-    :bind (:map ruby-mode-map ("C-c C-c" . jm/run-ruby-buffer))
+    :bind (:map ruby-ts-mode-map ("C-c C-c" . jm/run-ruby-buffer))
     :interpreter "ruby"
     :config
     (rspec-mode t))
@@ -1239,18 +1192,15 @@ Fix indentation for lines not starting statements (e.g., hash members)
 
 *** YAML
 #+BEGIN_SRC emacs-lisp
-  (use-package yaml-mode
-    :pin melpa-stable
-    :ensure t
-    :mode ("\\.yml\\'" "\\.yaml\\'")
-    :bind (:map yaml-mode-map ("C-m" . newline-and-indent)))
+  (add-hook 'yaml-ts-mode-hook (lambda () (local-set-key (kbd "C-m") #'newline-and-indent)))
 #+END_SRC
 
 *** Docker
-#+begin_src emacs-lisp
-  (use-package dockerfile-mode
-    :mode ("Dockerfile.*" ".*\\.docker'"))
-#+end_src
+Matches =Dockerfile=, =Dockerfile-mri=, =Dockerfile.cache=, etc.:
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\(?:^\\|/\\)Dockerfile[.-][^/]*\\'" . dockerfile-ts-mode))
+#+END_SRC
+
 * Tools
 ** Browsers
 There are far too many ways to configure which browser to use in emacs.
@@ -1299,6 +1249,7 @@ other dired window:
   (use-package editorconfig
     :pin melpa-stable
     :ensure t
+    :defer 1
     :config (editorconfig-mode t))
 #+END_SRC
 
@@ -1379,8 +1330,16 @@ I tend to keep man pages pretty narrow
   (use-package magit
     :pin melpa-stable
     :ensure t
+    :init
+    (setq transient-history-file (jm/local-path "transient/history.el")
+          transient-levels-file  (jm/local-path "transient/levels.el")
+          transient-values-file  (jm/local-path "transient/values.el"))
     :bind (("C-x g" . magit-status)
-           ("C-x G" . magit-blame-addition)))
+           ("C-x G" . magit-blame-addition))
+    :config
+    (setq magit-refresh-status-buffer nil)
+    (setq magit-diff-refine-hunk nil)
+    (setq magit-save-repository-buffers 'dontask))
 #+END_SRC
 
 ** MOTD
@@ -1427,14 +1386,23 @@ Ensure eshell garbage stays in =~/.emacs.d/local=:
   (setq eshell-directory-name (concat user-emacs-directory "local/eshell"))
 #+END_SRC
 
-** Silver Searcher
+** Ripgrep
 #+BEGIN_SRC emacs-lisp
-  (use-package ag
+  (use-package rg
     :ensure t
     :pin melpa-stable
-    :bind ("C-x a" . ag-project-regexp)
+    :bind (("C-c s" . rg-project)
+           ("C-x a" . rg-project)))
+#+END_SRC
+
+** Dumb Jump
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :ensure t
+    :pin melpa-stable
+    :hook (xref-backend-functions . dumb-jump-xref-activate)
     :config
-    (setq ag-highlight-search t))
+    (setq dumb-jump-selector 'completing-read))
 #+END_SRC
 
 * Local configuration
