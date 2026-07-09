@@ -393,7 +393,6 @@ Changing a region's case is useful
 
 Remember last edit position
 #+BEGIN_SRC emacs-lisp
-  (require 'saveplace)
   (setq-default save-place t)
   (setq save-place-file (jm/local-path "places"))
 #+END_SRC
@@ -525,6 +524,11 @@ Show line & column number in the mode line
   (column-number-mode t)
 #+END_SRC
 
+Show line numbers:
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode)
+#+end_src
+
 Show file size
 #+BEGIN_SRC emacs-lisp
   (size-indication-mode t)
@@ -587,9 +591,7 @@ Interactively-do-things is the greatest Emacs extension.
 *** Uniquify
 Use part of the directory to distinguish between identically-named files:
 #+BEGIN_SRC emacs-lisp
-  (use-package uniquify
-    :config
-    (setq uniquify-buffer-name-style 'forward))
+  (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
 *** Minibuffer History
@@ -603,24 +605,21 @@ Save minibuffer history:
 *** Recent Files
 Enable recent files:
 #+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :defer 1
-    :config
-    (setq recentf-save-file (jm/local-path "recentf"))
-    (setq recentf-max-saved-items 1000)
-    (recentf-mode 1))
+  (setq recentf-save-file (jm/local-path "recentf"))
+  (setq recentf-max-saved-items 1000)
+  (recentf-mode 1)
 #+END_SRC
 
 *** SMEX
 =M-x= -- ido-like completion for functions:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :pin melpa-stable
-    :ensure t
-    :bind ("M-x" . smex)
-    :config
-    (setq smex-save-file (jm/local-path "smex-items")))
+  ;; (use-package smex
+  ;;   :pin melpa-stable
+  ;;   :ensure t
+  ;;   :bind ("M-x" . smex)
+  ;;   :config
+  ;;   (setq smex-save-file (jm/local-path "smex-items")))
 #+END_SRC
 
 ** Mouse
