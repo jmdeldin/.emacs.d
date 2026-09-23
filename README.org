@@ -110,6 +110,14 @@ These keys work inside the Ido minibuffer (C-x C-f).
 | % R     | regex rename       |
 
 * Initialization
+** Performance
+Increase the GC threshold to reduce pauses during interactive use. The
+default 800KB is far too small for modern Emacs workflows.
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq read-process-output-max (* 1 1024 1024))
+#+END_SRC
+
 ** Load custom helper functions
 #+BEGIN_SRC emacs-lisp
 ;; dependency issue - these defuns should not bother with install crap
@@ -137,7 +145,9 @@ We can declare the origin of our packages with the
 =package-pinned-packages= variable:
 #+BEGIN_SRC emacs-lisp
   (setq package-pinned-packages '((use-package . "melpa-unstable")
-                                  (diminish . "melpa-unstable")))
+                                  (diminish . "melpa-unstable")
+                                  (consult . "melpa-unstable")
+                                  (orderless . "melpa-unstable")))
 #+END_SRC
 
 ** Install packages
@@ -565,10 +575,20 @@ Make windmove work in org-mode:
 *** Completion
 #+BEGIN_SRC emacs-lisp
   (fido-vertical-mode 1)
-  (setq completion-styles '(flex basic))
   (setq tab-always-indent 'complete)
-  (when (fboundp 'completion-preview-mode)
-    (global-completion-preview-mode 1))
+#+END_SRC
+
+*** orderless
+Fast space-separated pattern matching — replaces =flex= which scores every
+candidate on each keystroke (O(n) simple substring vs. expensive DP scoring):
+#+BEGIN_SRC emacs-lisp
+  (use-package orderless
+    :pin melpa-unstable
+    :ensure t
+    :config
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 
 *** Uniquify
@@ -591,6 +611,26 @@ Enable recent files:
   (setq recentf-save-file (jm/local-path "recentf"))
   (setq recentf-max-saved-items 1000)
   (recentf-mode 1)
+#+END_SRC
+
+*** consult
+=C-x b= shows open buffers, recent files, and bookmarks in MRU order.
+Cap recent files shown to 100 — the full 1000-item recentf list in the
+minibuffer adds candidates without real benefit:
+#+BEGIN_SRC emacs-lisp
+  (use-package consult
+    :pin melpa-unstable
+    :ensure t
+    :bind (("C-x b"   . consult-buffer)
+           ("C-x C-r" . consult-recent-file)
+           ("M-s l"   . consult-line)
+           ("M-s g"   . consult-grep))
+    :config
+    (with-eval-after-load 'consult
+      (setf (plist-get consult--source-recent-file :items)
+            (lambda ()
+              (mapcar #'abbreviate-file-name
+                      (seq-take recentf-list 100))))))
 #+END_SRC
 
 
@@ -926,7 +966,6 @@ Support editing mixed mode files, like ERB templates.
            (".html.erb" . html-erb-mode)
            (".erb" . html-erb-mode))
     :config
-    (setq mmm-global-mode 'auto)
     (setq mmm-submode-decoration-level 2)
     (setq mmm-parse-when-idle t))
 #+END_SRC
@@ -1359,19 +1398,10 @@ Run the above every few hours:
   (setq my-timer (run-with-idle-timer 14400 t 'motd))
 #+END_SRC
 
-** Projectile
-Find files in a project:
+** Project
+Find files in a project (built-in, uses =git ls-files= — always fresh):
 #+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :pin melpa-stable
-    :ensure t
-    :bind ("C-x p" . projectile-find-file)
-    :bind-keymap ("C-x P" . projectile-command-map)
-    :config
-    (projectile-mode t)
-    (setq projectile-enable-caching t)
-    (setq projectile-cache-file (jm/local-path "projectile-cache")))
-    (setq projectile-known-projects-file (jm/local-path "projectile-bookmarks.eld"))
+  (global-set-key (kbd "C-x p") #'project-find-file)
 #+END_SRC
 
 ** Shell
