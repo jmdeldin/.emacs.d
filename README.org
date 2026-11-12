@@ -854,11 +854,34 @@ Produce PDFs instead of DVIs
 #+END_SRC
 
 ** Markdown
+Press =C-c C-c l= to toggle the live preview. It opens in the right-hand
+window and refreshes when the Markdown buffer is saved. Rendering uses the
+local =cmark-gfm= command with GitHub Flavored Markdown extensions.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :pin melpa-stable
     :ensure t
-    :mode ("\\.md\\'" "\\.markdown\\'"))
+    :mode ("\\.md\\'" "\\.markdown\\'")
+    :init
+    (setq markdown-split-window-direction 'right)
+    :config
+    (setq markdown-command
+          (append
+           (list (or (executable-find "cmark-gfm")
+                     (and (file-executable-p "/opt/homebrew/bin/cmark-gfm")
+                          "/opt/homebrew/bin/cmark-gfm")
+                     "cmark-gfm")
+                 "--to" "html"
+                 "--extension" "table"
+                 "--extension" "strikethrough"
+                 "--extension" "autolink"
+                 "--extension" "tagfilter"
+                 "--extension" "tasklist"
+                 "--github-pre-lang"
+                 "--full-info-string"
+                 "--table-prefer-style-attributes")))
+    :bind (:map markdown-mode-map
+                ("C-c C-c l" . markdown-live-preview-mode)))
 #+END_SRC
 
 ** Nginx
