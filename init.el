@@ -1,14 +1,15 @@
-;;; init.el --- Jon-Michael Deldin's .emacs
+;;; init.el --- Jon-Michael Deldin's .emacs -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2010-2015 Jon-Michael Deldin
 
 ;; Author: Jon-Michael Deldin <dev@jmdeldin.com>
 ;; Keywords: local
 ;; Created:  2010-10-01
-;; Compatibility: 24.4
+;; Compatibility: 30.1
 
 ;;; Code:
 
+;; Keep package activation explicit for sessions started with -q or -l.
 (package-initialize)
 
 ;; Only load org (expensive) when README.org is newer than the tangled README.el

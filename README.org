@@ -7,6 +7,7 @@ use GNU Emacs 25.1+ on Ubuntu for Org-Mode, Ruby, LaTeX, sh, and a host
 of miscellaneous other languages.
 
 #+BEGIN_SRC emacs-lisp
+  ;;; -*- lexical-binding: t; -*-
   (load "server")
   (unless (server-running-p) (server-start))
 #+END_SRC
@@ -111,12 +112,9 @@ These keys work inside the Ido minibuffer (C-x C-f).
 
 * Initialization
 ** Performance
-Increase the GC threshold to reduce pauses during interactive use. The
-default 800KB is far too small for modern Emacs workflows.
-#+BEGIN_SRC emacs-lisp
-  (setq gc-cons-threshold (* 100 1024 1024))
-  (setq read-process-output-max (* 1 1024 1024))
-#+END_SRC
+Keep startup free of package archive refreshes and global features that do
+work in every programming buffer. Packages declared below are installed by
+=use-package= when needed; normal startup does not refresh package archives.
 
 ** Load custom helper functions
 #+BEGIN_SRC emacs-lisp
@@ -140,29 +138,9 @@ trying to install packages.
                            ("melpa-unstable" . "https://melpa.org/packages/")))
 #+END_SRC
 
-** Define required packages
-We can declare the origin of our packages with the
-=package-pinned-packages= variable:
-#+BEGIN_SRC emacs-lisp
-  (setq package-pinned-packages '((use-package . "melpa-unstable")
-                                  (diminish . "melpa-unstable")
-                                  (consult . "melpa-unstable")
-                                  (orderless . "melpa-unstable")))
-#+END_SRC
-
-** Install packages
-#+BEGIN_SRC emacs-lisp
-  (setq jm/packages (mapcar 'car package-pinned-packages))
-
-  (jm/install-all-packages jm/packages)
-#+END_SRC
-
 ** Load =use-package=
 #+BEGIN_SRC emacs-lisp
-  (eval-when-compile
-    (require 'use-package))
-  (require 'diminish)
-  (require 'bind-key)
+  (require 'use-package)
 #+END_SRC
 
 ** Utility packages
@@ -407,11 +385,11 @@ Remember last edit position
 ** Snippets
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :pin melpa-stable
+    :pin gnu
     :ensure t
     :defer 1
     :config
-    (yas-global-mode t))
+    (yas-global-mode 1))
 
   (use-package yasnippet-snippets
     :pin melpa-stable
@@ -482,18 +460,6 @@ Delete trailing whitespace on save
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+END_SRC
 
-** Highlight Stuff
-#+BEGIN_SRC emacs-lisp
-  (use-package highlight-indent-guides
-    :ensure t
-    :pin melpa-unstable
-    :defer t
-    :hook ((prog-mode     . highlight-indent-guides-mode)
-           (yaml-ts-mode  . highlight-indent-guides-mode))
-    :config
-    (setq highlight-indent-guides-method 'fill))
-#+END_SRC
-
 * UI
 Hide the {menu,tool,scroll}bars
 #+BEGIN_SRC emacs-lisp
@@ -520,7 +486,8 @@ Show line & column number in the mode line
   (column-number-mode t)
 #+END_SRC
 
-Show line numbers:
+Show line numbers. This is built in and has been part of this setup for
+several Emacs releases.
 #+begin_src emacs-lisp
   (global-display-line-numbers-mode)
 #+end_src
@@ -534,11 +501,6 @@ Highlight parens
 #+BEGIN_SRC emacs-lisp
   (show-paren-mode t)
   (setq show-paren-delay 0.0)
-#+END_SRC
-
-Highlight current line
-#+BEGIN_SRC emacs-lisp
-  (global-hl-line-mode 1)
 #+END_SRC
 
 Use =ibuffer= instead of =list-buffers=
@@ -578,19 +540,6 @@ Make windmove work in org-mode:
   (setq tab-always-indent 'complete)
 #+END_SRC
 
-*** orderless
-Fast space-separated pattern matching — replaces =flex= which scores every
-candidate on each keystroke (O(n) simple substring vs. expensive DP scoring):
-#+BEGIN_SRC emacs-lisp
-  (use-package orderless
-    :pin melpa-unstable
-    :ensure t
-    :config
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles basic partial-completion)))))
-#+END_SRC
-
 *** Uniquify
 Use part of the directory to distinguish between identically-named files:
 #+BEGIN_SRC emacs-lisp
@@ -612,27 +561,6 @@ Enable recent files:
   (setq recentf-max-saved-items 1000)
   (recentf-mode 1)
 #+END_SRC
-
-*** consult
-=C-x b= shows open buffers, recent files, and bookmarks in MRU order.
-Cap recent files shown to 100 — the full 1000-item recentf list in the
-minibuffer adds candidates without real benefit:
-#+BEGIN_SRC emacs-lisp
-  (use-package consult
-    :pin melpa-unstable
-    :ensure t
-    :bind (("C-x b"   . consult-buffer)
-           ("C-x C-r" . consult-recent-file)
-           ("M-s l"   . consult-line)
-           ("M-s g"   . consult-grep))
-    :config
-    (with-eval-after-load 'consult
-      (setf (plist-get consult--source-recent-file :items)
-            (lambda ()
-              (mapcar #'abbreviate-file-name
-                      (seq-take recentf-list 100))))))
-#+END_SRC
-
 
 ** Mouse
 Enable mouse support in a terminal (from [[http://stackoverflow.com/a/8859057/73492][StackOverflow]]):
@@ -840,16 +768,12 @@ For GUIs:
 
 * Languages
 ** Tree-sitter
-Automatically installs grammars on demand and remaps major modes to their
-tree-sitter counterparts:
+Use Emacs' built-in tree-sitter support. Keep local grammars available for
+the native tree-sitter modes configured below; grammar installation is an
+explicit setup step rather than work on every file visit.
 #+BEGIN_SRC emacs-lisp
-  (use-package treesit-auto
-    :ensure t
-    :init
-    (add-to-list 'treesit-extra-load-path (jm/local-path "tree-sitter"))
-    :config
-    (setq treesit-auto-install t)
-    (global-treesit-auto-mode))
+  (require 'treesit)
+  (add-to-list 'treesit-extra-load-path (jm/local-path "tree-sitter"))
 #+END_SRC
 
 ** C
@@ -880,16 +804,6 @@ mode isn't supported).
 #+END_SRC
 
 ** CSS
-Turn on =rainbow-mode= for colored hex values
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-mode
-    :pin gnu
-    :ensure t
-    :defer t
-    :init
-    (add-hook 'prog-mode-hook 'rainbow-mode))
-#+END_SRC
-
 Associate less and scss:
 #+BEGIN_SRC emacs-lisp
   (associate-file-type '(".less" ".scss" ".sass") 'css-ts-mode)
@@ -1278,8 +1192,7 @@ other dired window:
 ** Jump
 #+BEGIN_SRC emacs-lisp
   (use-package avy
-    :init
-    (bind-key "M-S" 'avy-goto-char-2))
+    :bind ("M-S" . avy-goto-char-2))
 #+END_SRC
 
 ** Editorconfig
@@ -1399,9 +1312,12 @@ Run the above every few hours:
 #+END_SRC
 
 ** Project
-Find files in a project (built-in, uses =git ls-files= — always fresh):
+Use the built-in project command map. =C-x p f= finds a file from the
+detected project root; the other built-in project commands remain available
+under the same prefix.
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x p") #'project-find-file)
+  (require 'project)
+  (keymap-set global-map "C-x p" project-prefix-map)
 #+END_SRC
 
 ** Shell
